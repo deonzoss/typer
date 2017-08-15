@@ -1,0 +1,72 @@
+#ifndef Letter_h
+#define Letter_h
+
+class Letter
+{
+	public:
+		Letter();
+		~Letter();
+		
+		void move();
+
+		bool loadLetter(char letter, SDL_Renderer* renderer);
+
+		bool loadFromRenderedText(char letter, SDL_Color letterColor, SDL_Renderer* renderer);
+
+		void render(int x, int y,SDL_Renderer* renderer, SDL_Rect* clip=NULL, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);	
+	
+		void fade();
+		
+		void setX(double x);
+
+		void setY(int Y);
+
+		Uint8 getAlpha();	
+
+		bool offScreen();	
+
+		bool groundContact();
+
+		Uint32 getLifetime();	
+		
+		double getX();
+
+		int getY();
+
+    void setDynamic(int value); 
+    
+    int  getDynamic(); 
+    
+    bool getOnGround();
+
+    void setOnGround(bool value);
+
+    double getSpeed();
+
+    void setSpeed(double value); 
+  
+  private:
+		SDL_Texture* texture = NULL;
+		SDL_Texture* shadowTexture = NULL;
+		TTF_Font* font = NULL;
+		char letter = '\0';
+		int width = 0;
+		int height= 0;	
+		double xPos= 0;
+		int yPos= 0;
+		double relX=0;
+		int randGroundValue=0;
+		int relY=0;
+	  int prevRelY=0;	
+    int rate=0;
+    int randXChange=0;
+    int velocity=0;
+		int angle=0;
+		Uint32 lifetime = 0;
+		bool onGround = false;
+		Uint8 alpha = 255;
+    int dynamic = 0;
+    double speedMult = 1;
+};
+
+#endif
