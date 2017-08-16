@@ -23,6 +23,14 @@ class Object
       SDL_RenderCopy(renderer, objectTexture, &objectClip, &renderQuad);
     }
 
+    void setY(int value){
+      renderQuad.y = value;
+    }
+
+    int getY(){
+      return renderQuad.y;
+    }
+
   private:
     SDL_Texture* objectTexture = NULL;
     SDL_Renderer* renderer = NULL;

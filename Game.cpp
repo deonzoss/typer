@@ -6,7 +6,7 @@ Game::Game(SDL_Renderer* renderer)
   textVector = makeTextVector();
   textGenerator = new TextGenerator(renderer);	
   scoreboard = new Scoreboard(renderer);
-  mainMenu = new Menu(renderer); 
+  mainMenu = new Menu(renderer);
   quit = false;
 }
 
@@ -53,10 +53,30 @@ void Game::displayTextVector()
 void Game::displayLetterVector()
 {
   for(int j = 0;j < letterVector.size(); j++){
-    letterVector[j]->render(letterVector[j]->getX(), letterVector[j]->getY(), renderer);
+    int dynamic = letterVector[j]->getDynamic(); 
+    if(dynamic != 2){ 
+      letterVector[j]->render(letterVector[j]->getX(), letterVector[j]->getY(), renderer);
+    } 
     if(!pauseLevel){
       letterVector[j]->move();
       if(letterVector[j]->getOnGround()){ 
+        if(dynamic == 1){
+          if(boss->getWalking()){
+            double speed = 1; 
+            if(slowTime){
+              speed = LETTER_SLOW_SPEED;
+            }
+            if(boss->getFacingRight())
+              letterVector[j]->setX(letterVector[j]->getX()+WALKING_SPEED/speed);
+            else
+              letterVector[j]->setX(letterVector[j]->getX()-WALKING_SPEED/speed);
+            if(boss->getFrameIndex()%2==0)
+              letterVector[j]->setY(BOSS_SPAWN_Y-90);
+            else
+              letterVector[j]->setY(BOSS_SPAWN_Y-80);
+               
+          }
+        }
         if(letterVector[j]->getLifetime() > LETTER_LIFETIME){
           letterVector[j]->fade();
           if(letterVector[j]->getAlpha()<=0){	
@@ -65,20 +85,16 @@ void Game::displayLetterVector()
             delete(temp);
           }
         }
-        if(letterVector[j]->getDynamic() == 1){
-          if(boss->getWalking()){
-            if(boss->getFacingRight())
-              letterVector[j]->setX(letterVector[j]->getX()+WALKING_SPEED);
-            else
-              letterVector[j]->setX(letterVector[j]->getX()-WALKING_SPEED);
-            if(boss->getFrameIndex()%2==0)
-              letterVector[j]->setY(BOSS_SPAWN_Y-90);
-            else
-              letterVector[j]->setY(BOSS_SPAWN_Y-80);
-               
-          }
-        }
       }
+    }
+  }
+}
+
+void Game::displayDynamicLetters(){
+  for(int j = 0; j < letterVector.size(); j++){
+    int dynamic = letterVector[j]->getDynamic();
+    if(dynamic == 2){
+      letterVector[j]->render(letterVector[j]->getX(), letterVector[j]->getY(), renderer);
     }
   }
 }
@@ -89,7 +105,7 @@ void Game::displayScoreVector()
     scoreVector[j]->render();
     if(!pauseLevel){
       scoreVector[j]->move();
-      if(scoreVector[j]->getLifetime() > LETTER_LIFETIME){
+      if(scoreVector[j]->getOnGround() && scoreVector[j]->getLifetime() > LETTER_LIFETIME){
         scoreVector[j]->fade();
         if(scoreVector[j]->getAlpha()<=0){	
           Scorer* temp = scoreVector[j];	
@@ -140,10 +156,15 @@ void Game::slowDown(){
   for(int i = 0; i < textVector.size(); i++){
     textVector[i]->setSpeed(newSpeed);
   }
-  printf("%d\n", letterVector.size()); 
   for(int i = 0; i < letterVector.size(); i++){
     letterVector[i]->setSpeed(10);
-  } 
+  }
+  for(int i = 0; i < scoreVector.size(); i++){
+    scoreVector[i]->setSpeed(10);
+  }
+  mainCharacter->setSpeed(10);
+  boss->setSpeed(10); 
+  
   return;
 }
 
@@ -155,6 +176,11 @@ void Game::speedUp(){
   for(int i = 0; i < letterVector.size(); i++){
     letterVector[i]->setSpeed(1);
   } 
+  for(int i = 0; i < scoreVector.size(); i++){
+    scoreVector[i]->setSpeed(1);
+  }
+  mainCharacter->setSpeed(1); 
+  boss->setSpeed(1); 
   return;
 }
 
@@ -285,47 +311,55 @@ void Game::collisionHandler()
 {
   for(int i = 0; i < letterVector.size(); i++){
     if(letterVector[i]->getOnGround() == false){
+      int scoreValue = NULL;
+      bool deleteLetter = false;
       if(boss->collisionCheck(letterVector[i]->getX(),letterVector[i]->getY())){
-        Scorer* score = new Scorer("+100", renderer, letterVector[i]->getX(), letterVector[i]->getY());
-        scoreboard->updateScore(100,2); 
-        scoreVector.push_back(score); 
+        scoreValue = 100; 
         letterVector[i]->setY(BOSS_SPAWN_Y-90);
         letterVector[i]->setOnGround(true);
         letterVector[i]->setDynamic(1); 
         boss->setHeavyHead(true);
       } 
       else if(worker->collisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
-        Scorer* score = new Scorer("+100", renderer, letterVector[i]->getX(), letterVector[i]->getY());
-        scoreboard->updateScore(100,2); 
-        scoreVector.push_back(score); 
+        scoreValue = 100; 
         letterVector[i]->setY(COWORKER_SPAWN_Y-40);
         letterVector[i]->setOnGround(true);
         worker->setHeavyHead(true);
       }
       else if(mainCharacter->collisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
-        Scorer* score = new Scorer("+100", renderer, letterVector[i]->getX(), letterVector[i]->getY());
-        scoreboard->updateScore(100,2); 
-        scoreVector.push_back(score); 
+        scoreValue = 100;
         letterVector[i]->setY(700);
         letterVector[i]->setOnGround(true);
         mainCharacter->setHeavyHead(true);
       }
+      else if(door->collisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
+        scoreValue = 100;
+        letterVector[i]->setDynamic(2);
+        letterVector[i]->setY(710);
+        letterVector[i]->setOnGround(true);
+        door->setAnimate(true);
+      }
       else if(trashcan->collisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
-        Scorer* score = new Scorer("+100", renderer, letterVector[i]->getX(), letterVector[i]->getY());
-        scoreboard->updateScore(100,2); 
-        scoreVector.push_back(score); 
-        Letter* temp = letterVector[i];	
-        letterVector.erase(letterVector.begin()+i);
-        delete(temp);
+        scoreValue = 100; 
+        deleteLetter = true;
       }
       else if(clock->collisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
-        Scorer* score = new Scorer("+100", renderer, letterVector[i]->getX(), letterVector[i]->getY());
-        scoreboard->updateScore(100,2); 
-        scoreVector.push_back(score); 
-        Letter* temp = letterVector[i];	
-        letterVector.erase(letterVector.begin()+i);
-        delete(temp);
+        scoreValue = 100; 
+        deleteLetter = true; 
       }
+      if(scoreValue){ 
+        Scorer* score = new Scorer("+100", renderer, letterVector[i]->getX(), letterVector[i]->getY());
+        scoreboard->updateScore(scoreValue,2); 
+        if(slowTime){
+          score->setSpeed(LETTER_SLOW_SPEED);
+        }
+        scoreVector.push_back(score); 
+        if(deleteLetter){ 
+          Letter* temp = letterVector[i];	
+          letterVector.erase(letterVector.begin()+i);
+          delete(temp);
+        }
+      } 
     }
   }
 }
@@ -359,6 +393,9 @@ void Game::start()
   clock = new Clock(renderer);
   clock->setObjectTexture(animationSheet); 
   
+  door = new Door(renderer);
+  door->setObjectTexture(animationSheet); 
+  
   while(!quit){
     SDL_RenderClear(renderer);
     SDL_RenderCopy(renderer, background, NULL, NULL);	
@@ -367,10 +404,14 @@ void Game::start()
     clock->render(); 
     trashcan->render(); 
     fountain->render(); 
+    door->render();  
+    if(startLevel && !quitLevel && screenDropped){ 
+      displayDynamicLetters(); 
+    } 
     boss->render(); 
     desk->render(); 
     worker->render();
-    mainCharacter->render();		
+    mainCharacter->render();	
 
    
     if(startLevel && !quitLevel){
@@ -413,8 +454,26 @@ void Game::start()
     }
     
     eventHandler();	//for typing	
+    if(slowTime){
+      SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+      SDL_SetRenderDrawColor(renderer, 191, 220, 245, slowRectAlpha);
+      SDL_RenderFillRect(renderer, &slowRect);
+      SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE); 
+      if(slowRectAlpha < 0x30){
+        slowRectAlpha+=5;
+      } 
+    }
+    else if(slowRectAlpha > 0){
+      slowRectAlpha-=5;
+      SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+      SDL_SetRenderDrawColor(renderer, 191, 220, 245, slowRectAlpha);
+      SDL_RenderFillRect(renderer, &slowRect);
+      SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE); 
+      if(slowRectAlpha < 0){
+        slowRectAlpha=0;
+      }
+    } 
     SDL_RenderPresent(renderer);
-          
     /*if(strikes == 3){
       quitLevel = true;
       screen->setEndGame(true); 

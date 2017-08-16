@@ -79,13 +79,13 @@ class Character
           double radians = angle*PI/180.0;
           relY = ((abs(relX))*(tan(radians)))-(((GRAVITY)*(pow((abs(relX)),2)))/(2.0*(pow(velocity,2)*pow(cos(radians),2))));
 
-          relX -= .1;
-          y -= relY;
+          relX -= .1/speed;
+          y -= relY/speed;
           
           if(movement)	
-            x -= relX;
+            x -= relX/speed;
           else
-            x += relX;
+            x += relX/speed;
 
           groundContact();	
         }
@@ -97,6 +97,10 @@ class Character
             return true;
           }
           return false;
+        }
+
+        bool getOnGround(){
+          return onGround;
         }
 
         Uint32 getLifetime(){
@@ -111,6 +115,10 @@ class Character
         {
           return alpha;
         }
+
+        void setSpeed(double value){
+          speed = value;
+        }
         
         int getWidth(){ return width;}
         int getHeight(){ return height;}
@@ -118,15 +126,15 @@ class Character
         int getYPos(){ return y;}	
         SDL_Texture* getText(){ return text;}
         SDL_Texture* getShadowText(){ return shadowText;}
-
+        
       private:
 
         SDL_Texture* text = NULL;
         SDL_Texture* shadowText = NULL;	
         int width = 0;
         int height = 0;
-        int x = 0;
-        int y = 0;
+        double x = 0;
+        double y = 0;
         double relX = 0;
         int relY = 0;
         int angle = 0;	
@@ -136,7 +144,7 @@ class Character
         Uint32 lifetime;
         bool onGround = false;
         Uint8 alpha = 255;
-
+        double speed = 1;
     };
 
 
@@ -176,7 +184,7 @@ class Character
         SDL_FreeSurface(shadowSurface);
 
       }
-
+      scoreText->setSpeed(speed);
       scoreVector.push_back(scoreText);
 
       scoring = 0;
@@ -215,7 +223,7 @@ class Character
 
         if(!scoreVector.empty()){
           for(int i = 0; i < scoreVector.size(); i++){
-            if(scoreVector[i]->getLifetime() > LETTER_LIFETIME){
+            if(scoreVector[i]->getOnGround() && scoreVector[i]->getLifetime() > LETTER_LIFETIME){
               scoreVector[i]->fade();
 
               if(!scoreVector[i]->getAlpha()){	
@@ -333,6 +341,13 @@ class Character
       }
       return false;
     }
+    
+    void setSpeed(double value){
+      this->speed = value; 
+      for(int i = 0; i < scoreVector.size(); i++){
+        scoreVector[i]->setSpeed(value);
+      } 
+    }
 
   private:
     SDL_Texture* objectTexture = NULL;
@@ -352,7 +367,7 @@ class Character
     int scoring = 0;
     int scoreType = 0;
     std::vector<ScoreText*> scoreVector;
-
+    double speed = 1;
 };
 
 #endif

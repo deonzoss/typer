@@ -82,13 +82,13 @@ class Scorer
       double radians = angle*PI/180.0;
       relY = ((abs(relX))*(tan(radians)))-(((GRAVITY)*(pow((abs(relX)),2)))/(2.0*(pow(velocity,2)*pow(cos(radians),2))));
 
-      relX -= .1;
-      y -= relY;
+      relX -= .1/speed;
+      y -= relY/speed;
       
       if(movement)	
-        x -= relX;
+        x -= relX/speed;
       else
-        x += relX;
+        x += relX/speed;
 
       
       groundContact();	
@@ -106,9 +106,14 @@ class Scorer
       if(y >= randGroundValue){
         y = randGroundValue;
         onGround = true;	
+        lifetime = SDL_GetTicks(); 
         return true;
       }
       return false;
+    }
+
+    bool getOnGround(){
+      return onGround;
     }
 
     Uint32 getLifetime(){
@@ -124,6 +129,7 @@ class Scorer
       return alpha;
     }
     
+    void setSpeed(double value){ speed = value;} 
     int getWidth(){ return width;}
     int getHeight(){ return height;}
     int getXPos(){ return x;}	
@@ -138,8 +144,8 @@ class Scorer
     TTF_Font* font = NULL; 
     int width = 0;
     int height = 0;
-    int x = 0;
-    int y = 0;
+    double x = 0;
+    double y = 0;
     double relX = 0;
     int relY = 0;
     int angle = 0;	
@@ -150,6 +156,7 @@ class Scorer
     bool onGround = false;
     Uint8 alpha = 255;
     char scoreString[6];
+    double speed = 1;
 };
 
 #endif

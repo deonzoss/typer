@@ -36,6 +36,8 @@ class Game
         
         void displayLetterVector();	
         
+        void displayDynamicLetters();       
+
         void displayScoreVector();
 
         void eventHandler();
@@ -60,6 +62,8 @@ class Game
       Menu* mainMenu; 
       Scoreboard* scoreboard;	
       SDL_Renderer* renderer;
+      SDL_Rect slowRect = {0,0,SCREEN_WIDTH, SCREEN_HEIGHT}; 
+      int slowRectAlpha = 0; 
       std::vector<Texture*> textVector;
       std::vector<Letter*> letterVector;	
       std::vector<Scorer*> scoreVector; 
@@ -80,6 +84,7 @@ class Game
       Object* desk = NULL;
       Fountain* fountain = NULL;
       Clock* clock = NULL;
+      Door* door = NULL; 
       bool startLevel = false;
       bool quitLevel = false; 
       bool screenDropped = false;

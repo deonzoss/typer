@@ -39,14 +39,14 @@ class Boss
           if(facingRight){ 
             renderQuad = {xPos,BOSS_SPAWN_Y, charRightClips[walkingFrameIndex].w, charRightClips[walkingFrameIndex].h};
             SDL_RenderCopy(renderer, objectTexture, &charRightClips[walkingFrameIndex], &renderQuad);
-            xPos+=WALKING_SPEED;
+            xPos+=WALKING_SPEED/speed;
           }
           else{
             renderQuad = {xPos,BOSS_SPAWN_Y, charLeftClips[walkingFrameIndex].w, charLeftClips[walkingFrameIndex].h};
             SDL_RenderCopy(renderer, objectTexture, &charLeftClips[walkingFrameIndex], &renderQuad);
-            xPos-=WALKING_SPEED; 
+            xPos-=WALKING_SPEED/speed; 
           }
-          if((SDL_GetTicks() - walkTime) > 220){
+          if((SDL_GetTicks() - walkTime) > (220)*speed){
             walkingFrameIndex++;
             if(walkingFrameIndex == 5){
               walkingFrameIndex = 1;
@@ -236,6 +236,15 @@ class Boss
     int getFrameIndex(){
       return walkingFrameIndex;
     }
+
+    double getSpeed(){
+      return speed;
+    }
+
+    void setSpeed(double value){
+      speed = value;
+    }
+
   private:
     SDL_Texture* objectTexture = NULL;
     SDL_Renderer* renderer = NULL;
@@ -254,8 +263,9 @@ class Boss
     bool frozen = false;
     bool facingRight = false;
     bool walking = true;
-    int xPos = BOSS_SPAWN_X;
+    double xPos = BOSS_SPAWN_X;
     int walkingFrameIndex = 1;
+    double speed = 1;
 };
 
 #endif

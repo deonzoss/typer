@@ -19,7 +19,7 @@ const int MAX_TEXT_LENGTH = 20;
 const int MAX_TEXT_SAMPLE_SIZE = 6;
 
 //SPEED
-const double LEVEL_ONE_SPEED = 1.5;
+const double LEVEL_ONE_SPEED = 3;
 const double LETTER_SLOW_SPEED = 10;
 const int TEXT_ROW_OFFSET = 90;
 const int MAX_MULTIPLIER_VAL = 45;
@@ -71,7 +71,7 @@ const int BOSS_OBJECT_W = 120;
 const int BOSS_OBJECT_H = 190;
 const int BOSS_SPAWN_X = 500;
 const int BOSS_SPAWN_Y = 690;
-const int WALKING_SPEED = 2;
+const double WALKING_SPEED = 1.9;
 
 const int TRASHCAN_SPAWN_X = 1190;
 const int TRASHCAN_SPAWN_Y = 750;
