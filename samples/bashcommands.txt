@@ -51,4 +51,9 @@ xzf
 ./configure
 #!/bin/bash
 #
+/usr/bin
+~
+--help
+-S
+-E
 

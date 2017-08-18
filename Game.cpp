@@ -339,6 +339,12 @@ void Game::collisionHandler()
         letterVector[i]->setOnGround(true);
         door->setAnimate(true);
       }
+      else if(fountain->collisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
+        scoreValue = 100;
+        letterVector[i]->setDynamic(2);
+        letterVector[i]->setY(LEFT_FOUNTAIN_HANDLE_SPAWN_Y - 20);
+        letterVector[i]->setOnGround(true);
+      }
       else if(trashcan->collisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
         scoreValue = 100; 
         deleteLetter = true;
@@ -359,7 +365,7 @@ void Game::collisionHandler()
           letterVector.erase(letterVector.begin()+i);
           delete(temp);
         }
-      } 
+      }
     }
   }
 }

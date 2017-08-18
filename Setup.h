@@ -19,7 +19,7 @@ const int MAX_TEXT_LENGTH = 20;
 const int MAX_TEXT_SAMPLE_SIZE = 6;
 
 //SPEED
-const double LEVEL_ONE_SPEED = 3;
+const double LEVEL_ONE_SPEED = 1.5;
 const double LETTER_SLOW_SPEED = 10;
 const int TEXT_ROW_OFFSET = 90;
 const int MAX_MULTIPLIER_VAL = 45;
@@ -84,6 +84,12 @@ const int DOOR_SPAWN_Y = 750;
 
 const int FOUNTAIN_SPAWN_X = 1080;
 const int FOUNTAIN_SPAWN_Y = 580;
+
+const int LEFT_FOUNTAIN_HANDLE_SPAWN_X = 1090;
+const int LEFT_FOUNTAIN_HANDLE_SPAWN_Y = 740;
+
+const int RIGHT_FOUNTAIN_HANDLE_SPAWN_X = 1140;
+const int RIGHT_FOUNTAIN_HANDLE_SPAWN_Y = 740;
 
 bool init();
 
