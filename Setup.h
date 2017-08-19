@@ -62,7 +62,7 @@ const int COWORKER_OBJECT_Y = 740;
 const int COWORKER_OBJECT_X = 520;
 const int COWORKER_OBJECT_W = 270;
 const int COWORKER_OBJECT_H = 230;
-const int COWORKER_SPAWN_X = 750;
+const int COWORKER_SPAWN_X = 850;
 const int COWORKER_SPAWN_Y = 680;
 
 const int BOSS_OBJECT_Y = 1520;
@@ -73,7 +73,7 @@ const int BOSS_SPAWN_X = 500;
 const int BOSS_SPAWN_Y = 690;
 const double WALKING_SPEED = 1.9;
 
-const int TRASHCAN_SPAWN_X = 1190;
+const int TRASHCAN_SPAWN_X = 750;
 const int TRASHCAN_SPAWN_Y = 750;
 
 const int CLOCK_SPAWN_X = 140;
@@ -82,13 +82,19 @@ const int CLOCK_SPAWN_Y = 580;
 const int DOOR_SPAWN_X = 1190;
 const int DOOR_SPAWN_Y = 750;
 
-const int FOUNTAIN_SPAWN_X = 1080;
+const int WINDOW_WORKER_X = 600;
+const int WINDOW_WORKER_Y = 630;
+
+const int WINDOW_WORKERS_X = 540;
+const int WINDOW_WORKERS_Y = 690;
+
+const int FOUNTAIN_SPAWN_X = 1150;
 const int FOUNTAIN_SPAWN_Y = 580;
 
-const int LEFT_FOUNTAIN_HANDLE_SPAWN_X = 1090;
+const int LEFT_FOUNTAIN_HANDLE_SPAWN_X = FOUNTAIN_SPAWN_X + 10;
 const int LEFT_FOUNTAIN_HANDLE_SPAWN_Y = 740;
 
-const int RIGHT_FOUNTAIN_HANDLE_SPAWN_X = 1140;
+const int RIGHT_FOUNTAIN_HANDLE_SPAWN_X = FOUNTAIN_SPAWN_X + 60;
 const int RIGHT_FOUNTAIN_HANDLE_SPAWN_Y = 740;
 
 bool init();

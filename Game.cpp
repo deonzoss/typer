@@ -406,10 +406,10 @@ void Game::start()
     SDL_RenderCopy(renderer, background, NULL, NULL);	
 
     screen->renderScreen(); 
+    door->render();  
     clock->render(); 
     trashcan->render(); 
     fountain->render(); 
-    door->render();  
     if(startLevel && !quitLevel && screenDropped){ 
       displayDynamicLetters(); 
     } 
@@ -422,11 +422,11 @@ void Game::start()
     if(startLevel && !quitLevel){
       if(screenDropped){
         displayTextVector();	
+        scoreboard->render();
+        screen->renderFrame();	
         displayLetterVector();	
         displayScoreVector(); 
         collisionHandler(); 
-        scoreboard->render();
-        screen->renderFrame();	
       } 
       else if (screen->getLettersRaised()){
         screenDropped = screen->dropScreen();
