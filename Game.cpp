@@ -20,9 +20,6 @@ std::vector<Texture*> Game::makeTextVector()
 
 std::vector<Texture*> Game::populateTextVector()
 {
-  if(textVector[0]){
-    printf("exists\n");
-  } 
   for(int i = 0; i < textVector.size(); i++){	
     Texture* texture = new Texture();
     texture->setRenderer(renderer);
@@ -163,7 +160,8 @@ void Game::slowDown(){
     scoreVector[i]->setSpeed(10);
   }
   mainCharacter->setSpeed(10);
-  boss->setSpeed(10); 
+  boss->setSpeed(10);
+  clock->setSpeed(10); 
   
   return;
 }
@@ -180,7 +178,8 @@ void Game::speedUp(){
     scoreVector[i]->setSpeed(1);
   }
   mainCharacter->setSpeed(1); 
-  boss->setSpeed(1); 
+  boss->setSpeed(1);
+  clock->setSpeed(1); 
   return;
 }
 
