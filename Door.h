@@ -24,15 +24,15 @@ class Door{
       windowWorker[0].w = 60;
       windowWorker[0].h = 160;
      
-      windowWorker[1].x = 530;
+      windowWorker[1].x = 540;
       windowWorker[1].y = 980;
       windowWorker[1].w = 60;
       windowWorker[1].h = 160;
       
       windowWorkerArm.x = 520;
-      windowWorkerArm.y = 1030;
-      windowWorkerArm.w = 10;
-      windowWorkerArm.h = 60;
+      windowWorkerArm.y = 980;
+      windowWorkerArm.w = 20;
+      windowWorkerArm.h = 120;
     }
 
     void render(){
@@ -43,22 +43,43 @@ class Door{
         object->setY(730);
       }
 
+      
+      if(windowWorkerIndex){ 
+        renderQuad = {WINDOW_WORKER_X + 40, WINDOW_WORKER_Y, windowWorkerArm.w, windowWorkerArm.h};
+        SDL_RenderCopy(renderer, objectTexture, &windowWorkerArm, &renderQuad);
+        angle = 0;
+        raiseArm = false; 
+      }
+      else{
+        renderQuad = {WINDOW_WORKER_X + 40, WINDOW_WORKER_Y, windowWorkerArm.w, windowWorkerArm.h};
+        SDL_RenderCopyEx(renderer, objectTexture, &windowWorkerArm, &renderQuad, angle, NULL, SDL_FLIP_NONE); 
+      }
+      
       renderQuad = {WINDOW_WORKER_X,WINDOW_WORKER_Y, windowWorker[0].w, windowWorker[0].h};
       SDL_RenderCopy(renderer, objectTexture, &windowWorker[windowWorkerIndex], &renderQuad); 
       
-      if(windowWorkerIndex){ 
-        renderQuad = {WINDOW_WORKER_X + 60, WINDOW_WORKER_Y + 50, windowWorkerArm.w, windowWorkerArm.h};
-        SDL_RenderCopy(renderer, objectTexture, &windowWorkerArm, &renderQuad); 
-      }
-      else{
-        renderQuad = {WINDOW_WORKER_X + 50, WINDOW_WORKER_Y + 50, windowWorkerArm.w, windowWorkerArm.h};
-        SDL_RenderCopy(renderer, objectTexture, &windowWorkerArm, &renderQuad); 
-      }
-      
       renderQuad = {WINDOW_WORKERS_X, WINDOW_WORKERS_Y, windowWorkers[0].w, windowWorkers[0].h};
       SDL_RenderCopy(renderer, objectTexture, &windowWorkers[windowWorkersIndex], &renderQuad); 
-      
-      
+       
+      if(raiseArm){
+        if(angle >= randValue){
+          angle-=10/speed;
+        } 
+        else if(SDL_GetTicks() - armTime > 2000*speed){
+          raiseArm = false;
+        }
+      }
+      else{
+        if(angle < 0){
+          angle+=10/speed;
+        }
+        else{
+          randValue = -45 - (rand()%90); 
+          raiseArm = true; 
+          armTime = SDL_GetTicks();
+        }
+      } 
+
       object->render();
     }
     
@@ -86,6 +107,11 @@ class Door{
       return false;
     }
 
+    void setSpeed(double value){
+      speed = value;
+    }
+
+
   private:
     Object* object;
     SDL_Renderer* renderer = NULL;
@@ -99,6 +125,11 @@ class Door{
     bool animate = false;
     int windowWorkersIndex = 0;
     int windowWorkerIndex = 0;
+    int angle = 0;
+    bool raiseArm = false;
+    Uint32 armTime;
+    int randValue;
+    double speed = 1;
 };
 
 #endif

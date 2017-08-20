@@ -162,7 +162,8 @@ void Game::slowDown(){
   mainCharacter->setSpeed(10);
   boss->setSpeed(10);
   clock->setSpeed(10); 
-  
+  door->setSpeed(10);
+
   return;
 }
 
@@ -180,6 +181,7 @@ void Game::speedUp(){
   mainCharacter->setSpeed(1); 
   boss->setSpeed(1);
   clock->setSpeed(1); 
+  door->setSpeed(1); 
   return;
 }
 
