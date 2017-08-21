@@ -65,6 +65,9 @@ const int COWORKER_OBJECT_H = 230;
 const int COWORKER_SPAWN_X = 850;
 const int COWORKER_SPAWN_Y = 680;
 
+const int COWORKER_COMPUTER_X = 860;
+const int COWORKER_COMPUTER_Y = 680;
+
 const int BOSS_OBJECT_Y = 1520;
 const int BOSS_OBJECT_X = 0;
 const int BOSS_OBJECT_W = 120;

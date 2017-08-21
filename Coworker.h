@@ -33,7 +33,17 @@ class Coworker
  
     void render()
     {
-      SDL_Rect renderQuad = {COWORKER_SPAWN_X,COWORKER_SPAWN_Y, charClips[0].w, charClips[0].h};
+      SDL_Rect renderQuad = {COWORKER_COMPUTER_X, COWORKER_COMPUTER_Y, computerClips[0].w, computerClips[0].h};
+      SDL_RenderCopy(renderer, objectTexture, &computerClips[computerClipsIndex], &renderQuad); 
+    
+      if(SDL_GetTicks()-computerClipTime > 200){ 
+        computerClipTime = SDL_GetTicks(); 
+        computerClipsIndex++;
+        if(computerClipsIndex == 26)
+          computerClipsIndex = 0;
+      } 
+      
+      renderQuad = {COWORKER_SPAWN_X,COWORKER_SPAWN_Y, charClips[0].w, charClips[0].h};
       SDL_RenderCopy(renderer, objectTexture, &charClips[0], &renderQuad);
       
       if(!heavyHead){ 
@@ -94,6 +104,14 @@ class Coworker
         charClips[i].w = COWORKER_OBJECT_W;
         charClips[i].h = COWORKER_OBJECT_H;
       }
+      for(int i = 0; i < 26; i++){
+        computerClips[i].x = 1160 + 80*(i%4);
+        printf("x:%d\n", i%4);
+        printf("y:%d\n", (i/4)%7);
+        computerClips[i].y = 680 + 80*((i/4)%7);
+        computerClips[i].w = 80;
+        computerClips[i].h = 80;
+      }
     }
 
     void setObjectTexture(SDL_Texture* texture)
@@ -119,12 +137,15 @@ class Coworker
     SDL_Texture* objectTexture = NULL;
     SDL_Renderer* renderer = NULL;
     SDL_Rect charClips[2];
+    SDL_Rect computerClips[26]; 
+    int computerClipsIndex = 0; 
     SDL_Rect charHead; 
     SDL_Color scoreColor;
     TTF_Font* font = NULL;
     int charIndex = 0;
     Uint32 blinkTime = 0;
     Uint32 heavyHeadTime = 0; 
+    Uint32 computerClipTime = 0;
     bool blink = false;
     bool heavyHead = false;
     bool frozen = false;
