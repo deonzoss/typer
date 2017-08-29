@@ -36,22 +36,16 @@ class Coworker
       SDL_Rect renderQuad = {COWORKER_COMPUTER_X, COWORKER_COMPUTER_Y, computerClips[0].w, computerClips[0].h};
       SDL_RenderCopy(renderer, objectTexture, &computerClips[computerClipsIndex], &renderQuad); 
     
-      if(SDL_GetTicks()-computerClipTime > 200){ 
-        computerClipTime = SDL_GetTicks(); 
-        computerClipsIndex++;
-        if(computerClipsIndex == 26)
-          computerClipsIndex = 0;
-      } 
       
       renderQuad = {COWORKER_SPAWN_X,COWORKER_SPAWN_Y, charClips[0].w, charClips[0].h};
       SDL_RenderCopy(renderer, objectTexture, &charClips[0], &renderQuad);
       
       if(!heavyHead){ 
-        renderQuad = {COWORKER_SPAWN_X + 130, COWORKER_SPAWN_Y - 20, charHead.w, charHead.h};
+        renderQuad = {COWORKER_SPAWN_X + 13*SCALESIZE, COWORKER_SPAWN_Y - 2*SCALESIZE, charHead.w, charHead.h};
         SDL_RenderCopy(renderer, objectTexture, &charHead, &renderQuad);
       } 
       else{
-        renderQuad = {COWORKER_SPAWN_X + 130, COWORKER_SPAWN_Y - 10, charHead.w, charHead.h};
+        renderQuad = {COWORKER_SPAWN_X + 13*SCALESIZE, COWORKER_SPAWN_Y - 1*SCALESIZE, charHead.w, charHead.h};
         SDL_RenderCopy(renderer, objectTexture, &charHead, &renderQuad);
         if(SDL_GetTicks() - heavyHeadTime >= LETTER_LIFETIME){
           heavyHead = false;
@@ -69,13 +63,13 @@ class Coworker
         blinkTime = SDL_GetTicks();
       }
       if(blink && ((SDL_GetTicks() - blinkTime) < 100)){
-        SDL_Rect blinkingEyes = {450, 830, 40, 10};
+        SDL_Rect blinkingEyes = {45*SCALESIZE, 83*SCALESIZE, 4*SCALESIZE, 1*SCALESIZE};
         SDL_Rect renderQuad; 
         if(!heavyHead){ 
-          renderQuad = {COWORKER_SPAWN_X + 140, COWORKER_SPAWN_Y + 10, blinkingEyes.w, blinkingEyes.h};
+          renderQuad = {COWORKER_SPAWN_X + 14*SCALESIZE, COWORKER_SPAWN_Y + 1*SCALESIZE, blinkingEyes.w, blinkingEyes.h};
         } 
         else{ 
-          renderQuad = {COWORKER_SPAWN_X + 140, COWORKER_SPAWN_Y + 20, blinkingEyes.w, blinkingEyes.h};
+          renderQuad = {COWORKER_SPAWN_X + 14*SCALESIZE, COWORKER_SPAWN_Y + 2*SCALESIZE, blinkingEyes.w, blinkingEyes.h};
         } 
         SDL_RenderCopy(renderer, objectTexture, &blinkingEyes, &renderQuad);
       }
@@ -94,10 +88,10 @@ class Coworker
 
     void setupClips()
     {
-      charHead.x = 440;
-      charHead.y = 840;
-      charHead.w = 70;
-      charHead.h = 70; 
+      charHead.x = 44*SCALESIZE;
+      charHead.y = 84*SCALESIZE;
+      charHead.w = 7*SCALESIZE;
+      charHead.h = 7*SCALESIZE; 
       for(int i = 0; i < 2; i++){
         charClips[i].x = COWORKER_OBJECT_X;
         charClips[i].y = COWORKER_OBJECT_Y;
@@ -105,12 +99,10 @@ class Coworker
         charClips[i].h = COWORKER_OBJECT_H;
       }
       for(int i = 0; i < 26; i++){
-        computerClips[i].x = 1160 + 80*(i%4);
-        printf("x:%d\n", i%4);
-        printf("y:%d\n", (i/4)%7);
-        computerClips[i].y = 680 + 80*((i/4)%7);
-        computerClips[i].w = 80;
-        computerClips[i].h = 80;
+        computerClips[i].x = 116*SCALESIZE + 8*SCALESIZE*(i%4);
+        computerClips[i].y = 68*SCALESIZE + 8*SCALESIZE*((i/4)%7);
+        computerClips[i].w = 8*SCALESIZE;
+        computerClips[i].h = 8*SCALESIZE;
       }
     }
 
@@ -119,20 +111,38 @@ class Coworker
       this->objectTexture = texture;
     }
 
-    bool collisionCheck(int x, int y){
-      if(x > COWORKER_SPAWN_X + 120 && x < COWORKER_SPAWN_X + 190){
-        if(y < COWORKER_SPAWN_Y - 10 && y > COWORKER_SPAWN_Y - 60){ 
+    bool collisionCheck(double x, double y){
+      if(x > COWORKER_SPAWN_X + 12*SCALESIZE && x < COWORKER_SPAWN_X + 19*SCALESIZE){
+        if(y < COWORKER_SPAWN_Y - 1*SCALESIZE && y > COWORKER_SPAWN_Y - 6*SCALESIZE){ 
           return true;
         }
       }
       return false; 
     }
 
+    bool computerCollisionCheck(double x, double y){
+      if(x > COWORKER_COMPUTER_X && x < COWORKER_COMPUTER_X + 8*SCALESIZE){
+        if(y > COWORKER_COMPUTER_Y -1*SCALESIZE && y < COWORKER_COMPUTER_Y+ 5*SCALESIZE){
+          return true;
+        } 
+      }
+      return false;
+    }
+
     void setHeavyHead(bool value){
       heavyHead = value;
       heavyHeadTime = SDL_GetTicks();
     }
+    
+    void setSpeed(double value){
+      speed = value;
+    }
 
+    void updateComputer(){
+      computerClipsIndex++; 
+      if(computerClipsIndex == 26)
+        computerClipsIndex = 0;
+    } 
   private:
     SDL_Texture* objectTexture = NULL;
     SDL_Renderer* renderer = NULL;
@@ -149,6 +159,7 @@ class Coworker
     bool blink = false;
     bool heavyHead = false;
     bool frozen = false;
+    double speed = 1;
 };
 
 #endif

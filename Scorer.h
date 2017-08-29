@@ -5,7 +5,7 @@
 class Scorer
 {
   public:
-    Scorer(char string[6], SDL_Renderer* renderer,int x, int y)
+    Scorer(char string[6], SDL_Renderer* renderer,double x, double y)
     {
       this->renderer = renderer; 
       strcpy(scoreString, string); 
@@ -16,7 +16,7 @@ class Scorer
       angle = 65 + (rand()%20);
       movement = (rand()%2);
       velocity = 10 + (rand()%3);	
-      randGroundValue = GROUND_VALUE + (rand()%30);	
+      randGroundValue = GROUND_VALUE + (rand()%3*(int)SCALESIZE);	
       lifetime = SDL_GetTicks();	
     }
 
@@ -95,7 +95,7 @@ class Scorer
     }
 
     void render(){
-      SDL_Rect renderQuad = {x+2, y+2, width, height};
+      SDL_Rect renderQuad = {x+.2*SCALESIZE, y+.2*SCALESIZE, width, height};
       SDL_RenderCopyEx(renderer, shadowTexture, NULL, &renderQuad, NULL, NULL, SDL_FLIP_NONE);
       
       renderQuad = {x, y, width, height};
@@ -130,10 +130,10 @@ class Scorer
     }
     
     void setSpeed(double value){ speed = value;} 
-    int getWidth(){ return width;}
-    int getHeight(){ return height;}
-    int getXPos(){ return x;}	
-    int getYPos(){ return y;}	
+    double getWidth(){ return width;}
+    double getHeight(){ return height;}
+    double getXPos(){ return x;}	
+    double getYPos(){ return y;}	
     SDL_Texture* getText(){ return scoreTexture;}
     SDL_Texture* getShadowText(){ return shadowTexture;}
 
@@ -142,12 +142,12 @@ class Scorer
     SDL_Texture* scoreTexture = NULL;
     SDL_Texture* shadowTexture = NULL;	
     TTF_Font* font = NULL; 
-    int width = 0;
-    int height = 0;
+    double width = 0;
+    double height = 0;
     double x = 0;
     double y = 0;
     double relX = 0;
-    int relY = 0;
+    double relY = 0;
     int angle = 0;	
     int velocity = 0;
     int movement = 0;

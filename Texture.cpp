@@ -85,9 +85,9 @@ bool Texture::loadFromRenderedText(std::string textureText)
 }
 
 
-void Texture::render(int x, int y, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip)
+void Texture::render(double x, double y, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip)
 {
-	SDL_Rect renderQuad = {x+3,y+3,shadowWidth, shadowHeight};
+	SDL_Rect renderQuad = {x+.3*SCALESIZE,y+.3*SCALESIZE,shadowWidth, shadowHeight};
 
 	SDL_RenderCopyEx(renderer, shadowTexture, clip, &renderQuad, angle, center, flip);
 	
@@ -130,11 +130,11 @@ int Texture::length(){
 	return text.length();
 }
 
-int Texture::getWidth(){
+double Texture::getWidth(){
 	return mWidth;
 }
 
-int Texture::getHeight(){
+double Texture::getHeight(){
 	return mHeight;
 }
 
@@ -162,11 +162,11 @@ SDL_Renderer* Texture::getRenderer(){
 	return renderer;
 }
 
-int Texture::getXPos(){
+double Texture::getXPos(){
 	return xPos;
 }
 
-void Texture::setXPos(int x){
+void Texture::setXPos(double x){
 	xPos = x;
 }
 

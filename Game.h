@@ -12,7 +12,6 @@
 #include "Trashcan.h"
 #include "Fountain.h"
 #include "Clock.h"
-#include "Computer.h"
 #include "Door.h"
 #include "Menu.h"
 #include "Scorer.h"

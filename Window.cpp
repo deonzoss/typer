@@ -141,12 +141,12 @@ void Window::free()
 	height = 0;
 }
 
-int Window::getWidth()
+double Window::getWidth()
 {
 	return width;
 }
 
-int Window::getHeight()
+double Window::getHeight()
 {
 	return height;
 }

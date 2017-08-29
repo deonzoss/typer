@@ -14,15 +14,15 @@ class Texture
 
 		bool loadText(std::string text);
 
-		void render(int x, int y, SDL_Rect* clip = NULL, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
+		void render(double x, double y, SDL_Rect* clip = NULL, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
 	
 		bool offScreen();	
 	
 		int popFront();	
 
-		int getWidth();
+		double getWidth();
 		
-		int getHeight();
+		double getHeight();
 		
 		void setOriginalText(std::string originalText);	
 		
@@ -34,9 +34,9 @@ class Texture
 
 		int length();	
 		
-		int getXPos();
+		double getXPos();
 
-		void setXPos(int x);
+		void setXPos(double x);
 
 		void setFont(TTF_Font* gFont);
 		
@@ -60,10 +60,10 @@ class Texture
 		std::string text;
 		std::string originalText;	
 
-		int mWidth = 0;
-		int mHeight = 0;
-		int shadowWidth = 0;
-		int shadowHeight = 0;
+		double mWidth = 0;
+		double mHeight = 0;
+		double shadowWidth = 0;
+		double shadowHeight = 0;
 		
 		double xPos = 0;
 		double speed = 0;

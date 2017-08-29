@@ -1,5 +1,4 @@
 #include "Word.h"
-
 #ifndef Menu_h
 #define Menu_h
 
@@ -12,10 +11,10 @@ class Menu
       menuDisplay = 1; 
       loadFont();
       for(int i = 0; i < 4; i++){
-        menuFrames[i].w = 230;
-        menuFrames[i].h = 50;
-        menuFrames[i].x = 10;
-        menuFrames[i].y = 580; 
+        menuFrames[i].w = 23*SCALESIZE;
+        menuFrames[i].h = 5*SCALESIZE;
+        menuFrames[i].x = 1*SCALESIZE;
+        menuFrames[i].y = 58*SCALESIZE; 
       }
     }
 
@@ -63,19 +62,22 @@ class Menu
       SDL_FreeSurface(textSurface);
       SDL_FreeSurface(textSurfaceShadow);
        
-      tipTextXPos = 200;
-      tipTextYPos = 200; 
+      tipTextXPos = 20*SCALESIZE;
+      tipTextYPos = 20*SCALESIZE; 
     
-      tipSentenceText = new Word(renderer, 160, 250, "- Spacebar pauses the game.", 1, MENU_FONT_COLOR, SHADOW_COLOR, 50, 1); 
+      tipSentenceText = new Word(renderer, 16*SCALESIZE, 25*SCALESIZE, "- Spacebar pauses the game.", 1, MENU_FONT_COLOR, SHADOW_COLOR, 5*SCALESIZE, .1*SCALESIZE); 
     
     }
 
     void loadMenuFrameText(){
 
-      characterText = new Word(renderer, menuFramesXPos[0] + 30, menuFramesYPos[0] + 5, "CHARACTER", 0, CODE_COLOR, SHADOW_COLOR, MAIN_MENU_FONT_SIZE, 0);
-      levelText = new Word(renderer, menuFramesXPos[1] + 70, menuFramesYPos[1] + 5, "LEVEL", 0, CODE_COLOR, SHADOW_COLOR, MAIN_MENU_FONT_SIZE, 0);
-      scoreboardText = new Word(renderer, menuFramesXPos[2] + 20, menuFramesYPos[2] + 5, "HIGH-SCORES", 0, CODE_COLOR, SHADOW_COLOR, MAIN_MENU_FONT_SIZE, 0);
-      optionsText = new Word(renderer, menuFramesXPos[3] + 50, menuFramesYPos[3] + 5, "OPTIONS", 0, CODE_COLOR, SHADOW_COLOR, MAIN_MENU_FONT_SIZE, 0);
+      characterText = new Word(renderer, menuFramesXPos[0] + 3*SCALESIZE, menuFramesYPos[0] + .5*SCALESIZE, "CHARACTER", 0, CODE_COLOR, SHADOW_COLOR, MAIN_MENU_FONT_SIZE, 0);
+      
+      levelText = new Word(renderer, menuFramesXPos[1] + 7*SCALESIZE, menuFramesYPos[1] + .5*SCALESIZE, "LEVEL", 0, CODE_COLOR, SHADOW_COLOR, MAIN_MENU_FONT_SIZE, 0);
+     
+      scoreboardText = new Word(renderer, menuFramesXPos[2] + 2*SCALESIZE, menuFramesYPos[2] + .5*SCALESIZE, "HIGH-SCORES", 0, CODE_COLOR, SHADOW_COLOR, MAIN_MENU_FONT_SIZE, 0);
+
+      optionsText = new Word(renderer, menuFramesXPos[3] + 5*SCALESIZE, menuFramesYPos[3] + .5*SCALESIZE, "OPTIONS", 0, CODE_COLOR, SHADOW_COLOR, MAIN_MENU_FONT_SIZE, 0);
 
     }
 
@@ -87,7 +89,7 @@ class Menu
         } 
       }  
       floatText(); 
-      SDL_Rect renderQuad = {typeStartXPos+3, typeStartYPos+3, typeStartWidth, typeStartHeight};
+      SDL_Rect renderQuad = {typeStartXPos+.3*SCALESIZE, typeStartYPos+.3*SCALESIZE, typeStartWidth, typeStartHeight};
       SDL_RenderCopyEx(renderer, typeStartShadow, NULL, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
       renderQuad = {typeStartXPos, typeStartYPos, typeStartWidth, typeStartHeight};
       SDL_RenderCopyEx(renderer, typeStart, NULL, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
@@ -138,28 +140,28 @@ class Menu
         loadTipText();
       }
       
-      makeBorder(1000, 380);
+      makeBorder(100*SCALESIZE, 38*SCALESIZE);
 
       SDL_Rect renderQuad = {tipTextXPos, tipTextYPos, tipTextWidth, tipTextHeight};
       SDL_RenderCopyEx(renderer, tipText, NULL, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
-      renderQuad = {tipTextXPos+2, tipTextYPos+2, tipTextWidth, tipTextHeight};
+      renderQuad = {tipTextXPos+.2*SCALESIZE, tipTextYPos+.2*SCALESIZE, tipTextWidth, tipTextHeight};
       SDL_RenderCopyEx(renderer, tipTextShadow, NULL, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
     }
 
     void displayCharacterMenu(){
-      makeBorder(1000, 700);
+      makeBorder(100*SCALESIZE, 70*SCALESIZE);
     }
 
     void displayLevelMenu(){
-      makeBorder(1000, 600);
+      makeBorder(100*SCALESIZE, 60*SCALESIZE);
     }
     
     void displayScoresMenu(){
-      makeBorder(1000, 500);
+      makeBorder(100*SCALESIZE, 50*SCALESIZE);
     }
     
     void displayOptionsMenu(){
-      makeBorder(1000, 400);
+      makeBorder(100*SCALESIZE, 40*SCALESIZE);
     }
     
     void displayPauseMenu(){
@@ -169,27 +171,27 @@ class Menu
       SDL_RenderFillRect(renderer, &borderRect);
       SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
       if(!pauseText){
-        pauseText = new Word(renderer, SCREEN_WIDTH/2 - 130, SCREEN_HEIGHT/2 - 50, "PAUSED", 1, CODE_COLOR, SHADOW_COLOR, 100, 3); 
+        pauseText = new Word(renderer, SCREEN_WIDTH/2 - 13*SCALESIZE, SCREEN_HEIGHT/2 - 5*SCALESIZE, "PAUSED", 1, CODE_COLOR, SHADOW_COLOR, 10*SCALESIZE, .3*SCALESIZE); 
       }
       pauseText->render();
 
     }
 
-    void makeBorder(int width, int height){
-      borderRect = {SCREEN_WIDTH/2 - 500, SCREEN_HEIGHT/2 - 320, width, height};
+    void makeBorder(double width, double height){
+      borderRect = {SCREEN_WIDTH/2 - 50*SCALESIZE, SCREEN_HEIGHT/2 - 32*SCALESIZE, width, height};
       SDL_SetRenderDrawColor(renderer, 65, 111, 153, 0xFF);
       SDL_RenderFillRect(renderer, &borderRect);
-      outlineRect = {borderRect.x+10, borderRect.y+10, borderRect.w-20, borderRect.h-20};
+      outlineRect = {borderRect.x+1*SCALESIZE, borderRect.y+1*SCALESIZE, borderRect.w-2*SCALESIZE, borderRect.h-2*SCALESIZE};
       SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
       SDL_RenderFillRect(renderer, &outlineRect);
     }
           
     void floatText(){
       if(floatUp){
-        typeStartYPos -= 1;
+        typeStartYPos -= .1*SCALESIZE;
       }
       else if(typeStartYPos < GROUND_VALUE){ 
-        typeStartYPos += 1;
+        typeStartYPos += .1*SCALESIZE;
       }
       if(typeStartYPos >= GROUND_VALUE){
         if((SDL_GetTicks() - floatTime) > 1000){ 
@@ -197,7 +199,7 @@ class Menu
           floatTime = SDL_GetTicks();
         }
       }
-      else if(typeStartYPos <= (GROUND_VALUE - 10)){
+      else if(typeStartYPos <= (GROUND_VALUE - 1*SCALESIZE)){
         floatUp = false; 
       } 
     }
@@ -221,27 +223,27 @@ class Menu
     SDL_Rect outlineRect;
     SDL_Rect borderRect;
     SDL_Rect menuFrames[4]; 
-    int menuFramesYPos[4] = {40, 40, 40, 40};
-    int menuFramesXPos[4] = {10, 250, 800, 1040};
+    int menuFramesYPos[4] = {4*SCALESIZE, 4*SCALESIZE, 4*SCALESIZE, 4*SCALESIZE};
+    int menuFramesXPos[4] = {1*SCALESIZE, 25*SCALESIZE, 80*SCALESIZE, 104*SCALESIZE};
 
     SDL_Texture* typeStart = NULL;
     SDL_Texture* typeStartShadow = NULL;
     
     SDL_Texture* tipText = NULL;
-    int tipTextXPos = 0;
-    int tipTextYPos= 0;
-    int tipTextWidth = 0;
-    int tipTextHeight = 0;
+    double tipTextXPos = 0;
+    double tipTextYPos= 0;
+    double tipTextWidth = 0;
+    double tipTextHeight = 0;
     SDL_Texture* tipTextShadow = NULL;
     SDL_Texture* objectTexture = NULL;
     
     TTF_Font* font = NULL;
    
     int menuDisplay = 0; 
-    int typeStartXPos = 0;
-    int typeStartYPos = 0;
-    int typeStartWidth = 0;
-    int typeStartHeight = 0;
+    double typeStartXPos = 0;
+    double typeStartYPos = 0;
+    double typeStartWidth = 0;
+    double typeStartHeight = 0;
     char* startString = "t y p e   \" s t a r t \"   t o   b e g i n   g a m e ";
     bool floatUp = false;
     Uint32 floatTime = 0;

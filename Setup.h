@@ -5,100 +5,113 @@
 #ifndef Setup_h
 #define Setup_h
 
+const double SCALESIZE = 5;
+
+
 const double PI = 3.14159265;
 const double GRAVITY = 9.8;
 
 
-const int SCREEN_WIDTH = 640*2;
-const int SCREEN_HEIGHT = 480*2;
-const int SCREEN_STARTING_YPOS = -500;
-const int SCREEN_END_YPOS = 0; 
-const int TEXT_SIZE = 40; 
-const int NUM_TEXT_ROWS = 10;
-const int MAX_TEXT_LENGTH = 20;
-const int MAX_TEXT_SAMPLE_SIZE = 6;
 
 //SPEED
-const double LEVEL_ONE_SPEED = 1.5;
+const double LEVEL_ONE_SPEED = .15*SCALESIZE;
 const double LETTER_SLOW_SPEED = 10;
-const int TEXT_ROW_OFFSET = 90;
-const int MAX_MULTIPLIER_VAL = 45;
-const int MULTIPLIER_Y = 60;
-const int MULTIPLIER_X = 280;
-const int GROUND_VALUE = 930-TEXT_SIZE;
-const char CODE_FONT[30] = "fonts/VT323-Regular.ttf";
+const double WALKING_SPEED = .19*SCALESIZE;
+const double WALKING_ANIMATION_CHANGE_SPEED = 220;
 
+//SCREEN
+const double TEXT_ROW_OFFSET = 9*SCALESIZE;
+const double MULTIPLIER_Y = 6*SCALESIZE;
+const double MULTIPLIER_X = 28*SCALESIZE;
+const char CODE_FONT[30] = "fonts/VT323-Regular.ttf";
 const SDL_Color CODE_COLOR = {0xFF,0xFF,0xFF};//WHITE
 const SDL_Color SHADOW_COLOR = {0, 0, 0};//BLACK
+const double SCOREBOARDX = 6*SCALESIZE;
+const double SCOREBOARDY = 6*SCALESIZE;
+const double SCOREBOARD_FONT_SIZE = 4*SCALESIZE;
+const double SCREEN_WIDTH = 128*SCALESIZE;
+const double SCREEN_HEIGHT = 96*SCALESIZE;
+const double SCREEN_STARTING_YPOS = -50*SCALESIZE;
+const double SCREEN_END_YPOS = 0*SCALESIZE; 
+const double TEXT_SIZE = 4*SCALESIZE; 
+const int  NUM_TEXT_ROWS = 10;
+const int MAX_TEXT_LENGTH = 20;
 
 
-const int SCOREBOARDX = 60;
-const int SCOREBOARDY = 60;
-const int SCOREBOARD_FONT_SIZE = 40;
 
 
 //MAIN MENU STUFF
-const int MAIN_MENU_FONT_SIZE = 40;
+const double MAIN_MENU_FONT_SIZE = 4*SCALESIZE;
 const SDL_Color MENU_FONT_COLOR = {65, 111, 153};
 const SDL_Color MENU_SHADOW_FONT_COLOR = {92, 109, 109};
+const double TIP_TEXT_XPOS = 20;
+const double TIP_TEXT_YPOS = 20;
+
+const double CHARACTER_SCORE_X = 13*SCALESIZE;	//initial coordinates for values to fly out of
+const double CHARACTER_SCORE_Y = 79.5*SCALESIZE;	//computer
+const double CHARACTER_SCORE_FONT_SIZE = 3*SCALESIZE;
 
 
-const int CHARACTER_SCORE_X = 130;	//initial coordinates for values to fly out of
-const int CHARACTER_SCORE_Y = 795;	//computer
-const int CHARACTER_SCORE_FONT_SIZE = 30;
+//SCORES
 const int LETTER_TYPED_SCORE = 10;
+const int MAX_MULTIPLIER_VAL = 45;
 
+
+//LIFETIMES
 const Uint32 LETTER_LIFETIME = 2000;
 
+//ENVIRONMENT VARIABLES
+const double GROUND_VALUE = (93*SCALESIZE)-TEXT_SIZE;
+
+
 //OBJECTS
+const double MAIN_CHARACTER_OBJECT_Y = 81*SCALESIZE;
+const double MAIN_CHARACTER_OBJECT_X = 11*SCALESIZE;
+const double MAIN_CHARACTER_OBJECT_W = MAIN_CHARACTER_OBJECT_X;
+const double MAIN_CHARACTER_OBJECT_H = 15*SCALESIZE;
 
+const double COWORKER_OBJECT_Y = 74*SCALESIZE;
+const double COWORKER_OBJECT_X = 52*SCALESIZE;
+const double COWORKER_OBJECT_W = 27*SCALESIZE;
+const double COWORKER_OBJECT_H = 23*SCALESIZE;
+const double COWORKER_SPAWN_X = 85*SCALESIZE;
+const double COWORKER_SPAWN_Y = 68*SCALESIZE;
 
-const int MAIN_CHARACTER_OBJECT_Y = 810;
-const int MAIN_CHARACTER_OBJECT_X = 110;
-const int MAIN_CHARACTER_OBJECT_W = MAIN_CHARACTER_OBJECT_X;
-const int MAIN_CHARACTER_OBJECT_H = 150;
+const double COWORKER_COMPUTER_X = 86*SCALESIZE;
+const double COWORKER_COMPUTER_Y = 68*SCALESIZE;
 
-const int COWORKER_OBJECT_Y = 740;
-const int COWORKER_OBJECT_X = 520;
-const int COWORKER_OBJECT_W = 270;
-const int COWORKER_OBJECT_H = 230;
-const int COWORKER_SPAWN_X = 850;
-const int COWORKER_SPAWN_Y = 680;
+const double BOSS_OBJECT_Y = 152*SCALESIZE;
+const double BOSS_OBJECT_X = 0*SCALESIZE;
+const double BOSS_OBJECT_W = 12*SCALESIZE;
+const double BOSS_OBJECT_H = 19*SCALESIZE;
+const double BOSS_SPAWN_X = 50*SCALESIZE;
+const double BOSS_SPAWN_Y = 69*SCALESIZE;
+const int BOSS_BLINK_TIME = 2500;
+const int BOSS_BLINK_DURATION = 100;
 
-const int COWORKER_COMPUTER_X = 860;
-const int COWORKER_COMPUTER_Y = 680;
+const double TRASHCAN_SPAWN_X = 75*SCALESIZE;
+const double TRASHCAN_SPAWN_Y = 75*SCALESIZE;
 
-const int BOSS_OBJECT_Y = 1520;
-const int BOSS_OBJECT_X = 0;
-const int BOSS_OBJECT_W = 120;
-const int BOSS_OBJECT_H = 190;
-const int BOSS_SPAWN_X = 500;
-const int BOSS_SPAWN_Y = 690;
-const double WALKING_SPEED = 1.9;
+const double CLOCK_SPAWN_X = 14*SCALESIZE;
+const double CLOCK_SPAWN_Y = 58*SCALESIZE;
 
-const int TRASHCAN_SPAWN_X = 750;
-const int TRASHCAN_SPAWN_Y = 750;
+const double DOOR_SPAWN_X = 119*SCALESIZE;
+const double DOOR_SPAWN_Y = 75*SCALESIZE;
 
-const int CLOCK_SPAWN_X = 140;
-const int CLOCK_SPAWN_Y = 580;
+const double WINDOW_WORKER_X = 60*SCALESIZE;
+const double WINDOW_WORKER_Y = 63*SCALESIZE;
 
-const int DOOR_SPAWN_X = 1190;
-const int DOOR_SPAWN_Y = 750;
+const double WINDOW_WORKERS_X = 54*SCALESIZE;
+const double WINDOW_WORKERS_Y = 69*SCALESIZE;
 
-const int WINDOW_WORKER_X = 600;
-const int WINDOW_WORKER_Y = 630;
+const double FOUNTAIN_SPAWN_X = 115*SCALESIZE;
+const double FOUNTAIN_SPAWN_Y = 58*SCALESIZE;
 
-const int WINDOW_WORKERS_X = 540;
-const int WINDOW_WORKERS_Y = 690;
+const double LEFT_FOUNTAIN_HANDLE_SPAWN_X = FOUNTAIN_SPAWN_X + 1*SCALESIZE;
+const double LEFT_FOUNTAIN_HANDLE_SPAWN_Y = 74*SCALESIZE;
 
-const int FOUNTAIN_SPAWN_X = 1150;
-const int FOUNTAIN_SPAWN_Y = 580;
-
-const int LEFT_FOUNTAIN_HANDLE_SPAWN_X = FOUNTAIN_SPAWN_X + 10;
-const int LEFT_FOUNTAIN_HANDLE_SPAWN_Y = 740;
-
-const int RIGHT_FOUNTAIN_HANDLE_SPAWN_X = FOUNTAIN_SPAWN_X + 60;
-const int RIGHT_FOUNTAIN_HANDLE_SPAWN_Y = 740;
+const double RIGHT_FOUNTAIN_HANDLE_SPAWN_X = FOUNTAIN_SPAWN_X + 6*SCALESIZE;
+const double RIGHT_FOUNTAIN_HANDLE_SPAWN_Y = 74*SCALESIZE;
 
 bool init();
 

@@ -8,35 +8,35 @@ class Screen
     {
       this->renderer = renderer;
 
-      wholeScreen.x = 0;
-      wholeScreen.y = 40;
-      wholeScreen.w = 1280;
-      wholeScreen.h = 540;
+      wholeScreen.x = 0*SCALESIZE;
+      wholeScreen.y = 4*SCALESIZE;
+      wholeScreen.w = 128*SCALESIZE;
+      wholeScreen.h = 54*SCALESIZE;
 
-      wholeScreenXPos = 0;
+      wholeScreenXPos = 0*SCALESIZE;
       wholeScreenYPos = SCREEN_STARTING_YPOS;
       
       leftFrame.x = wholeScreen.x;
       leftFrame.y = wholeScreen.y;
-      leftFrame.w = 50;
+      leftFrame.w = 5*SCALESIZE;
       leftFrame.h = wholeScreen.h;
 
-      rightFrame.x = wholeScreen.w - 50;
+      rightFrame.x = wholeScreen.w - 5*SCALESIZE;
       rightFrame.y = wholeScreen.y;
-      rightFrame.w = 50;
+      rightFrame.w = 5*SCALESIZE;
       rightFrame.h = wholeScreen.h;
   
       for(int i = 0; i < 5; i++){
-        startFrames[i].w = 60;
-        startFrames[i].h = 90;
-        startFrames[i].x = 240 + i*60;
-        startFrames[i].y = 580;
+        startFrames[i].w = 6*SCALESIZE;
+        startFrames[i].h = 9*SCALESIZE;
+        startFrames[i].x = 24*SCALESIZE + i*6*SCALESIZE;
+        startFrames[i].y = 58*SCALESIZE;
       } 
       for(int i = 0; i < 9; i++){
-        endFrames[i].w = 60;
-        endFrames[i].h = 90;
-        endFrames[i].x = 540 + i*60;
-        endFrames[i].y = 580;
+        endFrames[i].w = 6*SCALESIZE;
+        endFrames[i].h = 9*SCALESIZE;
+        endFrames[i].x = 54*SCALESIZE + i*6*SCALESIZE;
+        endFrames[i].y = 58*SCALESIZE;
       } 
       
       endXPos = SCREEN_WIDTH/2 - (endFrames[0].w*9)/2;
@@ -64,7 +64,7 @@ class Screen
     }
     bool dropScreen(){
       if(wholeScreenYPos<SCREEN_END_YPOS){ 
-        wholeScreenYPos+=10;
+        wholeScreenYPos+=1*SCALESIZE;
       }
       else{
         wholeScreenYPos = SCREEN_END_YPOS;
@@ -79,7 +79,7 @@ class Screen
         return false;
       } 
       else if(wholeScreenYPos>SCREEN_STARTING_YPOS){ 
-        wholeScreenYPos-=10;
+        wholeScreenYPos-=1*SCALESIZE;
       }
       else{
         wholeScreenYPos = SCREEN_STARTING_YPOS;
@@ -96,11 +96,11 @@ class Screen
       if(!screenDropped){
         if(raiseLetters){
           for(int i = 0; i < raiseLetters; i++){
-            if(startFramesYPos[i] > -50){ 
-              startFramesYPos[i] -= 10;
+            if(startFramesYPos[i] > -5*SCALESIZE){ 
+              startFramesYPos[i] -= 1*SCALESIZE;
             }
           }
-          if(raiseLetters == 5 && startFramesYPos[4] <= -50){
+          if(raiseLetters == 5 && startFramesYPos[4] <= -5*SCALESIZE){
             lettersRaised = true;
             lettersDropped = false; 
             raiseLetters = 0;
@@ -111,33 +111,33 @@ class Screen
             raiseEndLetter();
           } 
           for(int i = 0; i < raiseEndLetters; i++){
-            if(endFramesYPos[i] > -50){
-              endFramesYPos[i] -= 10;
+            if(endFramesYPos[i] > -5*SCALESIZE){
+              endFramesYPos[i] -= 1*SCALESIZE;
             }
           }
-          if(raiseEndLetters == 9 && endFramesYPos[8] <= -50){
+          if(raiseEndLetters == 9 && endFramesYPos[8] <= -5*SCALESIZE){
             endLettersRaised = true;
             endLettersDropped = false;
             raiseEndLetters = 0;
             for(int i = 0; i < 9; i++){
-              endFramesYPos[i] = 410;
+              endFramesYPos[i] = 41*SCALESIZE;
             }
           }
         }
         else if(dropLetters){
           for(int i = 0; i < dropLetters; i++){
-            if(startFramesYPos[i] < 40){
-              startFramesYPos[i] += 10;
+            if(startFramesYPos[i] < 4*SCALESIZE){
+              startFramesYPos[i] += 1*SCALESIZE;
             }
           }
-          if(dropLetters == 5 && startFramesYPos[4] >= 40){
+          if(dropLetters == 5 && startFramesYPos[4] >= 4*SCALESIZE){
             lettersRaised = false;
             lettersDropped = true;
             dropLetters = 0;
           }
         } 
         for(int i = 0; i < 5; i++){ 
-          renderQuad = {490+i*startFrames[i].w,startFramesYPos[i],startFrames[i].w,startFrames[i].h};	
+          renderQuad = {49*SCALESIZE+i*startFrames[i].w,startFramesYPos[i],startFrames[i].w,startFrames[i].h};	
           SDL_RenderCopy(renderer, objectTexture,&startFrames[i], &renderQuad);
         } 
       }
@@ -147,7 +147,7 @@ class Screen
       }
       if(endLettersDropped && screenDropped){
         for(int i = 0; i < 9; i++){
-          endFramesYPos[i] = wholeScreenYPos + 540;
+          endFramesYPos[i] = wholeScreenYPos + 54*SCALESIZE;
         }
       } 
       if(endGame || endLettersDropped){ 
@@ -163,11 +163,11 @@ class Screen
     
     void dropGameOver(){ 
       for(int i = 0; i < endGame; i++){
-        if(endFramesYPos[i] < 540){
-          endFramesYPos[i] += 10;
+        if(endFramesYPos[i] < 54*SCALESIZE){
+          endFramesYPos[i] += 1*SCALESIZE;
         }
       }
-      if(endGame == 9 && endFramesYPos[8] >= 540){
+      if(endGame == 9 && endFramesYPos[8] >= 54*SCALESIZE){
         endGame = 0;
         endLettersDropped=true; 
         return; 
@@ -211,14 +211,14 @@ class Screen
     bool lettersDropped = true; 
     bool endLettersDropped = false; 
     bool endLettersRaised = true; 
-    int wholeScreenXPos = 0;
-    int wholeScreenYPos = 0;
+    double wholeScreenXPos = 0;
+    double wholeScreenYPos = 0;
     int raiseLetters = 0;
     int raiseEndLetters = 0; 
     int dropLetters = 0; 
-    int startFramesYPos[5] = {40, 40, 40, 40, 40};
-    int endFramesYPos[9] = {410,410,410,410,410,410,410,410,410};        
-    int endXPos;
+    int startFramesYPos[5] = {4*SCALESIZE, 4*SCALESIZE, 4*SCALESIZE, 4*SCALESIZE, 4*SCALESIZE};
+    int endFramesYPos[9] = {41*SCALESIZE,41*SCALESIZE,41*SCALESIZE,41*SCALESIZE,41*SCALESIZE,41*SCALESIZE,41*SCALESIZE,41*SCALESIZE,41*SCALESIZE};        
+    double endXPos;
     int endGame = 0;
 
 };	

@@ -9,9 +9,9 @@
 Letter::Letter()
 {
 	angle = 10 + (rand()%30);	
-	velocity = 10 + (rand()%40);	
-  randXChange = (rand()%5); 
-	randGroundValue = GROUND_VALUE + (rand()%30);
+	velocity = 1*SCALESIZE + (rand()%(3*(int)SCALESIZE));	
+  randXChange = (rand()%((int)(.5*SCALESIZE))); 
+	randGroundValue = GROUND_VALUE + (rand()%(3*(int)SCALESIZE));
 }
 
 Letter::~Letter()
@@ -30,7 +30,7 @@ void Letter::move(){
 	double radians = angle*PI/180.0;
 	
   if(rate > -50){
-    relY = ((abs(relX))*(tan(radians)))-(((GRAVITY)*(pow((abs(relX)),2)))/(2.0*(pow(velocity,2)*pow(cos(radians),2))));	
+    relY = (((abs(relX))*(tan(radians)))-(((GRAVITY)*(pow((abs(relX)),2)))/(2.0*(pow(velocity,2)*pow(cos(radians),2))))/10);	
     rate = 4*(relY-prevRelY);
     if(rate < -50)
       rate = -50; 
@@ -38,18 +38,17 @@ void Letter::move(){
   
   
   prevRelY = relY;  
-	relX -= -5/speedMult;
+	relX -= (-5)/speedMult;
    
-  yPos -= rate;
-  if(velocity%2){  
-  	xPos += (-4 - randXChange)/speedMult;	
+  yPos -= (rate/10)*SCALESIZE;
+  if(angle%2){  
+  	xPos += (-.4*SCALESIZE - randXChange)/speedMult;	
   }
   else{
-    xPos -= (-4 - randXChange)/speedMult;
+    xPos -= (-.4*SCALESIZE - randXChange)/speedMult;
   }
   groundContact();
-
-	return;
+  return;
 }
 
 bool Letter::loadLetter(char letter, SDL_Renderer* renderer)
@@ -94,7 +93,7 @@ bool Letter::loadFromRenderedText(char letter, SDL_Color letterColor, SDL_Render
 	return texture!=NULL;	
 }
 
-void Letter::render(int x, int y,SDL_Renderer* renderer, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip)
+void Letter::render(double x, double y,SDL_Renderer* renderer, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip)
 {
 	if(onGround){	
 		SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
@@ -104,7 +103,7 @@ void Letter::render(int x, int y,SDL_Renderer* renderer, SDL_Rect* clip, double 
 		SDL_SetTextureAlphaMod(shadowTexture, alpha);
 	}	
 	
-	SDL_Rect renderQuad = {x+3,y+3,width,height};
+	SDL_Rect renderQuad = {x+.3*SCALESIZE,y+.3*SCALESIZE,width,height};
 
 	SDL_RenderCopyEx(renderer, shadowTexture, clip, &renderQuad, angle, center, flip);
 	
@@ -135,7 +134,7 @@ void Letter::setX(double x)
 	xPos = x;
 }
 
-void Letter::setY(int y)
+void Letter::setY(double y)
 {
 	yPos = y;
 }
@@ -155,7 +154,7 @@ double Letter::getX()
 	return xPos;
 }
 
-int Letter::getY()
+double Letter::getY()
 {
 	return yPos;
 }

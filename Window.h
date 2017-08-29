@@ -16,8 +16,8 @@ class Window
 
 		void free();
 
-		int getWidth();
-		int getHeight();
+		double getWidth();
+		double getHeight();
 
 		bool hasMouseFocus();
 		bool hasKeyboardFocus();

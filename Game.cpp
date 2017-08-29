@@ -68,9 +68,9 @@ void Game::displayLetterVector()
             else
               letterVector[j]->setX(letterVector[j]->getX()-WALKING_SPEED/speed);
             if(boss->getFrameIndex()%2==0)
-              letterVector[j]->setY(BOSS_SPAWN_Y-90);
+              letterVector[j]->setY(BOSS_SPAWN_Y-9*SCALESIZE);
             else
-              letterVector[j]->setY(BOSS_SPAWN_Y-80);
+              letterVector[j]->setY(BOSS_SPAWN_Y-8*SCALESIZE);
                
           }
         }
@@ -154,15 +154,16 @@ void Game::slowDown(){
     textVector[i]->setSpeed(newSpeed);
   }
   for(int i = 0; i < letterVector.size(); i++){
-    letterVector[i]->setSpeed(10);
+    letterVector[i]->setSpeed((double)10);
   }
   for(int i = 0; i < scoreVector.size(); i++){
-    scoreVector[i]->setSpeed(10);
+    scoreVector[i]->setSpeed((double)10);
   }
-  mainCharacter->setSpeed(10);
-  boss->setSpeed(10);
-  clock->setSpeed(10); 
-  door->setSpeed(10);
+  mainCharacter->setSpeed((double)10);
+  boss->setSpeed((double)10);
+  clock->setSpeed((double)10); 
+  door->setSpeed((double)10);
+  worker->setSpeed((double)10);
 
   return;
 }
@@ -173,15 +174,16 @@ void Game::speedUp(){
     textVector[i]->setSpeed(newSpeed);
   } 
   for(int i = 0; i < letterVector.size(); i++){
-    letterVector[i]->setSpeed(1);
+    letterVector[i]->setSpeed((double)1);
   } 
   for(int i = 0; i < scoreVector.size(); i++){
-    scoreVector[i]->setSpeed(1);
+    scoreVector[i]->setSpeed((double)1);
   }
-  mainCharacter->setSpeed(1); 
-  boss->setSpeed(1);
-  clock->setSpeed(1); 
-  door->setSpeed(1); 
+  mainCharacter->setSpeed((double)1); 
+  boss->setSpeed((double)1);
+  clock->setSpeed((double)1); 
+  door->setSpeed((double)1); 
+  worker->setSpeed((double)1);
   return;
 }
 
@@ -316,34 +318,34 @@ void Game::collisionHandler()
       bool deleteLetter = false;
       if(boss->collisionCheck(letterVector[i]->getX(),letterVector[i]->getY())){
         scoreValue = 100; 
-        letterVector[i]->setY(BOSS_SPAWN_Y-90);
+        letterVector[i]->setY(BOSS_SPAWN_Y-9*SCALESIZE);
         letterVector[i]->setOnGround(true);
         letterVector[i]->setDynamic(1); 
         boss->setHeavyHead(true);
       } 
       else if(worker->collisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
         scoreValue = 100; 
-        letterVector[i]->setY(COWORKER_SPAWN_Y-40);
+        letterVector[i]->setY(COWORKER_SPAWN_Y-4*SCALESIZE);
         letterVector[i]->setOnGround(true);
         worker->setHeavyHead(true);
       }
       else if(mainCharacter->collisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
         scoreValue = 100;
-        letterVector[i]->setY(700);
+        letterVector[i]->setY(70*SCALESIZE);
         letterVector[i]->setOnGround(true);
         mainCharacter->setHeavyHead(true);
       }
       else if(door->collisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
         scoreValue = 100;
         letterVector[i]->setDynamic(2);
-        letterVector[i]->setY(710);
+        letterVector[i]->setY(71*SCALESIZE);
         letterVector[i]->setOnGround(true);
         door->setAnimate(true);
       }
       else if(fountain->collisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
         scoreValue = 100;
         letterVector[i]->setDynamic(2);
-        letterVector[i]->setY(LEFT_FOUNTAIN_HANDLE_SPAWN_Y - 20);
+        letterVector[i]->setY(LEFT_FOUNTAIN_HANDLE_SPAWN_Y - 2*SCALESIZE);
         letterVector[i]->setOnGround(true);
       }
       else if(trashcan->collisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
@@ -351,6 +353,11 @@ void Game::collisionHandler()
         deleteLetter = true;
       }
       else if(clock->collisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
+        scoreValue = 100; 
+        deleteLetter = true; 
+      }
+      else if(worker->computerCollisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
+        worker->updateComputer();
         scoreValue = 100; 
         deleteLetter = true; 
       }
@@ -388,7 +395,7 @@ void Game::start()
   boss = new Boss(renderer);
   boss->setObjectTexture(animationSheet);
   
-  desk = new Object(800, 820, 270, 160, 0, 760, renderer);
+  desk = new Object(80*SCALESIZE, 82*SCALESIZE, 27*SCALESIZE, 16*SCALESIZE, 0, 76*SCALESIZE, renderer);
   desk->setObjectTexture(animationSheet);
  
   trashcan = new Trashcan(renderer);

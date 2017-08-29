@@ -7,38 +7,38 @@
 class Clock{
   public:
     Clock(SDL_Renderer* renderer){
-      object = new Object(0, 640, 100, 100, CLOCK_SPAWN_X, CLOCK_SPAWN_Y, renderer);
+      object = new Object(0*SCALESIZE, 64*SCALESIZE, 10*SCALESIZE, 10*SCALESIZE, CLOCK_SPAWN_X, CLOCK_SPAWN_Y, renderer);
       this->renderer = renderer;
       
-      minuteHand.x = 100;
-      minuteHand.y = 680;
-      minuteHand.w = 10;
-      minuteHand.h = 90;
+      minuteHand.x = 10*SCALESIZE;
+      minuteHand.y = 68*SCALESIZE;
+      minuteHand.w = 1*SCALESIZE;
+      minuteHand.h = 9*SCALESIZE;
 
-      hourHand.x = 110;
-      hourHand.y = 680;
-      hourHand.w = 10;
-      hourHand.h = 70;
+      hourHand.x = 11*SCALESIZE;
+      hourHand.y = 68*SCALESIZE;
+      hourHand.w = 1*SCALESIZE;
+      hourHand.h = 7*SCALESIZE;
 
     }
 
     void render(){
       object->render();
-      renderQuad = {CLOCK_SPAWN_X + 40, CLOCK_SPAWN_Y, minuteHand.w, minuteHand.h};
+      renderQuad = {CLOCK_SPAWN_X + 4*SCALESIZE, CLOCK_SPAWN_Y, minuteHand.w, minuteHand.h};
       SDL_RenderCopyEx(renderer, objectTexture, &minuteHand, &renderQuad, minuteHandAngle, NULL, SDL_FLIP_NONE); 
-      renderQuad = {CLOCK_SPAWN_X + 40, CLOCK_SPAWN_Y + 10, hourHand.w, hourHand.h};
+      renderQuad = {CLOCK_SPAWN_X + 4*SCALESIZE, CLOCK_SPAWN_Y + 1*SCALESIZE, hourHand.w, hourHand.h};
       SDL_RenderCopyEx(renderer, objectTexture, &hourHand, &renderQuad, hourHandAngle, NULL, SDL_FLIP_NONE); 
       if(minuteHandAngle > 360){
         minuteHandAngle = 0;
       }
       else{
-        minuteHandAngle+= 1.2/speed;
+        minuteHandAngle+= (.12*SCALESIZE)/speed;
       }
       if(hourHandAngle > 360){
         hourHandAngle = 0;
       }
       else{
-        hourHandAngle += .12/speed; 
+        hourHandAngle += (.012*SCALESIZE)/speed; 
       }
     }
     
@@ -59,9 +59,9 @@ class Clock{
       return speed;
     }
     
-    bool collisionCheck(int x, int y){
-      if(x >= CLOCK_SPAWN_X && x <= CLOCK_SPAWN_X + 100)
-        if(y >= CLOCK_SPAWN_Y - 10 && y <= CLOCK_SPAWN_Y + 100)
+    bool collisionCheck(double x, double y){
+      if(x >= CLOCK_SPAWN_X && x <= CLOCK_SPAWN_X + 10*SCALESIZE)
+        if(y >= CLOCK_SPAWN_Y - 1*SCALESIZE && y <= CLOCK_SPAWN_Y + 10*SCALESIZE)
           return true; 
       return false;
     }

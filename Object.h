@@ -4,7 +4,7 @@
 class Object
 {
   public:
-    Object(int xPos, int yPos, int width, int height, int spawnXPos, int spawnYPos, SDL_Renderer* renderer)
+    Object(double xPos, double yPos, double width, double height, double spawnXPos, double spawnYPos, SDL_Renderer* renderer)
     {
       this->renderer = renderer;
       objectClip.x = xPos;

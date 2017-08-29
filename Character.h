@@ -36,7 +36,7 @@ class Character
     class ScoreText
     {
       public:
-        ScoreText(SDL_Texture* text, SDL_Texture* shadowText, int width, int height, int x, int y)
+        ScoreText(SDL_Texture* text, SDL_Texture* shadowText, double width, double height, double x, double y)
         {
           this->text = text;
           this->shadowText = shadowText;	
@@ -47,7 +47,7 @@ class Character
           angle = 65 + (rand()%20);
           movement = (rand()%2);
           velocity = 10 + (rand()%3);	
-          randGroundValue = GROUND_VALUE + (rand()%30);	
+          randGroundValue = GROUND_VALUE + (rand()%3*SCALESIZE);	
           lifetime = SDL_GetTicks();	
         }
 
@@ -120,10 +120,10 @@ class Character
           speed = value;
         }
         
-        int getWidth(){ return width;}
-        int getHeight(){ return height;}
-        int getXPos(){ return x;}	
-        int getYPos(){ return y;}	
+        double getWidth(){ return width;}
+        double getHeight(){ return height;}
+        double getXPos(){ return x;}	
+        double getYPos(){ return y;}	
         SDL_Texture* getText(){ return text;}
         SDL_Texture* getShadowText(){ return shadowText;}
         
@@ -131,16 +131,16 @@ class Character
 
         SDL_Texture* text = NULL;
         SDL_Texture* shadowText = NULL;	
-        int width = 0;
-        int height = 0;
+        double width = 0;
+        double height = 0;
         double x = 0;
         double y = 0;
         double relX = 0;
-        int relY = 0;
+        double relY = 0;
         int angle = 0;	
         int velocity = 0;
         int movement = 0;
-        int randGroundValue = 0;
+        double randGroundValue = 0;
         Uint32 lifetime;
         bool onGround = false;
         Uint8 alpha = 255;
@@ -201,18 +201,18 @@ class Character
 
     void render()
     {
-      SDL_Rect renderQuad = {60,790, charClips[0].w, charClips[0].h};
+      SDL_Rect renderQuad = {6*SCALESIZE,79*SCALESIZE, charClips[0].w, charClips[0].h};
       SDL_RenderCopy(renderer, objectTexture, &charClips[0], &renderQuad);
      
       if(!heavyHead){ 
-        renderQuad = {80,720, charHead.w, charHead.h};
+        renderQuad = {8*SCALESIZE,72*SCALESIZE, charHead.w, charHead.h};
         SDL_RenderCopy(renderer, objectTexture, &charHead, &renderQuad);
       } 
       else{
         if((SDL_GetTicks() - heavyHeadTime) > LETTER_LIFETIME){
           heavyHead = false;
         }
-        renderQuad = {80,730, charHead.w, charHead.h};
+        renderQuad = {8*SCALESIZE,73*SCALESIZE, charHead.w, charHead.h};
         SDL_RenderCopy(renderer, objectTexture, &charHead, &renderQuad);
       } 
       
@@ -239,7 +239,7 @@ class Character
       }
       
       for(int i = 0; i < scoreVector.size(); i++){		
-        renderQuad = {scoreVector[i]->getXPos()+2, scoreVector[i]->getYPos()+2, scoreVector[i]->getWidth(), scoreVector[i]->getHeight()};
+        renderQuad = {scoreVector[i]->getXPos()+.2*SCALESIZE, scoreVector[i]->getYPos()+.2*SCALESIZE, scoreVector[i]->getWidth(), scoreVector[i]->getHeight()};
         SDL_RenderCopyEx(renderer, scoreVector[i]->getShadowText(), NULL, &renderQuad, NULL, NULL, SDL_FLIP_NONE);
 
         renderQuad = {scoreVector[i]->getXPos(), scoreVector[i]->getYPos(), scoreVector[i]->getWidth(), scoreVector[i]->getHeight()};
@@ -264,7 +264,7 @@ class Character
           charIndex = 1;
       }
       else if((SDL_GetTicks() - typeTime) < 300){
-        SDL_Rect renderQuad = {60,790, charClips[0].w, charClips[0].h};
+        SDL_Rect renderQuad = {6*SCALESIZE,79*SCALESIZE, charClips[0].w, charClips[0].h};
         SDL_RenderCopy(renderer, objectTexture, &charClips[charIndex], &renderQuad);	
       }
     }
@@ -278,10 +278,10 @@ class Character
         charClips[i].h = MAIN_CHARACTER_OBJECT_H;
       }
 
-      charHead.x = 20;
-      charHead.y = 740;
-      charHead.w = 70;
-      charHead.h = 70;
+      charHead.x = 2*SCALESIZE;
+      charHead.y = 74*SCALESIZE;
+      charHead.w = 7*SCALESIZE;
+      charHead.h = 7*SCALESIZE;
     }
 
     void tryToBlink()
@@ -293,13 +293,13 @@ class Character
 
       if(blink && ((SDL_GetTicks() - blinkTime) < 100)){
         if(!heavyHead){ 
-          SDL_Rect blinkingEyes = {460,750,40,10};
-          SDL_Rect renderQuad = {100,750, blinkingEyes.w, blinkingEyes.h};
+          SDL_Rect blinkingEyes = {46*SCALESIZE,75*SCALESIZE,4*SCALESIZE,1*SCALESIZE};
+          SDL_Rect renderQuad = {10*SCALESIZE,75*SCALESIZE, blinkingEyes.w, blinkingEyes.h};
           SDL_RenderCopy(renderer, objectTexture, &blinkingEyes, &renderQuad);
         }
         else{
-          SDL_Rect blinkingEyes = {460,750,40,10};
-          SDL_Rect renderQuad = {100,760, blinkingEyes.w, blinkingEyes.h};
+          SDL_Rect blinkingEyes = {46*SCALESIZE,75*SCALESIZE,4*SCALESIZE,1*SCALESIZE};
+          SDL_Rect renderQuad = {10*SCALESIZE,76*SCALESIZE, blinkingEyes.w, blinkingEyes.h};
           SDL_RenderCopy(renderer, objectTexture, &blinkingEyes, &renderQuad);
         } 
       }
@@ -332,9 +332,9 @@ class Character
       this->scoreType = type;
     }
 
-    bool collisionCheck(int x, int y){
-      if(x >= 80 && x <= 140){
-        if(y >= 710 && y <= 760){
+    bool collisionCheck(double x, double y){
+      if(x >= 8*SCALESIZE && x <= 14*SCALESIZE){
+        if(y >= 71*SCALESIZE && y <= 76*SCALESIZE){
           heavyHeadTime = SDL_GetTicks(); 
           return true;
         }

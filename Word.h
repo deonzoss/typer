@@ -4,7 +4,7 @@
 class Word
 {
   public:
-    Word(SDL_Renderer* renderer, int xPos, int yPos, char string[50], bool shadow, SDL_Color fontColor, SDL_Color shadowColor, int fontSize, int shadowOffset){
+    Word(SDL_Renderer* renderer, double xPos, double yPos, char string[50], bool shadow, SDL_Color fontColor, SDL_Color shadowColor, double fontSize, double shadowOffset){
       this->renderer = renderer;
       this->xPos = xPos;
       this->yPos = yPos;
@@ -73,12 +73,12 @@ class Word
     SDL_Texture* wordTexture = NULL;
     SDL_Texture* shadowTexture = NULL; 
     char string[50];
-    int wordWidth = 0;
-    int wordHeight = 0;
-    int xPos = 0;
-    int yPos = 0;
+    double wordWidth = 0;
+    double wordHeight = 0;
+    double xPos = 0;
+    double yPos = 0;
     int shadowOffset = 0;
-    int fontSize = 0; 
+    double fontSize = 0; 
     TTF_Font* font;
     SDL_Color fontColor;
     SDL_Color shadowColor;

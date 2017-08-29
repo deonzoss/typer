@@ -7,32 +7,32 @@
 class Door{
   public:
     Door(SDL_Renderer* renderer){
-      object = new Object(1090, 840, 40, 20, 430, 730, renderer);
+      object = new Object(109*SCALESIZE, 84*SCALESIZE, 4*SCALESIZE, 2*SCALESIZE, 43*SCALESIZE, 73*SCALESIZE, renderer);
       this->renderer = renderer;
-      windowWorkers[0].x = 460;
-      windowWorkers[0].y = 1140;
-      windowWorkers[0].w = 540;
-      windowWorkers[0].h = 130;
+      windowWorkers[0].x = 46*SCALESIZE;
+      windowWorkers[0].y = 114*SCALESIZE;
+      windowWorkers[0].w = 54*SCALESIZE;
+      windowWorkers[0].h = 13*SCALESIZE;
      
-      windowWorkers[1].x = 460;
-      windowWorkers[1].y = 1270;
-      windowWorkers[1].w = 540;
-      windowWorkers[1].h = 130;
+      windowWorkers[1].x = 46*SCALESIZE;
+      windowWorkers[1].y = 127*SCALESIZE;
+      windowWorkers[1].w = 54*SCALESIZE;
+      windowWorkers[1].h = 13*SCALESIZE;
       
-      windowWorker[0].x = 460;
-      windowWorker[0].y = 980;
-      windowWorker[0].w = 60;
-      windowWorker[0].h = 160;
+      windowWorker[0].x = 46*SCALESIZE;
+      windowWorker[0].y = 98*SCALESIZE;
+      windowWorker[0].w = 6*SCALESIZE;
+      windowWorker[0].h = 16*SCALESIZE;
      
-      windowWorker[1].x = 540;
-      windowWorker[1].y = 980;
-      windowWorker[1].w = 60;
-      windowWorker[1].h = 160;
+      windowWorker[1].x = 54*SCALESIZE;
+      windowWorker[1].y = 98*SCALESIZE;
+      windowWorker[1].w = 6*SCALESIZE;
+      windowWorker[1].h = 16*SCALESIZE;
       
-      windowWorkerArm.x = 520;
-      windowWorkerArm.y = 980;
-      windowWorkerArm.w = 20;
-      windowWorkerArm.h = 120;
+      windowWorkerArm.x = 52*SCALESIZE;
+      windowWorkerArm.y = 98*SCALESIZE;
+      windowWorkerArm.w = 2*SCALESIZE;
+      windowWorkerArm.h = 12*SCALESIZE;
     }
 
     void render(){
@@ -40,18 +40,18 @@ class Door{
         animate = false;
         windowWorkersIndex = 0;
         windowWorkerIndex = 0; 
-        object->setY(730);
+        object->setY(73*SCALESIZE);
       }
 
       
       if(windowWorkerIndex){ 
-        renderQuad = {WINDOW_WORKER_X + 40, WINDOW_WORKER_Y, windowWorkerArm.w, windowWorkerArm.h};
+        renderQuad = {WINDOW_WORKER_X + 4*SCALESIZE, WINDOW_WORKER_Y, windowWorkerArm.w, windowWorkerArm.h};
         SDL_RenderCopy(renderer, objectTexture, &windowWorkerArm, &renderQuad);
         angle = 0;
         raiseArm = false; 
       }
       else{
-        renderQuad = {WINDOW_WORKER_X + 40, WINDOW_WORKER_Y, windowWorkerArm.w, windowWorkerArm.h};
+        renderQuad = {WINDOW_WORKER_X + 4*SCALESIZE, WINDOW_WORKER_Y, windowWorkerArm.w, windowWorkerArm.h};
         SDL_RenderCopyEx(renderer, objectTexture, &windowWorkerArm, &renderQuad, angle, NULL, SDL_FLIP_NONE); 
       }
       
@@ -94,13 +94,13 @@ class Door{
         windowWorkersIndex = 1;
         windowWorkerIndex = 1;
         handleLifetime = SDL_GetTicks(); 
-        object->setY(740); 
+        object->setY(74*SCALESIZE); 
       }
     }
 
-    bool collisionCheck(int x, int y){
-      if(x>= 420 && x <= 460){
-        if(y >= 710 && y <= 760){
+    bool collisionCheck(double x, double y){
+      if(x>= 42*SCALESIZE && x <= 46*SCALESIZE){
+        if(y >= 71*SCALESIZE && y <= 76*SCALESIZE){
           return true;
         }
       } 

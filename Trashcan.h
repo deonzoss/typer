@@ -6,7 +6,7 @@
 class Trashcan{
   public:
     Trashcan(SDL_Renderer* renderer){
-      object = new Object(0, 1020, 70, 130, TRASHCAN_SPAWN_X, TRASHCAN_SPAWN_Y, renderer);
+      object = new Object(0, 102*SCALESIZE, 7*SCALESIZE, 13*SCALESIZE, TRASHCAN_SPAWN_X, TRASHCAN_SPAWN_Y, renderer);
       this->renderer = renderer;
     }
 
@@ -23,9 +23,9 @@ class Trashcan{
       object->setObjectTexture(texture);
     }
 
-    bool collisionCheck(int x, int y){
-      if(x >= TRASHCAN_SPAWN_X && x <= TRASHCAN_SPAWN_X + 70)
-        if(y >= TRASHCAN_SPAWN_Y - 10 && y <= TRASHCAN_SPAWN_Y + 40)
+    bool collisionCheck(double x, double y){
+      if(x >= TRASHCAN_SPAWN_X && x <= TRASHCAN_SPAWN_X + 7*SCALESIZE)
+        if(y >= TRASHCAN_SPAWN_Y - 1*SCALESIZE && y <= TRASHCAN_SPAWN_Y + 4*SCALESIZE)
           return true;
       return false;
     }
