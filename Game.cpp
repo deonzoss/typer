@@ -117,6 +117,8 @@ void Game::displayScoreVector()
 SDL_Texture* Game::loadBackground()
 {
   SDL_Surface* loadedSurface = IMG_Load("images/typer.png");
+  SDL_Surface* optimizedSurface;
+
   if(loadedSurface == NULL){
     printf("Error loading surface. SDL_image Error: %s\n", IMG_GetError());
   }

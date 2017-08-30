@@ -31,7 +31,8 @@ bool Window::init()
 		height = SCREEN_HEIGHT;
 
 		renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-		if(!renderer){
+    
+    if(!renderer){
 			printf("SDL Error: %s\n", SDL_GetError());
 			SDL_DestroyWindow(window);
 			window = NULL;
