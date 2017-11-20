@@ -38,7 +38,8 @@ bool Window::init()
 		}
 		else{
 			SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-			windowID = SDL_GetWindowID(window);
+		  SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "0");	
+      windowID = SDL_GetWindowID(window);
 			shown = true;
 		}
 	}

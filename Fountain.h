@@ -6,16 +6,16 @@
 class Fountain{
   public:
     Fountain(SDL_Renderer* renderer){
-      object = new Object(0*SCALESIZE, 115*SCALESIZE, 10*SCALESIZE, 30*SCALESIZE, FOUNTAIN_SPAWN_X,FOUNTAIN_SPAWN_Y, renderer);
-      leftHandle = new Object(10*SCALESIZE, 131*SCALESIZE, 2*SCALESIZE, 1*SCALESIZE, LEFT_FOUNTAIN_HANDLE_SPAWN_X, LEFT_FOUNTAIN_HANDLE_SPAWN_Y, renderer);
-      rightHandle = new Object(12*SCALESIZE, 131*SCALESIZE, 2*SCALESIZE, 1*SCALESIZE, RIGHT_FOUNTAIN_HANDLE_SPAWN_X, RIGHT_FOUNTAIN_HANDLE_SPAWN_Y, renderer);
+      object = new Object(0, 115, 10, 30, FOUNTAIN_SPAWN_X,FOUNTAIN_SPAWN_Y, renderer);
+      leftHandle = new Object(10, 131, 2, 1, LEFT_FOUNTAIN_HANDLE_SPAWN_X, LEFT_FOUNTAIN_HANDLE_SPAWN_Y, renderer);
+      rightHandle = new Object(12, 131, 2, 1, RIGHT_FOUNTAIN_HANDLE_SPAWN_X, RIGHT_FOUNTAIN_HANDLE_SPAWN_Y, renderer);
       this->renderer = renderer;
       
       for(int i = 0; i < 5; i++){
-        stream[i].x = 10*SCALESIZE + (1*SCALESIZE*i);
-        stream[i].y = 133*SCALESIZE;
-        stream[i].w = 1*SCALESIZE;
-        stream[i].h = 3*SCALESIZE;
+        stream[i].x = 10 + (1*i);
+        stream[i].y = 133;
+        stream[i].w = 1;
+        stream[i].h = 3;
       }
     }
     void render(){
@@ -33,7 +33,7 @@ class Fountain{
           leftHandle->setY(LEFT_FOUNTAIN_HANDLE_SPAWN_Y);
         }
         else{
-          renderQuad = {LEFT_FOUNTAIN_HANDLE_SPAWN_X + 1*SCALESIZE, LEFT_FOUNTAIN_HANDLE_SPAWN_Y + 2*SCALESIZE, stream[0].w, stream[0].h};
+          renderQuad = {LEFT_FOUNTAIN_HANDLE_SPAWN_X + 1*SCALESIZE, LEFT_FOUNTAIN_HANDLE_SPAWN_Y + 2*SCALESIZE, stream[0].w*SCALESIZE, stream[0].h*SCALESIZE};
           SDL_RenderCopy(renderer, objectTexture, &stream[leftStreamIndex], &renderQuad); 
           if(SDL_GetTicks()-leftStreamAnimationTimer > 100){
             if(leftStreamIndex < 2) 
@@ -43,7 +43,7 @@ class Fountain{
         }
       }
       else if(leftStreamIndex != 0){
-          renderQuad = {LEFT_FOUNTAIN_HANDLE_SPAWN_X + 1*SCALESIZE, LEFT_FOUNTAIN_HANDLE_SPAWN_Y + 2*SCALESIZE, stream[0].w, stream[0].h};
+          renderQuad = {LEFT_FOUNTAIN_HANDLE_SPAWN_X + 1*SCALESIZE, LEFT_FOUNTAIN_HANDLE_SPAWN_Y + 2*SCALESIZE, stream[0].w*SCALESIZE, stream[0].h*SCALESIZE};
           SDL_RenderCopy(renderer, objectTexture, &stream[leftStreamIndex], &renderQuad); 
           if(SDL_GetTicks()-leftStreamAnimationTimer > 100){
             if(leftStreamIndex == 5) 
@@ -61,7 +61,7 @@ class Fountain{
           rightHandle->setY(RIGHT_FOUNTAIN_HANDLE_SPAWN_Y);
         }
         else{
-          renderQuad = {RIGHT_FOUNTAIN_HANDLE_SPAWN_X, RIGHT_FOUNTAIN_HANDLE_SPAWN_Y+2*SCALESIZE, stream[0].w, stream[0].h};
+          renderQuad = {RIGHT_FOUNTAIN_HANDLE_SPAWN_X, RIGHT_FOUNTAIN_HANDLE_SPAWN_Y+2*SCALESIZE, stream[0].w*SCALESIZE, stream[0].h*SCALESIZE};
           SDL_RenderCopy(renderer, objectTexture, &stream[rightStreamIndex], &renderQuad); 
           if(SDL_GetTicks()-rightStreamAnimationTimer > 100){
             if(rightStreamIndex < 2) 
@@ -71,7 +71,7 @@ class Fountain{
         }
       }
       else if(rightStreamIndex != 0){
-          renderQuad = {RIGHT_FOUNTAIN_HANDLE_SPAWN_X, RIGHT_FOUNTAIN_HANDLE_SPAWN_Y+2*SCALESIZE, stream[0].w, stream[0].h};
+          renderQuad = {RIGHT_FOUNTAIN_HANDLE_SPAWN_X, RIGHT_FOUNTAIN_HANDLE_SPAWN_Y+2*SCALESIZE, stream[0].w*SCALESIZE, stream[0].h*SCALESIZE};
           SDL_RenderCopy(renderer, objectTexture, &stream[rightStreamIndex], &renderQuad); 
           if(SDL_GetTicks()-rightStreamAnimationTimer > 100){
             if(rightStreamIndex == 5) 

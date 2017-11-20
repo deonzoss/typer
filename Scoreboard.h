@@ -181,17 +181,17 @@ class Scoreboard
 		{
 			if(objectTexture)
 			{
-        blankMultDisplay.x = 0*SCALESIZE;
-        blankMultDisplay.y = 2*SCALESIZE;
-        blankMultDisplay.w = 89*SCALESIZE;
-        blankMultDisplay.h = 2*SCALESIZE;
+        blankMultDisplay.x = 0;
+        blankMultDisplay.y = 2;
+        blankMultDisplay.w = 89;
+        blankMultDisplay.h = 2;
     
         for(int i = 0; i < MAX_MULTIPLIER_VAL; i++)
 				{	
-					multClips[i].x = 0*SCALESIZE;
-					multClips[i].y = 0*SCALESIZE;
-					multClips[i].w = (2*SCALESIZE*(i+1))-(1*SCALESIZE);
-					multClips[i].h = 2*SCALESIZE;
+					multClips[i].x = 0;
+					multClips[i].y = 0;
+					multClips[i].w = (2*(i+1))-(1);
+					multClips[i].h = 2;
 				}	
 			}
 		}	
@@ -219,14 +219,14 @@ class Scoreboard
 
 
 
-      SDL_Rect multRenderQuad = {MULTIPLIER_X,MULTIPLIER_Y,blankMultDisplay.w,blankMultDisplay.h};
+      SDL_Rect multRenderQuad = {MULTIPLIER_X,MULTIPLIER_Y,blankMultDisplay.w*SCALESIZE,blankMultDisplay.h*SCALESIZE};
 
       SDL_RenderCopy(renderer, objectTexture, &blankMultDisplay, &multRenderQuad);	
 
 
 			if(multiplier){	
 
-				multRenderQuad = {MULTIPLIER_X,MULTIPLIER_Y,multClips[multiplier-1].w,multClips[multiplier-1].h};
+				multRenderQuad = {MULTIPLIER_X,MULTIPLIER_Y,multClips[multiplier-1].w*SCALESIZE,multClips[multiplier-1].h*SCALESIZE};
 
 				SDL_RenderCopy(renderer, objectTexture, &multClips[multiplier-1], &multRenderQuad);	
 			}		

@@ -11,7 +11,7 @@ class Object
       objectClip.y = yPos;
       objectClip.h = height;
       objectClip.w = width;
-      renderQuad = {spawnXPos, spawnYPos, width, height};
+      renderQuad = {spawnXPos, spawnYPos, width*SCALESIZE, height*SCALESIZE};
     }
 
     void setObjectTexture(SDL_Texture* texture)

@@ -114,9 +114,20 @@ void Game::displayScoreVector()
   }
 }
 
+
 SDL_Texture* Game::loadBackground()
 {
   SDL_Surface* loadedSurface = IMG_Load("images/typer.png");
+  //SDL_Surface* scaledSurface;
+  SDL_Rect scaleRect;
+  scaleRect.x = 0;
+  scaleRect.y = 0;
+  scaleRect.w = SCREEN_WIDTH;
+  scaleRect.h = SCREEN_HEIGHT;
+ 
+  //if(!SDL_BlitScaled(loadedSurface, NULL, scaledSurface, &scaleRect))
+    //printf("%s\n", SDL_GetError());
+
   if(loadedSurface == NULL){
     printf("Error loading surface. SDL_image Error: %s\n", IMG_GetError());
   }
@@ -126,6 +137,7 @@ SDL_Texture* Game::loadBackground()
       printf("Unable to create texture from surface. SDL Error: %s\n", SDL_GetError());
     }
     SDL_FreeSurface(loadedSurface);
+    //SDL_FreeSurface(scaledSurface);
   }
   return background;
 }
@@ -195,6 +207,7 @@ void Game::eventHandler()
     }
     else if(startLevel && event.key.keysym.sym==SDLK_ESCAPE && event.type == SDL_KEYUP){
       quitLevel = true;
+      mainMenu->reset();
       screen->setEndGame(true);
     }
     else if(startLevel && event.key.keysym.sym==SDLK_RETURN && event.type == SDL_KEYUP){
@@ -234,7 +247,7 @@ void Game::processInput(char input)
       mainCharacter->unfreeze();
       worker->unfreeze(); 
       boss->unfreeze(); 
-      mainMenu->setMenuDisplay(1); 
+      mainMenu->setMenuDisplay(0); 
     }
     else{
       mainMenu->setMenuDisplay(6); 
@@ -395,7 +408,7 @@ void Game::start()
   boss = new Boss(renderer);
   boss->setObjectTexture(animationSheet);
   
-  desk = new Object(80*SCALESIZE, 82*SCALESIZE, 27*SCALESIZE, 16*SCALESIZE, 0, 76*SCALESIZE, renderer);
+  desk = new Object(80, 82, 27, 16, 0, 76*SCALESIZE, renderer);
   desk->setObjectTexture(animationSheet);
  
   trashcan = new Trashcan(renderer);
@@ -412,9 +425,9 @@ void Game::start()
   
   while(!quit){
     SDL_RenderClear(renderer);
-    SDL_RenderCopy(renderer, background, NULL, NULL);	
+    SDL_Rect dest = {.x = 0, .y = 0, .w = SCREEN_WIDTH, .h = SCREEN_HEIGHT}; 
+    SDL_RenderCopy(renderer, background, NULL, &dest);	
 
-    screen->renderScreen(); 
     door->render();  
     clock->render(); 
     trashcan->render(); 
@@ -429,6 +442,7 @@ void Game::start()
 
    
     if(startLevel && !quitLevel){
+      screen->renderScreen(); 
       if(screenDropped){
         displayTextVector();	
         scoreboard->render();
@@ -450,6 +464,7 @@ void Game::start()
     }
     
     else if(quitLevel){
+      screen->renderScreen(); 
       if(!screenRaised){
         screenRaised = screen->liftScreen();
         screenDropped = !screenRaised; 
@@ -465,6 +480,7 @@ void Game::start()
     }
     else{
       mainMenu->render();
+      screen->renderScreen(); 
     }
     
     eventHandler();	//for typing	

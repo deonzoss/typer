@@ -9,7 +9,7 @@
 Letter::Letter()
 {
 	angle = 10 + (rand()%30);	
-	velocity = 1*SCALESIZE + (rand()%(3*(int)SCALESIZE));	
+	velocity = 1*SCALESIZE + (rand()%(2*(int)SCALESIZE));	
   randXChange = (rand()%((int)(.5*SCALESIZE))); 
 	randGroundValue = GROUND_VALUE + (rand()%(3*(int)SCALESIZE));
 }
@@ -29,23 +29,23 @@ void Letter::move(){
 	
 	double radians = angle*PI/180.0;
 	
-  if(rate > -50){
+  if(rate > -5*SCALESIZE){
     relY = (((abs(relX))*(tan(radians)))-(((GRAVITY)*(pow((abs(relX)),2)))/(2.0*(pow(velocity,2)*pow(cos(radians),2))))/10);	
     rate = 4*(relY-prevRelY);
-    if(rate < -50)
-      rate = -50; 
+    if(rate < -5*SCALESIZE)
+      rate = -5*SCALESIZE; 
   } 
   
   
   prevRelY = relY;  
 	relX -= (-5)/speedMult;
    
-  yPos -= (rate/10)*SCALESIZE;
+  yPos -= (rate/15)*SCALESIZE;
   if(angle%2){  
-  	xPos += (-.4*SCALESIZE - randXChange)/speedMult;	
+  	xPos += (-.3*SCALESIZE - randXChange)/speedMult;	
   }
   else{
-    xPos -= (-.4*SCALESIZE - randXChange)/speedMult;
+    xPos -= (-.3*SCALESIZE - randXChange)/speedMult;
   }
   groundContact();
   return;

@@ -8,13 +8,12 @@ class Menu
     Menu(SDL_Renderer* renderer)
     {
       this->renderer = renderer;
-      menuDisplay = 1; 
       loadFont();
       for(int i = 0; i < 4; i++){
-        menuFrames[i].w = 23*SCALESIZE;
-        menuFrames[i].h = 5*SCALESIZE;
-        menuFrames[i].x = 1*SCALESIZE;
-        menuFrames[i].y = 58*SCALESIZE; 
+        menuFrames[i].w = 23;
+        menuFrames[i].h = 5;
+        menuFrames[i].x = 1;
+        menuFrames[i].y = 58; 
       }
     }
 
@@ -33,6 +32,27 @@ class Menu
       font = TTF_OpenFont(CODE_FONT, MAIN_MENU_FONT_SIZE);
       if(font == NULL)
         printf("Error opening menu font\n");
+    }
+    
+    void reset(){
+      //currentBorderRect={0,0,0,0};
+      //currentOutlineRect={0,0,0,0};
+      //previousBorderRect={0,0,0,0};
+      //previousOutlineRect={0,0,0,0};
+      prevBorderType=0;
+      borderType=0;
+      setMenuDisplay(1);
+      for(int i = 0; i < 4; i++){
+        menuFramesYPos[i] = MENU_FRAMES_SPAWN_Y; 
+      }
+      characterText->setY(MENU_FRAMES_SPAWN_Y+.5*SCALESIZE);
+      levelText->setY(MENU_FRAMES_SPAWN_Y+.5*SCALESIZE);
+      scoreboardText->setY(MENU_FRAMES_SPAWN_Y+.5*SCALESIZE);
+      optionsText->setY(MENU_FRAMES_SPAWN_Y+.5*SCALESIZE);
+    }
+
+    void raise(){
+
     }
 
     void loadFromRenderedText()
@@ -53,6 +73,7 @@ class Menu
     }
 
     void loadTipText(){
+      
       SDL_Surface* textSurface = TTF_RenderText_Solid(font, "TIP: ", MENU_FONT_COLOR); 
       SDL_Surface* textSurfaceShadow = TTF_RenderText_Solid(font, "TIP: ", MENU_SHADOW_FONT_COLOR);
       tipText = SDL_CreateTextureFromSurface(renderer, textSurface);
@@ -62,8 +83,8 @@ class Menu
       SDL_FreeSurface(textSurface);
       SDL_FreeSurface(textSurfaceShadow);
        
-      tipTextXPos = 20*SCALESIZE;
-      tipTextYPos = 20*SCALESIZE; 
+      tipTextXPos = TIP_TEXT_XPOS*SCALESIZE;
+      tipTextYPos = TIP_TEXT_YPOS*SCALESIZE; 
     
       tipSentenceText = new Word(renderer, 16*SCALESIZE, 25*SCALESIZE, "- Spacebar pauses the game.", 1, MENU_FONT_COLOR, SHADOW_COLOR, 5*SCALESIZE, .1*SCALESIZE); 
     
@@ -82,12 +103,22 @@ class Menu
     }
 
     void render(){
-      if(menuDisplay){
+      if(menuDisplay>=1 && menuDisplay <=5){
+        if(transition && !scrollDownPrevFrame){
+          displayPreviousBorder(); 
+          displayPreviousMenuFrame(); 
+        }
+        displayBorder();
         displayMenu(); 
-        if(menuDisplay == 6){
-          return;
-        } 
+        if(scrollDownPrevFrame){
+          displayPreviousBorder(); 
+          displayPreviousMenuFrame(); 
+        }
       }  
+      else if(menuDisplay==6){
+        displayPauseMenu();
+        return;
+      } 
       floatText(); 
       SDL_Rect renderQuad = {typeStartXPos+.3*SCALESIZE, typeStartYPos+.3*SCALESIZE, typeStartWidth, typeStartHeight};
       SDL_RenderCopyEx(renderer, typeStartShadow, NULL, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
@@ -98,13 +129,20 @@ class Menu
       levelText->render();
       scoreboardText->render();
       optionsText->render();
-      tipSentenceText->render();
     }
+
     
     void displayMenuFrames(){
       for(int i = 0; i < 4; i++){
-        SDL_Rect renderQuad = {menuFramesXPos[i], menuFramesYPos[i], menuFrames[i].w, menuFrames[i].h};
-        SDL_RenderCopy(renderer, objectTexture, &menuFrames[i], &renderQuad);
+        if(i+2 != prevBorderType){ 
+          SDL_Rect renderQuad = {menuFramesXPos[i], menuFramesYPos[i], menuFrames[i].w*SCALESIZE, menuFrames[i].h*SCALESIZE};
+          SDL_RenderCopy(renderer, objectTexture, &menuFrames[i], &renderQuad);
+        }
+        else if(!transition){
+          SDL_Rect renderQuad = {menuFramesXPos[i], menuFramesYPos[i], menuFrames[i].w*SCALESIZE, menuFrames[i].h*SCALESIZE};
+          SDL_RenderCopy(renderer, objectTexture, &menuFrames[i], &renderQuad);
+        }
+
       }
       
       if(!characterText){
@@ -113,6 +151,9 @@ class Menu
     }
 
     void displayMenu(){
+      
+      displayMenuFrames(); 
+     
       if(menuDisplay == 1){
         displayTipMenu();
       }
@@ -128,11 +169,9 @@ class Menu
       else if(menuDisplay == 5){
         displayOptionsMenu();
       }
-      else if(menuDisplay == 6){
-        displayPauseMenu();
-        return;
-      }
+      
       displayMenuFrames(); 
+    
     }				
 
     void displayTipMenu(){
@@ -140,52 +179,195 @@ class Menu
         loadTipText();
       }
       
-      makeBorder(100*SCALESIZE, 38*SCALESIZE);
+      if(borderType != menuDisplay){ 
+        makeBorder(100*SCALESIZE, tipTextHeight+tipTextYPos, SCREEN_WIDTH/2 - (100*SCALESIZE)/2,tipTextYPos-2*SCALESIZE);
+      }
 
-      SDL_Rect renderQuad = {tipTextXPos, tipTextYPos, tipTextWidth, tipTextHeight};
+      
+      SDL_Rect renderQuad = {currentBorderRect.x + 2*SCALESIZE, currentBorderRect.y + 2*SCALESIZE, tipTextWidth, tipTextHeight};
       SDL_RenderCopyEx(renderer, tipText, NULL, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
-      renderQuad = {tipTextXPos+.2*SCALESIZE, tipTextYPos+.2*SCALESIZE, tipTextWidth, tipTextHeight};
+      renderQuad = {currentBorderRect.x + 2*SCALESIZE + .2*SCALESIZE, currentBorderRect.y + 2*SCALESIZE +.2*SCALESIZE, tipTextWidth, tipTextHeight};
       SDL_RenderCopyEx(renderer, tipTextShadow, NULL, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
+      
+      tipSentenceText->setX(currentBorderRect.x + 2*SCALESIZE); 
+      tipSentenceText->setY(currentBorderRect.y + 5*SCALESIZE); 
+      tipSentenceText->render();
     }
 
     void displayCharacterMenu(){
-      makeBorder(100*SCALESIZE, 70*SCALESIZE);
+      if(borderType != menuDisplay){ 
+        makeBorder(SCREEN_WIDTH - (2*SCALESIZE), SCREEN_HEIGHT/2, SCALESIZE , 0);
+      }
     }
 
     void displayLevelMenu(){
-      makeBorder(100*SCALESIZE, 60*SCALESIZE);
+      if(borderType != menuDisplay){ 
+        makeBorder(SCREEN_WIDTH - (2*SCALESIZE), SCREEN_HEIGHT/2, SCALESIZE , 0);
+      }
     }
     
     void displayScoresMenu(){
-      makeBorder(100*SCALESIZE, 50*SCALESIZE);
+      if(borderType != menuDisplay){ 
+        makeBorder(SCREEN_WIDTH - (2*SCALESIZE), SCREEN_HEIGHT/2, SCALESIZE , 0);
+      }
     }
     
     void displayOptionsMenu(){
-      makeBorder(100*SCALESIZE, 40*SCALESIZE);
+      if(borderType != menuDisplay){ 
+        makeBorder(SCREEN_WIDTH - (2*SCALESIZE), SCREEN_HEIGHT/2, SCALESIZE , 0);
+      }
     }
     
     void displayPauseMenu(){
+      borderType=6;   
+      prevBorderType=0; 
       SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-      borderRect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+      currentBorderRect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
       SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0x66);
-      SDL_RenderFillRect(renderer, &borderRect);
+      SDL_RenderFillRect(renderer, &currentBorderRect);
       SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
       if(!pauseText){
         pauseText = new Word(renderer, SCREEN_WIDTH/2 - 13*SCALESIZE, SCREEN_HEIGHT/2 - 5*SCALESIZE, "PAUSED", 1, CODE_COLOR, SHADOW_COLOR, 10*SCALESIZE, .3*SCALESIZE); 
       }
       pauseText->render();
-
     }
 
-    void makeBorder(double width, double height){
-      borderRect = {SCREEN_WIDTH/2 - 50*SCALESIZE, SCREEN_HEIGHT/2 - 32*SCALESIZE, width, height};
-      SDL_SetRenderDrawColor(renderer, 65, 111, 153, 0xFF);
-      SDL_RenderFillRect(renderer, &borderRect);
-      outlineRect = {borderRect.x+1*SCALESIZE, borderRect.y+1*SCALESIZE, borderRect.w-2*SCALESIZE, borderRect.h-2*SCALESIZE};
-      SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-      SDL_RenderFillRect(renderer, &outlineRect);
+    void makeBorder(double width, double height, double x, double y){
+      prevBorderType = borderType; 
+      borderType = menuDisplay;
+      previousBorderRect = currentBorderRect;
+      previousOutlineRect = currentOutlineRect;
+      currentBorderRect = {x, y - height + MENU_FRAMES_SPAWN_Y, width, height};
+      currentOutlineRect = {currentBorderRect.x+1*SCALESIZE, currentBorderRect.y + SCALESIZE, currentBorderRect.w-2*SCALESIZE, currentBorderRect.h-2*SCALESIZE};
+    
+      transition= true; 
     }
+
+    void displayBorder(){
+      if(borderType == 0){
+        return;
+      } 
+      else if(borderType == 1){ 
+        if(currentBorderRect.y < tipTextYPos){
+          currentBorderRect.y+=1*SCALESIZE;
+          currentOutlineRect.y+=1*SCALESIZE; 
+        } 
+      }
+      else if(currentBorderRect.y < MENU_FRAMES_SPAWN_Y-SCALESIZE){
+        currentBorderRect.y+=1*SCALESIZE;
+        currentOutlineRect.y+=1*SCALESIZE; 
+        
+        if(borderType >= 2 && borderType <=5){
+         
+          if(borderType == 2)
+            characterText->setY(characterText->getY()+1*SCALESIZE);    
+          else if(borderType == 3)
+            levelText->setY(levelText->getY()+1*SCALESIZE);    
+          else if(borderType == 4)
+            scoreboardText->setY(scoreboardText->getY()+1*SCALESIZE);    
+          else if(borderType == 5)
+            optionsText->setY(optionsText->getY()+1*SCALESIZE);    
           
+          menuFramesYPos[borderType-2]+=1*SCALESIZE; 
+        }
+      }
+      SDL_SetRenderDrawColor(renderer, 65, 111, 153, 0xFF);
+      SDL_RenderFillRect(renderer, &currentBorderRect);
+      SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+      SDL_RenderFillRect(renderer, &currentOutlineRect);
+    }
+    
+    void displayPreviousBorder(){
+      if(prevBorderType == -1 || prevBorderType == 0 || prevBorderType == 6){
+        transition=false; 
+        return;
+      }
+      if(previousBorderRect.y > (0-previousBorderRect.h+MENU_FRAMES_SPAWN_Y)){
+        previousBorderRect.y-=1*SCALESIZE;
+        previousOutlineRect.y-=1*SCALESIZE; 
+        SDL_SetRenderDrawColor(renderer, 65, 111, 153, 0xFF);
+        SDL_RenderFillRect(renderer, &previousBorderRect);
+        SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+        SDL_RenderFillRect(renderer, &previousOutlineRect);
+        
+        if(prevBorderType >= 2 && prevBorderType <=5){
+          if(prevBorderType == 2)
+            characterText->setY(characterText->getY()-1*SCALESIZE);    
+          else if(prevBorderType == 3)
+            levelText->setY(levelText->getY()-1*SCALESIZE);    
+          else if(prevBorderType == 4)
+            scoreboardText->setY(scoreboardText->getY()-1*SCALESIZE);    
+          else if(prevBorderType == 5)
+            optionsText->setY(optionsText->getY()-1*SCALESIZE);    
+          menuFramesYPos[prevBorderType-2]-=1*SCALESIZE; 
+        }
+      }
+      else{
+        if(scrollDownPrevFrame){
+          if(prevBorderType >= 2 && prevBorderType <=5){
+            if(prevBorderType == 2){
+              if(characterText->getY()<4*SCALESIZE){
+                characterText->setY(characterText->getY()+1*SCALESIZE);    
+                menuFramesYPos[prevBorderType-2] += 1*SCALESIZE;
+              }
+              else{
+                scrollDownPrevFrame=false;
+                transition = false;
+              }
+            }
+            else if(prevBorderType == 3)
+              if(levelText->getY()<4*SCALESIZE){
+                levelText->setY(levelText->getY()+1*SCALESIZE);    
+                menuFramesYPos[prevBorderType-2] += 1*SCALESIZE;
+              }
+              else{
+                scrollDownPrevFrame=false;
+                transition = false;
+              }
+            else if(prevBorderType == 4)
+              if(scoreboardText->getY()<4*SCALESIZE){
+                scoreboardText->setY(scoreboardText->getY()+1*SCALESIZE);    
+                menuFramesYPos[prevBorderType-2] += 1*SCALESIZE;
+              }
+              else{
+                scrollDownPrevFrame=false;
+                transition = false;
+              }
+            else if(prevBorderType == 5)
+              if(optionsText->getY()<4*SCALESIZE){
+                optionsText->setY(optionsText->getY()+1*SCALESIZE);    
+                menuFramesYPos[prevBorderType-2] += 1*SCALESIZE;
+              }
+              else{
+                scrollDownPrevFrame=false;
+                transition = false;
+              }
+
+          }
+        }
+        else if(prevBorderType >= 2 && prevBorderType <=5){
+          if(prevBorderType == 2)
+            characterText->setY(0*SCALESIZE);    
+          else if(prevBorderType == 3)
+            levelText->setY(0*SCALESIZE);    
+          else if(prevBorderType == 4)
+            scoreboardText->setY(0*SCALESIZE);    
+          else if(prevBorderType == 5)
+            optionsText->setY(0*SCALESIZE);    
+          menuFramesYPos[prevBorderType-2] = 0*SCALESIZE;
+          scrollDownPrevFrame = true;
+        }
+        else{
+          transition = false;
+        }
+      } 
+    
+    }
+    void displayPreviousMenuFrame(){
+          SDL_Rect renderQuad = {menuFramesXPos[prevBorderType-2], menuFramesYPos[prevBorderType-2], menuFrames[prevBorderType-2].w*SCALESIZE, menuFrames[prevBorderType-2].h*SCALESIZE};
+          SDL_RenderCopy(renderer, objectTexture, &menuFrames[prevBorderType-2], &renderQuad);
+    }
+
     void floatText(){
       if(floatUp){
         typeStartYPos -= .1*SCALESIZE;
@@ -204,7 +386,11 @@ class Menu
       } 
     }
 
-    void setMenuDisplay(int value){ menuDisplay = value;}
+    void setMenuDisplay(int value){ 
+      if(!transition) 
+        menuDisplay = value;
+    }
+    
     int getMenuDisplay(){ return menuDisplay;}
 
     void setObjectTexture(SDL_Texture* texture){
@@ -220,8 +406,6 @@ class Menu
     Word* pauseText = NULL; 
     
     SDL_Renderer* renderer = NULL;
-    SDL_Rect outlineRect;
-    SDL_Rect borderRect;
     SDL_Rect menuFrames[4]; 
     int menuFramesYPos[4] = {4*SCALESIZE, 4*SCALESIZE, 4*SCALESIZE, 4*SCALESIZE};
     int menuFramesXPos[4] = {1*SCALESIZE, 25*SCALESIZE, 80*SCALESIZE, 104*SCALESIZE};
@@ -239,7 +423,7 @@ class Menu
     
     TTF_Font* font = NULL;
    
-    int menuDisplay = 0; 
+    int menuDisplay = 1; 
     double typeStartXPos = 0;
     double typeStartYPos = 0;
     double typeStartWidth = 0;
@@ -247,6 +431,15 @@ class Menu
     char* startString = "t y p e   \" s t a r t \"   t o   b e g i n   g a m e ";
     bool floatUp = false;
     Uint32 floatTime = 0;
+
+    SDL_Rect currentBorderRect;
+    SDL_Rect currentOutlineRect;
+    SDL_Rect previousBorderRect;
+    SDL_Rect previousOutlineRect;
+    bool transition = false; 
+    bool scrollDownPrevFrame = false;
+    int borderType = 0;
+    int prevBorderType = -1;
 };
 
 #endif

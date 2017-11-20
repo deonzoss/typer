@@ -33,19 +33,19 @@ class Coworker
  
     void render()
     {
-      SDL_Rect renderQuad = {COWORKER_COMPUTER_X, COWORKER_COMPUTER_Y, computerClips[0].w, computerClips[0].h};
+      SDL_Rect renderQuad = {COWORKER_COMPUTER_X, COWORKER_COMPUTER_Y, computerClips[0].w*SCALESIZE, computerClips[0].h*SCALESIZE};
       SDL_RenderCopy(renderer, objectTexture, &computerClips[computerClipsIndex], &renderQuad); 
     
       
-      renderQuad = {COWORKER_SPAWN_X,COWORKER_SPAWN_Y, charClips[0].w, charClips[0].h};
+      renderQuad = {COWORKER_SPAWN_X,COWORKER_SPAWN_Y, charClips[0].w*SCALESIZE, charClips[0].h*SCALESIZE};
       SDL_RenderCopy(renderer, objectTexture, &charClips[0], &renderQuad);
       
       if(!heavyHead){ 
-        renderQuad = {COWORKER_SPAWN_X + 13*SCALESIZE, COWORKER_SPAWN_Y - 2*SCALESIZE, charHead.w, charHead.h};
+        renderQuad = {COWORKER_SPAWN_X + 13*SCALESIZE, COWORKER_SPAWN_Y - 2*SCALESIZE, charHead.w*SCALESIZE, charHead.h*SCALESIZE};
         SDL_RenderCopy(renderer, objectTexture, &charHead, &renderQuad);
       } 
       else{
-        renderQuad = {COWORKER_SPAWN_X + 13*SCALESIZE, COWORKER_SPAWN_Y - 1*SCALESIZE, charHead.w, charHead.h};
+        renderQuad = {COWORKER_SPAWN_X + 13*SCALESIZE, COWORKER_SPAWN_Y - 1*SCALESIZE, charHead.w*SCALESIZE, charHead.h*SCALESIZE};
         SDL_RenderCopy(renderer, objectTexture, &charHead, &renderQuad);
         if(SDL_GetTicks() - heavyHeadTime >= LETTER_LIFETIME){
           heavyHead = false;
@@ -63,13 +63,13 @@ class Coworker
         blinkTime = SDL_GetTicks();
       }
       if(blink && ((SDL_GetTicks() - blinkTime) < 100)){
-        SDL_Rect blinkingEyes = {45*SCALESIZE, 83*SCALESIZE, 4*SCALESIZE, 1*SCALESIZE};
+        SDL_Rect blinkingEyes = {45, 83, 4, 1};
         SDL_Rect renderQuad; 
         if(!heavyHead){ 
-          renderQuad = {COWORKER_SPAWN_X + 14*SCALESIZE, COWORKER_SPAWN_Y + 1*SCALESIZE, blinkingEyes.w, blinkingEyes.h};
+          renderQuad = {COWORKER_SPAWN_X + 14*SCALESIZE, COWORKER_SPAWN_Y + 1*SCALESIZE, blinkingEyes.w*SCALESIZE, blinkingEyes.h*SCALESIZE};
         } 
         else{ 
-          renderQuad = {COWORKER_SPAWN_X + 14*SCALESIZE, COWORKER_SPAWN_Y + 2*SCALESIZE, blinkingEyes.w, blinkingEyes.h};
+          renderQuad = {COWORKER_SPAWN_X + 14*SCALESIZE, COWORKER_SPAWN_Y + 2*SCALESIZE, blinkingEyes.w*SCALESIZE, blinkingEyes.h*SCALESIZE};
         } 
         SDL_RenderCopy(renderer, objectTexture, &blinkingEyes, &renderQuad);
       }
@@ -88,10 +88,10 @@ class Coworker
 
     void setupClips()
     {
-      charHead.x = 44*SCALESIZE;
-      charHead.y = 84*SCALESIZE;
-      charHead.w = 7*SCALESIZE;
-      charHead.h = 7*SCALESIZE; 
+      charHead.x = 44;
+      charHead.y = 84;
+      charHead.w = 7;
+      charHead.h = 7; 
       for(int i = 0; i < 2; i++){
         charClips[i].x = COWORKER_OBJECT_X;
         charClips[i].y = COWORKER_OBJECT_Y;
@@ -99,10 +99,10 @@ class Coworker
         charClips[i].h = COWORKER_OBJECT_H;
       }
       for(int i = 0; i < 26; i++){
-        computerClips[i].x = 116*SCALESIZE + 8*SCALESIZE*(i%4);
-        computerClips[i].y = 68*SCALESIZE + 8*SCALESIZE*((i/4)%7);
-        computerClips[i].w = 8*SCALESIZE;
-        computerClips[i].h = 8*SCALESIZE;
+        computerClips[i].x = 116 + 8*(i%4);
+        computerClips[i].y = 68 + 8*((i/4)%7);
+        computerClips[i].w = 8;
+        computerClips[i].h = 8;
       }
     }
 

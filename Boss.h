@@ -37,12 +37,12 @@ class Boss
       if(!frozen){ 
         if(walking){ 
           if(facingRight){ 
-            renderQuad = {xPos,BOSS_SPAWN_Y, charRightClips[walkingFrameIndex].w, charRightClips[walkingFrameIndex].h};
+            renderQuad = {xPos,BOSS_SPAWN_Y, charRightClips[walkingFrameIndex].w*SCALESIZE, charRightClips[walkingFrameIndex].h*SCALESIZE};
             SDL_RenderCopy(renderer, objectTexture, &charRightClips[walkingFrameIndex], &renderQuad);
             xPos+=WALKING_SPEED/speed;
           }
           else{
-            renderQuad = {xPos,BOSS_SPAWN_Y, charLeftClips[walkingFrameIndex].w, charLeftClips[walkingFrameIndex].h};
+            renderQuad = {xPos,BOSS_SPAWN_Y, charLeftClips[walkingFrameIndex].w*SCALESIZE, charLeftClips[walkingFrameIndex].h*SCALESIZE};
             SDL_RenderCopy(renderer, objectTexture, &charLeftClips[walkingFrameIndex], &renderQuad);
             xPos-=WALKING_SPEED/speed; 
           }
@@ -56,11 +56,11 @@ class Boss
         }
         else{
           if(facingRight){   
-            renderQuad = {BOSS_SPAWN_X,BOSS_SPAWN_Y, charRightClips[0].w, charRightClips[0].h};
+            renderQuad = {BOSS_SPAWN_X,BOSS_SPAWN_Y, charRightClips[0].w*SCALESIZE, charRightClips[0].h*SCALESIZE};
             SDL_RenderCopy(renderer, objectTexture, &charRightClips[0], &renderQuad);
           }
           else{
-            renderQuad = {BOSS_SPAWN_X,BOSS_SPAWN_Y, charLeftClips[0].w, charLeftClips[0].h};
+            renderQuad = {BOSS_SPAWN_X,BOSS_SPAWN_Y, charLeftClips[0].w*SCALESIZE, charLeftClips[0].h*SCALESIZE};
             SDL_RenderCopy(renderer, objectTexture, &charLeftClips[0], &renderQuad);
           }
         }
@@ -74,30 +74,30 @@ class Boss
       }
       else{
         if(facingRight){ 
-          renderQuad = {xPos,BOSS_SPAWN_Y, charRightClips[walkingFrameIndex].w, charRightClips[walkingFrameIndex].h};
+          renderQuad = {xPos,BOSS_SPAWN_Y, charRightClips[walkingFrameIndex].w*SCALESIZE, charRightClips[walkingFrameIndex].h*SCALESIZE};
           SDL_RenderCopy(renderer, objectTexture, &charRightClips[walkingFrameIndex], &renderQuad);
         }
         else{
-          renderQuad = {xPos,BOSS_SPAWN_Y, charLeftClips[walkingFrameIndex].w, charLeftClips[walkingFrameIndex].h};
+          renderQuad = {xPos,BOSS_SPAWN_Y, charLeftClips[walkingFrameIndex].w*SCALESIZE, charLeftClips[walkingFrameIndex].h*SCALESIZE};
           SDL_RenderCopy(renderer, objectTexture, &charLeftClips[walkingFrameIndex], &renderQuad);
         }
       }
       if(!heavyHead){ 
         if(facingRight){ 
           if(walkingFrameIndex%2==0 || !walking){
-            renderQuad = {xPos+1*SCALESIZE, BOSS_SPAWN_Y - 7*SCALESIZE, charHeadRight.w, charHeadRight.h};
+            renderQuad = {xPos+1*SCALESIZE, BOSS_SPAWN_Y - 7*SCALESIZE, charHeadRight.w*SCALESIZE, charHeadRight.h*SCALESIZE};
           }
           else{ 
-            renderQuad = {xPos+1*SCALESIZE, BOSS_SPAWN_Y - 6*SCALESIZE, charHeadRight.w, charHeadRight.h};
+            renderQuad = {xPos+1*SCALESIZE, BOSS_SPAWN_Y - 6*SCALESIZE, charHeadRight.w*SCALESIZE, charHeadRight.h*SCALESIZE};
           } 
           SDL_RenderCopy(renderer, objectTexture, &charHeadRight, &renderQuad);
         }
         else{ 
           if(walkingFrameIndex%2==0 || !walking){
-            renderQuad = {xPos+4*SCALESIZE, BOSS_SPAWN_Y - 7*SCALESIZE, charHeadLeft.w, charHeadLeft.h};
+            renderQuad = {xPos+4*SCALESIZE, BOSS_SPAWN_Y - 7*SCALESIZE, charHeadLeft.w*SCALESIZE, charHeadLeft.h*SCALESIZE};
           }
           else{ 
-            renderQuad = {xPos+4*SCALESIZE, BOSS_SPAWN_Y - 6*SCALESIZE, charHeadLeft.w, charHeadLeft.h};
+            renderQuad = {xPos+4*SCALESIZE, BOSS_SPAWN_Y - 6*SCALESIZE, charHeadLeft.w*SCALESIZE, charHeadLeft.h*SCALESIZE};
           } 
           SDL_RenderCopy(renderer, objectTexture, &charHeadLeft, &renderQuad);
         } 
@@ -108,19 +108,19 @@ class Boss
         }
         if(facingRight){
           if(walkingFrameIndex%2==0 || !walking){
-            renderQuad = {xPos+1*SCALESIZE, BOSS_SPAWN_Y - 6*SCALESIZE, charHeadRight.w, charHeadRight.h};
+            renderQuad = {xPos+1*SCALESIZE, BOSS_SPAWN_Y - 6*SCALESIZE, charHeadRight.w*SCALESIZE, charHeadRight.h*SCALESIZE};
           }
           else{ 
-            renderQuad = {xPos+1*SCALESIZE, BOSS_SPAWN_Y - 5*SCALESIZE, charHeadRight.w, charHeadRight.h};
+            renderQuad = {xPos+1*SCALESIZE, BOSS_SPAWN_Y - 5*SCALESIZE, charHeadRight.w*SCALESIZE, charHeadRight.h*SCALESIZE};
           } 
           SDL_RenderCopy(renderer, objectTexture, &charHeadRight, &renderQuad);
         } 
         else{
           if(walkingFrameIndex%2==0 || !walking){
-            renderQuad = {xPos+4*SCALESIZE, BOSS_SPAWN_Y - 6*SCALESIZE, charHeadLeft.w, charHeadLeft.h};
+            renderQuad = {xPos+4*SCALESIZE, BOSS_SPAWN_Y - 6*SCALESIZE, charHeadLeft.w*SCALESIZE, charHeadLeft.h*SCALESIZE};
           }
           else{ 
-            renderQuad = {xPos+4*SCALESIZE, BOSS_SPAWN_Y - 5*SCALESIZE, charHeadLeft.w, charHeadLeft.h};
+            renderQuad = {xPos+4*SCALESIZE, BOSS_SPAWN_Y - 5*SCALESIZE, charHeadLeft.w*SCALESIZE, charHeadLeft.h*SCALESIZE};
           } 
           SDL_RenderCopy(renderer, objectTexture, &charHeadLeft, &renderQuad);
         }
@@ -149,13 +149,13 @@ class Boss
           yPos+=1*SCALESIZE;
         }
         if(facingRight){ 
-          blinkingEyes = {46*SCALESIZE, 75*SCALESIZE, 4*SCALESIZE, 1*SCALESIZE};
-          SDL_Rect renderQuad = {xPos+3*SCALESIZE, yPos, blinkingEyes.w, blinkingEyes.h};
+          blinkingEyes = {46, 75, 4, 1};
+          SDL_Rect renderQuad = {xPos+3*SCALESIZE, yPos, blinkingEyes.w*SCALESIZE, blinkingEyes.h*SCALESIZE};
           SDL_RenderCopy(renderer, objectTexture, &blinkingEyes, &renderQuad);
         }
         else{
-          blinkingEyes = {45*SCALESIZE, 83*SCALESIZE, 4*SCALESIZE, 1*SCALESIZE};
-          SDL_Rect renderQuad = {xPos+5*SCALESIZE, yPos, blinkingEyes.w, blinkingEyes.h};
+          blinkingEyes = {45, 83, 4, 1};
+          SDL_Rect renderQuad = {xPos+5*SCALESIZE, yPos, blinkingEyes.w*SCALESIZE, blinkingEyes.h*SCALESIZE};
           SDL_RenderCopy(renderer, objectTexture, &blinkingEyes, &renderQuad);
         }
       }
@@ -192,24 +192,24 @@ class Boss
 
     void setupClips()
     {
-      charHeadRight.x = 1*SCALESIZE;
-      charHeadRight.y = 145*SCALESIZE;
-      charHeadRight.w = 7*SCALESIZE;
-      charHeadRight.h = 7*SCALESIZE;
+      charHeadRight.x = 1;
+      charHeadRight.y = 145;
+      charHeadRight.w = 7;
+      charHeadRight.h = 7;
 
-      charHeadLeft.x = 4*SCALESIZE;
-      charHeadLeft.y = 171*SCALESIZE;
-      charHeadLeft.w = 7*SCALESIZE;
-      charHeadLeft.h = 7*SCALESIZE;
+      charHeadLeft.x = 4;
+      charHeadLeft.y = 171;
+      charHeadLeft.w = 7;
+      charHeadLeft.h = 7;
 
       for(int i = 0; i < 5; i++){
-        charRightClips[i].x = BOSS_OBJECT_X+(15*SCALESIZE*i);
+        charRightClips[i].x = BOSS_OBJECT_X+(15*i);
         charRightClips[i].y = BOSS_OBJECT_Y;
         charRightClips[i].w = BOSS_OBJECT_W;
         charRightClips[i].h = BOSS_OBJECT_H;
         
-        charLeftClips[i].x = BOSS_OBJECT_X+(15*SCALESIZE*i);
-        charLeftClips[i].y = BOSS_OBJECT_Y+BOSS_OBJECT_H+7*SCALESIZE;
+        charLeftClips[i].x = BOSS_OBJECT_X+(15*i);
+        charLeftClips[i].y = BOSS_OBJECT_Y+BOSS_OBJECT_H+7;
         charLeftClips[i].w = BOSS_OBJECT_W;
         charLeftClips[i].h = BOSS_OBJECT_H;
       }

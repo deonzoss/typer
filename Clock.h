@@ -7,26 +7,26 @@
 class Clock{
   public:
     Clock(SDL_Renderer* renderer){
-      object = new Object(0*SCALESIZE, 64*SCALESIZE, 10*SCALESIZE, 10*SCALESIZE, CLOCK_SPAWN_X, CLOCK_SPAWN_Y, renderer);
+      object = new Object(0, 64, 10, 10, CLOCK_SPAWN_X, CLOCK_SPAWN_Y, renderer);
       this->renderer = renderer;
       
-      minuteHand.x = 10*SCALESIZE;
-      minuteHand.y = 68*SCALESIZE;
-      minuteHand.w = 1*SCALESIZE;
-      minuteHand.h = 9*SCALESIZE;
+      minuteHand.x = 10;
+      minuteHand.y = 68;
+      minuteHand.w = 1;
+      minuteHand.h = 9;
 
-      hourHand.x = 11*SCALESIZE;
-      hourHand.y = 68*SCALESIZE;
-      hourHand.w = 1*SCALESIZE;
-      hourHand.h = 7*SCALESIZE;
+      hourHand.x = 11;
+      hourHand.y = 68;
+      hourHand.w = 1;
+      hourHand.h = 7;
 
     }
 
     void render(){
       object->render();
-      renderQuad = {CLOCK_SPAWN_X + 4*SCALESIZE, CLOCK_SPAWN_Y, minuteHand.w, minuteHand.h};
+      renderQuad = {CLOCK_SPAWN_X + 4*SCALESIZE, CLOCK_SPAWN_Y, minuteHand.w*SCALESIZE, minuteHand.h*SCALESIZE};
       SDL_RenderCopyEx(renderer, objectTexture, &minuteHand, &renderQuad, minuteHandAngle, NULL, SDL_FLIP_NONE); 
-      renderQuad = {CLOCK_SPAWN_X + 4*SCALESIZE, CLOCK_SPAWN_Y + 1*SCALESIZE, hourHand.w, hourHand.h};
+      renderQuad = {CLOCK_SPAWN_X + 4*SCALESIZE, CLOCK_SPAWN_Y + 1*SCALESIZE, hourHand.w*SCALESIZE, hourHand.h*SCALESIZE};
       SDL_RenderCopyEx(renderer, objectTexture, &hourHand, &renderQuad, hourHandAngle, NULL, SDL_FLIP_NONE); 
       if(minuteHandAngle > 360){
         minuteHandAngle = 0;
@@ -40,10 +40,6 @@ class Clock{
       else{
         hourHandAngle += (.012*SCALESIZE)/speed; 
       }
-    }
-    
-    void animate(){
-
     }
 
     void setObjectTexture(SDL_Texture* texture){

@@ -8,38 +8,38 @@ class Screen
     {
       this->renderer = renderer;
 
-      wholeScreen.x = 0*SCALESIZE;
-      wholeScreen.y = 4*SCALESIZE;
-      wholeScreen.w = 128*SCALESIZE;
-      wholeScreen.h = 54*SCALESIZE;
+      wholeScreen.x = 0;
+      wholeScreen.y = 4;
+      wholeScreen.w = 128;
+      wholeScreen.h = 54;
 
       wholeScreenXPos = 0*SCALESIZE;
       wholeScreenYPos = SCREEN_STARTING_YPOS;
       
       leftFrame.x = wholeScreen.x;
       leftFrame.y = wholeScreen.y;
-      leftFrame.w = 5*SCALESIZE;
+      leftFrame.w = 5;
       leftFrame.h = wholeScreen.h;
 
-      rightFrame.x = wholeScreen.w - 5*SCALESIZE;
+      rightFrame.x = wholeScreen.w - 5;
       rightFrame.y = wholeScreen.y;
-      rightFrame.w = 5*SCALESIZE;
+      rightFrame.w = 5;
       rightFrame.h = wholeScreen.h;
   
       for(int i = 0; i < 5; i++){
-        startFrames[i].w = 6*SCALESIZE;
-        startFrames[i].h = 9*SCALESIZE;
-        startFrames[i].x = 24*SCALESIZE + i*6*SCALESIZE;
-        startFrames[i].y = 58*SCALESIZE;
+        startFrames[i].w = 6;
+        startFrames[i].h = 9;
+        startFrames[i].x = 24 + i*6;
+        startFrames[i].y = 58;
       } 
       for(int i = 0; i < 9; i++){
-        endFrames[i].w = 6*SCALESIZE;
-        endFrames[i].h = 9*SCALESIZE;
-        endFrames[i].x = 54*SCALESIZE + i*6*SCALESIZE;
-        endFrames[i].y = 58*SCALESIZE;
+        endFrames[i].w = 6;
+        endFrames[i].h = 9;
+        endFrames[i].x = 54 + i*6;
+        endFrames[i].y = 58;
       } 
       
-      endXPos = SCREEN_WIDTH/2 - (endFrames[0].w*9)/2;
+      endXPos = SCREEN_WIDTH/2 - (endFrames[0].w*SCALESIZE*9)/2;
     }
 
     ~Screen()
@@ -137,7 +137,7 @@ class Screen
           }
         } 
         for(int i = 0; i < 5; i++){ 
-          renderQuad = {49*SCALESIZE+i*startFrames[i].w,startFramesYPos[i],startFrames[i].w,startFrames[i].h};	
+          renderQuad = {49*SCALESIZE+i*startFrames[i].w*SCALESIZE,startFramesYPos[i],startFrames[i].w*SCALESIZE,startFrames[i].h*SCALESIZE};	
           SDL_RenderCopy(renderer, objectTexture,&startFrames[i], &renderQuad);
         } 
       }
@@ -152,11 +152,11 @@ class Screen
       } 
       if(endGame || endLettersDropped){ 
         for(int i = 0; i < 9; i++){
-          SDL_Rect renderQuad = {endXPos+i*endFrames[i].w,endFramesYPos[i],endFrames[i].w,endFrames[i].h};	
+          SDL_Rect renderQuad = {endXPos+i*endFrames[i].w*SCALESIZE,endFramesYPos[i],endFrames[i].w*SCALESIZE,endFrames[i].h*SCALESIZE};	
           SDL_RenderCopy(renderer, objectTexture,&endFrames[i], &renderQuad);
         }
       }
-      renderQuad = {wholeScreenXPos,wholeScreenYPos,wholeScreen.w,wholeScreen.h};	
+      renderQuad = {wholeScreenXPos,wholeScreenYPos,wholeScreen.w*SCALESIZE,wholeScreen.h*SCALESIZE};	
       SDL_RenderCopy(renderer, objectTexture,&wholeScreen, &renderQuad);
       
     }
@@ -178,10 +178,10 @@ class Screen
 
     void renderFrame()
     {
-      SDL_Rect renderQuad = {0, 0, leftFrame.w, leftFrame.h};
+      SDL_Rect renderQuad = {0, 0, leftFrame.w*SCALESIZE, leftFrame.h*SCALESIZE};
       SDL_RenderCopy(renderer, objectTexture,&leftFrame, &renderQuad);
 
-      renderQuad = {wholeScreen.w - rightFrame.w, 0, rightFrame.w, rightFrame.h};	
+      renderQuad = {wholeScreen.w*SCALESIZE - rightFrame.w*SCALESIZE, 0, rightFrame.w*SCALESIZE, rightFrame.h*SCALESIZE};	
       SDL_RenderCopy(renderer, objectTexture,&rightFrame, &renderQuad);
     }
 

@@ -66,8 +66,18 @@ class Word
       renderQuad = {xPos, yPos, wordWidth, wordHeight};
       SDL_RenderCopyEx(renderer, wordTexture, NULL, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
     }
-
-  
+    
+    void setX(double value){
+      xPos = value;
+    }
+    
+    void setY(double value){
+      yPos = value;
+    } 
+    
+    double getY(){
+      return yPos;
+    } 
   private: 
     SDL_Renderer* renderer = NULL;
     SDL_Texture* wordTexture = NULL;

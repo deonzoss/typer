@@ -201,18 +201,18 @@ class Character
 
     void render()
     {
-      SDL_Rect renderQuad = {6*SCALESIZE,79*SCALESIZE, charClips[0].w, charClips[0].h};
+      SDL_Rect renderQuad = {6*SCALESIZE,79*SCALESIZE, charClips[0].w*SCALESIZE, charClips[0].h*SCALESIZE};
       SDL_RenderCopy(renderer, objectTexture, &charClips[0], &renderQuad);
      
       if(!heavyHead){ 
-        renderQuad = {8*SCALESIZE,72*SCALESIZE, charHead.w, charHead.h};
+        renderQuad = {8*SCALESIZE,72*SCALESIZE, charHead.w*SCALESIZE, charHead.h*SCALESIZE};
         SDL_RenderCopy(renderer, objectTexture, &charHead, &renderQuad);
       } 
       else{
         if((SDL_GetTicks() - heavyHeadTime) > LETTER_LIFETIME){
           heavyHead = false;
         }
-        renderQuad = {8*SCALESIZE,73*SCALESIZE, charHead.w, charHead.h};
+        renderQuad = {8*SCALESIZE,73*SCALESIZE, charHead.w*SCALESIZE, charHead.h*SCALESIZE};
         SDL_RenderCopy(renderer, objectTexture, &charHead, &renderQuad);
       } 
       
@@ -264,7 +264,7 @@ class Character
           charIndex = 1;
       }
       else if((SDL_GetTicks() - typeTime) < 300){
-        SDL_Rect renderQuad = {6*SCALESIZE,79*SCALESIZE, charClips[0].w, charClips[0].h};
+        SDL_Rect renderQuad = {6*SCALESIZE,79*SCALESIZE, charClips[0].w*SCALESIZE, charClips[0].h*SCALESIZE};
         SDL_RenderCopy(renderer, objectTexture, &charClips[charIndex], &renderQuad);	
       }
     }
@@ -278,10 +278,10 @@ class Character
         charClips[i].h = MAIN_CHARACTER_OBJECT_H;
       }
 
-      charHead.x = 2*SCALESIZE;
-      charHead.y = 74*SCALESIZE;
-      charHead.w = 7*SCALESIZE;
-      charHead.h = 7*SCALESIZE;
+      charHead.x = 2;
+      charHead.y = 74;
+      charHead.w = 7;
+      charHead.h = 7;
     }
 
     void tryToBlink()
@@ -293,13 +293,13 @@ class Character
 
       if(blink && ((SDL_GetTicks() - blinkTime) < 100)){
         if(!heavyHead){ 
-          SDL_Rect blinkingEyes = {46*SCALESIZE,75*SCALESIZE,4*SCALESIZE,1*SCALESIZE};
-          SDL_Rect renderQuad = {10*SCALESIZE,75*SCALESIZE, blinkingEyes.w, blinkingEyes.h};
+          SDL_Rect blinkingEyes = {46,75,4,1};
+          SDL_Rect renderQuad = {10*SCALESIZE,75*SCALESIZE, blinkingEyes.w*SCALESIZE, blinkingEyes.h*SCALESIZE};
           SDL_RenderCopy(renderer, objectTexture, &blinkingEyes, &renderQuad);
         }
         else{
-          SDL_Rect blinkingEyes = {46*SCALESIZE,75*SCALESIZE,4*SCALESIZE,1*SCALESIZE};
-          SDL_Rect renderQuad = {10*SCALESIZE,76*SCALESIZE, blinkingEyes.w, blinkingEyes.h};
+          SDL_Rect blinkingEyes = {46,75,4,1};
+          SDL_Rect renderQuad = {10*SCALESIZE,76*SCALESIZE, blinkingEyes.w*SCALESIZE, blinkingEyes.h*SCALESIZE};
           SDL_RenderCopy(renderer, objectTexture, &blinkingEyes, &renderQuad);
         } 
       }

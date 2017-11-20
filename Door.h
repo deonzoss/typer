@@ -7,32 +7,32 @@
 class Door{
   public:
     Door(SDL_Renderer* renderer){
-      object = new Object(109*SCALESIZE, 84*SCALESIZE, 4*SCALESIZE, 2*SCALESIZE, 43*SCALESIZE, 73*SCALESIZE, renderer);
+      object = new Object(109, 84, 4, 2, 43*SCALESIZE, 73*SCALESIZE, renderer);
       this->renderer = renderer;
-      windowWorkers[0].x = 46*SCALESIZE;
-      windowWorkers[0].y = 114*SCALESIZE;
-      windowWorkers[0].w = 54*SCALESIZE;
-      windowWorkers[0].h = 13*SCALESIZE;
+      windowWorkers[0].x = 46;
+      windowWorkers[0].y = 114;
+      windowWorkers[0].w = 54;
+      windowWorkers[0].h = 13;
      
-      windowWorkers[1].x = 46*SCALESIZE;
-      windowWorkers[1].y = 127*SCALESIZE;
-      windowWorkers[1].w = 54*SCALESIZE;
-      windowWorkers[1].h = 13*SCALESIZE;
+      windowWorkers[1].x = 46;
+      windowWorkers[1].y = 127;
+      windowWorkers[1].w = 54;
+      windowWorkers[1].h = 13;
       
-      windowWorker[0].x = 46*SCALESIZE;
-      windowWorker[0].y = 98*SCALESIZE;
-      windowWorker[0].w = 6*SCALESIZE;
-      windowWorker[0].h = 16*SCALESIZE;
+      windowWorker[0].x = 46;
+      windowWorker[0].y = 98;
+      windowWorker[0].w = 6;
+      windowWorker[0].h = 16;
      
-      windowWorker[1].x = 54*SCALESIZE;
-      windowWorker[1].y = 98*SCALESIZE;
-      windowWorker[1].w = 6*SCALESIZE;
-      windowWorker[1].h = 16*SCALESIZE;
+      windowWorker[1].x = 54;
+      windowWorker[1].y = 98;
+      windowWorker[1].w = 6;
+      windowWorker[1].h = 16;
       
-      windowWorkerArm.x = 52*SCALESIZE;
-      windowWorkerArm.y = 98*SCALESIZE;
-      windowWorkerArm.w = 2*SCALESIZE;
-      windowWorkerArm.h = 12*SCALESIZE;
+      windowWorkerArm.x = 52;
+      windowWorkerArm.y = 98;
+      windowWorkerArm.w = 2;
+      windowWorkerArm.h = 12;
     }
 
     void render(){
@@ -45,20 +45,20 @@ class Door{
 
       
       if(windowWorkerIndex){ 
-        renderQuad = {WINDOW_WORKER_X + 4*SCALESIZE, WINDOW_WORKER_Y, windowWorkerArm.w, windowWorkerArm.h};
+        renderQuad = {WINDOW_WORKER_X + 4*SCALESIZE, WINDOW_WORKER_Y, windowWorkerArm.w*SCALESIZE, windowWorkerArm.h*SCALESIZE};
         SDL_RenderCopy(renderer, objectTexture, &windowWorkerArm, &renderQuad);
         angle = 0;
         raiseArm = false; 
       }
       else{
-        renderQuad = {WINDOW_WORKER_X + 4*SCALESIZE, WINDOW_WORKER_Y, windowWorkerArm.w, windowWorkerArm.h};
+        renderQuad = {WINDOW_WORKER_X + 4*SCALESIZE, WINDOW_WORKER_Y, windowWorkerArm.w*SCALESIZE, windowWorkerArm.h*SCALESIZE};
         SDL_RenderCopyEx(renderer, objectTexture, &windowWorkerArm, &renderQuad, angle, NULL, SDL_FLIP_NONE); 
       }
       
-      renderQuad = {WINDOW_WORKER_X,WINDOW_WORKER_Y, windowWorker[0].w, windowWorker[0].h};
+      renderQuad = {WINDOW_WORKER_X,WINDOW_WORKER_Y, windowWorker[0].w*SCALESIZE, windowWorker[0].h*SCALESIZE};
       SDL_RenderCopy(renderer, objectTexture, &windowWorker[windowWorkerIndex], &renderQuad); 
       
-      renderQuad = {WINDOW_WORKERS_X, WINDOW_WORKERS_Y, windowWorkers[0].w, windowWorkers[0].h};
+      renderQuad = {WINDOW_WORKERS_X, WINDOW_WORKERS_Y, windowWorkers[0].w*SCALESIZE, windowWorkers[0].h*SCALESIZE};
       SDL_RenderCopy(renderer, objectTexture, &windowWorkers[windowWorkersIndex], &renderQuad); 
        
       if(raiseArm){

@@ -6,7 +6,7 @@
 class Trashcan{
   public:
     Trashcan(SDL_Renderer* renderer){
-      object = new Object(0, 102*SCALESIZE, 7*SCALESIZE, 13*SCALESIZE, TRASHCAN_SPAWN_X, TRASHCAN_SPAWN_Y, renderer);
+      object = new Object(0, 102, 7, 13, TRASHCAN_SPAWN_X, TRASHCAN_SPAWN_Y, renderer);
       this->renderer = renderer;
     }
 
