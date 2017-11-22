@@ -49,10 +49,31 @@ class Menu
       levelText->setY(MENU_FRAMES_SPAWN_Y+.5*SCALESIZE);
       scoreboardText->setY(MENU_FRAMES_SPAWN_Y+.5*SCALESIZE);
       optionsText->setY(MENU_FRAMES_SPAWN_Y+.5*SCALESIZE);
+      raiseMenu = false;
+      scrollDownPrevFrame = false;
+      transition = false;
     }
 
     void raise(){
+      for(int i = 0; i < 4; i++){
+        menuFramesYPos[i] = menuFramesYPos[i]-.5*SCALESIZE;  
+      }
+      characterText->setY(characterText->getY() - .5*SCALESIZE);
+      levelText->setY(levelText->getY() - .5*SCALESIZE);
+      scoreboardText->setY(scoreboardText->getY() - .5*SCALESIZE);
+      optionsText->setY(optionsText->getY() - .5*SCALESIZE);
 
+      if(typeStartYPos < SCREEN_HEIGHT){
+        typeStartYPos+=.5*SCALESIZE;
+      }
+
+      currentBorderRect.y-=.5*SCALESIZE;
+      currentOutlineRect.y-=.5*SCALESIZE;
+
+    }
+
+    void setRaiseMenu(bool value){
+      raiseMenu = value;
     }
 
     void loadFromRenderedText()
@@ -103,6 +124,9 @@ class Menu
     }
 
     void render(){
+      if(raiseMenu){
+        raise();
+      }
       if(menuDisplay>=1 && menuDisplay <=5){
         if(transition && !scrollDownPrevFrame){
           displayPreviousBorder(); 
@@ -247,13 +271,13 @@ class Menu
       if(borderType == 0){
         return;
       } 
-      else if(borderType == 1){ 
+      else if(borderType == 1 && !raiseMenu){ 
         if(currentBorderRect.y < tipTextYPos){
           currentBorderRect.y+=1*SCALESIZE;
           currentOutlineRect.y+=1*SCALESIZE; 
         } 
       }
-      else if(currentBorderRect.y < MENU_FRAMES_SPAWN_Y-SCALESIZE){
+      else if(currentBorderRect.y < MENU_FRAMES_SPAWN_Y-SCALESIZE & !raiseMenu){
         currentBorderRect.y+=1*SCALESIZE;
         currentOutlineRect.y+=1*SCALESIZE; 
         
@@ -438,6 +462,7 @@ class Menu
     SDL_Rect previousOutlineRect;
     bool transition = false; 
     bool scrollDownPrevFrame = false;
+    bool raiseMenu = false;
     int borderType = 0;
     int prevBorderType = -1;
 };

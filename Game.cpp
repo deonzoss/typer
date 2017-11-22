@@ -438,7 +438,6 @@ void Game::start()
     boss->render(); 
     desk->render(); 
     worker->render();
-    mainCharacter->render();	
 
    
     if(startLevel && !quitLevel){
@@ -447,13 +446,21 @@ void Game::start()
         displayTextVector();	
         scoreboard->render();
         screen->renderFrame();	
-        displayLetterVector();	
         displayScoreVector(); 
         collisionHandler(); 
       } 
       else if (screen->getLettersRaised()){
+        mainMenu->setRaiseMenu(true);
+        mainMenu->render();
         screenDropped = screen->dropScreen();
         screenRaised = !screenDropped; 
+        screen->renderScreen(); 
+        if(screenDropped){
+          mainMenu->reset();
+        }
+      }
+      else{
+        mainMenu->render();
       }
       if(pauseLevel){
         mainMenu->render(); 
@@ -482,8 +489,11 @@ void Game::start()
       mainMenu->render();
       screen->renderScreen(); 
     }
+    mainCharacter->render();	
+    displayLetterVector();	
     
     eventHandler();	//for typing	
+
     if(slowTime){
       SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
       SDL_SetRenderDrawColor(renderer, 191, 220, 245, slowRectAlpha);

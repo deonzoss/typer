@@ -5,7 +5,7 @@
 #ifndef Setup_h
 #define Setup_h
 
-const double SCALESIZE = 5;
+const double SCALESIZE = 10;
 
 
 const double PI = 3.14159265;
