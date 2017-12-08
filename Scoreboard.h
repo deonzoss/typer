@@ -1,3 +1,7 @@
+#include "Setup.h"
+#include <SDL2/SDL_ttf.h>
+
+
 #ifndef Scoreboard_h
 #define Scoreboard_h
 
@@ -128,8 +132,11 @@ class Scoreboard
 				
 				multColor = getColor(multColor);	
 
+        TTF_SetFontStyle(font, TTF_STYLE_BOLD);
+
 				SDL_Surface* multSurface = TTF_RenderText_Solid(font, multString, multColor);
 				SDL_Surface* shadowMultSurface = TTF_RenderText_Solid(font, multString, SHADOW_COLOR);	
+        TTF_SetFontStyle(font, NULL);
 				if(!multSurface){
 					printf("Error making mult surface. TTF_Error: %n", TTF_GetError());
 				}
@@ -219,23 +226,23 @@ class Scoreboard
 
 
 
-      SDL_Rect multRenderQuad = {MULTIPLIER_X,MULTIPLIER_Y,blankMultDisplay.w*SCALESIZE,blankMultDisplay.h*SCALESIZE};
+      SDL_Rect multRenderQuad = {MULTIPLIER_X - 1*SCALESIZE,MULTIPLIER_Y,blankMultDisplay.w*SCALESIZE,blankMultDisplay.h*SCALESIZE};
 
       SDL_RenderCopy(renderer, objectTexture, &blankMultDisplay, &multRenderQuad);	
 
 
 			if(multiplier){	
 
-				multRenderQuad = {MULTIPLIER_X,MULTIPLIER_Y,multClips[multiplier-1].w*SCALESIZE,multClips[multiplier-1].h*SCALESIZE};
+				multRenderQuad = {MULTIPLIER_X - 1*SCALESIZE,MULTIPLIER_Y,multClips[multiplier-1].w*SCALESIZE,multClips[multiplier-1].h*SCALESIZE};
 
 				SDL_RenderCopy(renderer, objectTexture, &multClips[multiplier-1], &multRenderQuad);	
 			}		
 			
 			if(multValue > 1){	
-				scoreRenderQuad = {multTextureX + .1*SCALESIZE, multTextureY - .7*SCALESIZE, multTextureWidth, multTextureHeight};
+				scoreRenderQuad = {multTextureX + .1*SCALESIZE - OFFSET, multTextureY - .7*SCALESIZE, multTextureWidth, multTextureHeight};
 				SDL_RenderCopyEx(renderer, shadowMultTexture, NULL, &scoreRenderQuad, 0.0, NULL, SDL_FLIP_NONE);
 				
-				scoreRenderQuad = {multTextureX - .2*SCALESIZE, multTextureY - 1*SCALESIZE, multTextureWidth, multTextureHeight};
+				scoreRenderQuad = {multTextureX - .2*SCALESIZE - OFFSET, multTextureY - 1*SCALESIZE, multTextureWidth, multTextureHeight};
 				SDL_RenderCopyEx(renderer, multTexture, NULL, &scoreRenderQuad, 0.0, NULL, SDL_FLIP_NONE);
 			}
 		
@@ -335,22 +342,23 @@ class Scoreboard
 		double fontTextureWidth = 0;			//for texture of score value (number following SCORE:)
 		double fontTextureHeight = 0;
 		double fontTextureX = SCOREBOARDX;
-		double fontTextureY = SCOREBOARDY;
+		double fontTextureY = SCOREBOARDY + SCREEN_END_YPOS;
 		
 		double scoreTextureWidth = 0;			//for texture of "SCORE: "
 		double scoreTextureHeight = 0;
 		double scoreTextureX = SCOREBOARDX;
-		double scoreTextureY = SCOREBOARDY;
+		double scoreTextureY = SCOREBOARDY + SCREEN_END_YPOS;
 	
 		double multTextureWidth = 0;
 		double multTextureHeight = 0;
 		double multTextureX = SCREEN_WIDTH-10*SCALESIZE;
-		double multTextureY = SCOREBOARDY;
+		double multTextureY = SCOREBOARDY + SCREEN_END_YPOS;
 	
 		bool incScore = false;
     bool objectScore = false;
     bool wordScore = false;
 		bool multColorDesc = false;
+
 };
 
 #endif

@@ -1,4 +1,4 @@
-
+#include "Setup.h"
 #include "Object.h"
 
 #ifndef Clock_h
@@ -28,17 +28,20 @@ class Clock{
       SDL_RenderCopyEx(renderer, objectTexture, &minuteHand, &renderQuad, minuteHandAngle, NULL, SDL_FLIP_NONE); 
       renderQuad = {CLOCK_SPAWN_X + 4*SCALESIZE, CLOCK_SPAWN_Y + 1*SCALESIZE, hourHand.w*SCALESIZE, hourHand.h*SCALESIZE};
       SDL_RenderCopyEx(renderer, objectTexture, &hourHand, &renderQuad, hourHandAngle, NULL, SDL_FLIP_NONE); 
-      if(minuteHandAngle > 360){
-        minuteHandAngle = 0;
-      }
-      else{
-        minuteHandAngle+= (.12*SCALESIZE)/speed;
-      }
-      if(hourHandAngle > 360){
-        hourHandAngle = 0;
-      }
-      else{
-        hourHandAngle += (.012*SCALESIZE)/speed; 
+    
+      if(!levelStarted){ 
+        if(minuteHandAngle > 360){
+          minuteHandAngle = 0;
+        }
+        else{
+          minuteHandAngle+= ((.01*SCALESIZE)/speed); 
+        }
+        if(hourHandAngle > 360){
+          hourHandAngle = 0;
+        }
+        else{
+          hourHandAngle+= ((.01*SCALESIZE)/speed)/12; 
+        }
       }
     }
 
@@ -62,6 +65,22 @@ class Clock{
       return false;
     }
 
+    void setMinuteHandAngle(double value){
+      minuteHandAngle = value;
+    }
+    
+    void setHourHandAngle(double value){
+      hourHandAngle = value;
+    }
+    
+    double getHourHandAngle(){
+      return hourHandAngle;
+    }
+
+    void setLevelStarted(bool value){
+      levelStarted = value;
+    }
+
   private:
     Object* object;
     SDL_Renderer* renderer = NULL;
@@ -73,6 +92,8 @@ class Clock{
     double minuteHandAngle = 0;
     double hourHandAngle = 0;
     double speed = 1;
+    bool levelStarted = false;
+
 };
 
 #endif

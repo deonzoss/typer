@@ -15,6 +15,7 @@ class Menu
         menuFrames[i].x = 1;
         menuFrames[i].y = 58; 
       }
+      loadMenuFrameText();
     }
 
     ~Menu()
@@ -56,19 +57,19 @@ class Menu
 
     void raise(){
       for(int i = 0; i < 4; i++){
-        menuFramesYPos[i] = menuFramesYPos[i]-.5*SCALESIZE;  
+        menuFramesYPos[i] = menuFramesYPos[i]-1*SCALESIZE;  
       }
-      characterText->setY(characterText->getY() - .5*SCALESIZE);
-      levelText->setY(levelText->getY() - .5*SCALESIZE);
-      scoreboardText->setY(scoreboardText->getY() - .5*SCALESIZE);
-      optionsText->setY(optionsText->getY() - .5*SCALESIZE);
+      characterText->setY(characterText->getY() - 1*SCALESIZE);
+      levelText->setY(levelText->getY() - 1*SCALESIZE);
+      scoreboardText->setY(scoreboardText->getY() - 1*SCALESIZE);
+      optionsText->setY(optionsText->getY() - 1*SCALESIZE);
 
       if(typeStartYPos < SCREEN_HEIGHT){
-        typeStartYPos+=.5*SCALESIZE;
+        typeStartYPos+=1*SCALESIZE;
       }
 
-      currentBorderRect.y-=.5*SCALESIZE;
-      currentOutlineRect.y-=.5*SCALESIZE;
+      currentBorderRect.y-=1*SCALESIZE;
+      currentOutlineRect.y-=1*SCALESIZE;
 
     }
 
@@ -131,9 +132,25 @@ class Menu
         if(transition && !scrollDownPrevFrame){
           displayPreviousBorder(); 
           displayPreviousMenuFrame(); 
+          if(prevBorderType==2) 
+            characterText->render();
+          else if(prevBorderType==3)
+            levelText->render();
+          else if(prevBorderType==4)
+            scoreboardText->render();
+          else if(prevBorderType==5)
+            optionsText->render();
         }
         displayBorder();
         displayMenu(); 
+        if(!transition || prevBorderType!=2) 
+          characterText->render();
+        if(!transition || prevBorderType!=3)
+          levelText->render();
+        if(!transition || prevBorderType!=4)
+          scoreboardText->render();
+        if(!transition || prevBorderType!=5)
+          optionsText->render();
         if(scrollDownPrevFrame){
           displayPreviousBorder(); 
           displayPreviousMenuFrame(); 
@@ -149,10 +166,6 @@ class Menu
       renderQuad = {typeStartXPos, typeStartYPos, typeStartWidth, typeStartHeight};
       SDL_RenderCopyEx(renderer, typeStart, NULL, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
     
-      characterText->render();
-      levelText->render();
-      scoreboardText->render();
-      optionsText->render();
     }
 
     
@@ -432,11 +445,10 @@ class Menu
     SDL_Renderer* renderer = NULL;
     SDL_Rect menuFrames[4]; 
     int menuFramesYPos[4] = {4*SCALESIZE, 4*SCALESIZE, 4*SCALESIZE, 4*SCALESIZE};
-    int menuFramesXPos[4] = {1*SCALESIZE, 25*SCALESIZE, 80*SCALESIZE, 104*SCALESIZE};
+    int menuFramesXPos[4] = {OFFSET + 1*SCALESIZE,OFFSET +  25*SCALESIZE,OFFSET +  80*SCALESIZE,OFFSET +  104*SCALESIZE};
 
     SDL_Texture* typeStart = NULL;
-    SDL_Texture* typeStartShadow = NULL;
-    
+    SDL_Texture* typeStartShadow = NULL; 
     SDL_Texture* tipText = NULL;
     double tipTextXPos = 0;
     double tipTextYPos= 0;
@@ -465,6 +477,8 @@ class Menu
     bool raiseMenu = false;
     int borderType = 0;
     int prevBorderType = -1;
+    
+   
 };
 
 #endif

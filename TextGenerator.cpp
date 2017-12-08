@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <time.h>
 
+
 TextGenerator::TextGenerator(SDL_Renderer* renderer)
 {
 	rand = 0;

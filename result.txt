@@ -1,0 +1,1109 @@
+g++ Setup.cpp main.cpp Texture.cpp Game.cpp SdlWindow.cpp TextGenerator.cpp Level.cpp Letter.cpp -Wall -Werror -w -g -lX11 -lSDL2 -lSDL2_image -lSDL2_ttf  -o  typer
+Game.cpp:1:2: error: invalid preprocessing directive #includ; did you mean #include?
+ #includ "Game.h"
+  ^~~~~~
+  include
+Game.cpp:3:1: error: ‘Game’ does not name a type
+ Game::Game(SDL_Renderer* renderer)
+ ^~~~
+Game.cpp:14:6: error: ‘vector’ in namespace ‘std’ does not name a template type
+ std::vector<Texture*> Game::makeTextVector()
+      ^~~~~~
+Game.cpp:21:6: error: ‘vector’ in namespace ‘std’ does not name a template type
+ std::vector<Texture*> Game::populateTextVector()
+      ^~~~~~
+Game.cpp:35:6: error: ‘Game’ has not been declared
+ void Game::displayTextVector()
+      ^~~~
+Game.cpp: In function ‘void displayTextVector()’:
+Game.cpp:37:22: error: ‘textVector’ was not declared in this scope
+   for(int j = 0; j < textVector.size(); j++){
+                      ^~~~~~~~~~
+Game.cpp:39:31: error: ‘textGenerator’ was not declared in this scope
+       textVector[j]->loadText(textGenerator->create());
+                               ^~~~~~~~~~~~~
+Game.cpp:40:7: error: ‘strikes’ was not declared in this scope
+       strikes++;
+       ^~~~~~~
+Game.cpp:41:7: error: ‘screen’ was not declared in this scope
+       screen->putFlagDown();
+       ^~~~~~
+Game.cpp:43:52: error: ‘TEXT_ROW_OFFSET’ was not declared in this scope
+     textVector[j]->render(textVector[j]->getXPos(),TEXT_ROW_OFFSET +  j*TEXT_SIZE);
+                                                    ^~~~~~~~~~~~~~~
+Game.cpp:43:73: error: ‘TEXT_SIZE’ was not declared in this scope
+     textVector[j]->render(textVector[j]->getXPos(),TEXT_ROW_OFFSET +  j*TEXT_SIZE);
+                                                                         ^~~~~~~~~
+Game.cpp:44:9: error: ‘pauseLevel’ was not declared in this scope
+     if(!pauseLevel){
+         ^~~~~~~~~~
+Game.cpp: At global scope:
+Game.cpp:50:6: error: ‘Game’ has not been declared
+ void Game::explodeTextVector()
+      ^~~~
+Game.cpp: In function ‘void explodeTextVector()’:
+Game.cpp:52:22: error: ‘textVector’ was not declared in this scope
+   for(int i = 0; i < textVector.capacity(); i++){
+                      ^~~~~~~~~~
+Game.cpp:54:7: error: ‘Letter’ was not declared in this scope
+       Letter* letter = new Letter();
+       ^~~~~~
+Game.cpp:54:7: note: suggested alternative: ‘extern’
+       Letter* letter = new Letter();
+       ^~~~~~
+       extern
+Game.cpp:54:15: error: ‘letter’ was not declared in this scope
+       Letter* letter = new Letter();
+               ^~~~~~
+Game.cpp:54:15: note: suggested alternative: ‘extern’
+       Letter* letter = new Letter();
+               ^~~~~~
+               extern
+Game.cpp:54:28: error: expected type-specifier before ‘Letter’
+       Letter* letter = new Letter();
+                            ^~~~~~
+Game.cpp:55:58: error: ‘renderer’ was not declared in this scope
+       letter->loadLetter(textVector[i]->getText().front, renderer);
+                                                          ^~~~~~~~
+Game.cpp:55:58: note: suggested alternative: ‘register’
+       letter->loadLetter(textVector[i]->getText().front, renderer);
+                                                          ^~~~~~~~
+                                                          register
+Game.cpp:57:20: error: ‘TEXT_ROW_OFFSET’ was not declared in this scope
+       letter->setY(TEXT_ROW_OFFSET + i*TEXT_SIZE);
+                    ^~~~~~~~~~~~~~~
+Game.cpp:57:40: error: ‘TEXT_SIZE’ was not declared in this scope
+       letter->setY(TEXT_ROW_OFFSET + i*TEXT_SIZE);
+                                        ^~~~~~~~~
+Game.cpp:58:10: error: ‘slowTime’ was not declared in this scope
+       if(slowTime){
+          ^~~~~~~~
+Game.cpp:59:26: error: ‘LETTER_SLOW_SPEED’ was not declared in this scope
+         letter->setSpeed(LETTER_SLOW_SPEED);
+                          ^~~~~~~~~~~~~~~~~
+Game.cpp:61:7: error: ‘letterVector’ was not declared in this scope
+       letterVector.push_back(letter);
+       ^~~~~~~~~~~~
+Game.cpp:62:25: error: ‘scoreboard’ was not declared in this scope
+       int letterScore = scoreboard->updateScore(LETTER_TYPED_SCORE, 1);
+                         ^~~~~~~~~~
+Game.cpp:62:49: error: ‘LETTER_TYPED_SCORE’ was not declared in this scope
+       int letterScore = scoreboard->updateScore(LETTER_TYPED_SCORE, 1);
+                                                 ^~~~~~~~~~~~~~~~~~
+Game.cpp:63:7: error: ‘mainCharacter’ was not declared in this scope
+       mainCharacter->setScoring(letterScore, 1);
+       ^~~~~~~~~~~~~
+Game.cpp: At global scope:
+Game.cpp:69:6: error: ‘Game’ has not been declared
+ void Game::displayLetterVector()
+      ^~~~
+Game.cpp: In function ‘void displayLetterVector()’:
+Game.cpp:71:21: error: ‘letterVector’ was not declared in this scope
+   for(int j = 0;j < letterVector.size(); j++){
+                     ^~~~~~~~~~~~
+Game.cpp:71:21: note: suggested alternative: ‘displayLetterVector’
+   for(int j = 0;j < letterVector.size(); j++){
+                     ^~~~~~~~~~~~
+                     displayLetterVector
+Game.cpp:74:81: error: ‘renderer’ was not declared in this scope
+       letterVector[j]->render(letterVector[j]->getX(), letterVector[j]->getY(), renderer);
+                                                                                 ^~~~~~~~
+Game.cpp:74:81: note: suggested alternative: ‘register’
+       letterVector[j]->render(letterVector[j]->getX(), letterVector[j]->getY(), renderer);
+                                                                                 ^~~~~~~~
+                                                                                 register
+Game.cpp:76:9: error: ‘pauseLevel’ was not declared in this scope
+     if(!pauseLevel){
+         ^~~~~~~~~~
+Game.cpp:80:14: error: ‘boss’ was not declared in this scope
+           if(boss->getWalking()){
+              ^~~~
+Game.cpp:80:14: note: suggested alternative: ‘bool’
+           if(boss->getWalking()){
+              ^~~~
+              bool
+Game.cpp:82:16: error: ‘slowTime’ was not declared in this scope
+             if(slowTime){
+                ^~~~~~~~
+Game.cpp:83:23: error: ‘LETTER_SLOW_SPEED’ was not declared in this scope
+               speed = LETTER_SLOW_SPEED;
+                       ^~~~~~~~~~~~~~~~~
+Game.cpp:86:61: error: ‘WALKING_SPEED’ was not declared in this scope
+               letterVector[j]->setX(letterVector[j]->getX()+WALKING_SPEED/speed);
+                                                             ^~~~~~~~~~~~~
+Game.cpp:88:61: error: ‘WALKING_SPEED’ was not declared in this scope
+               letterVector[j]->setX(letterVector[j]->getX()-WALKING_SPEED/speed);
+                                                             ^~~~~~~~~~~~~
+Game.cpp:90:37: error: ‘BOSS_SPAWN_Y’ was not declared in this scope
+               letterVector[j]->setY(BOSS_SPAWN_Y-9*SCALESIZE);
+                                     ^~~~~~~~~~~~
+Game.cpp:90:52: error: ‘SCALESIZE’ was not declared in this scope
+               letterVector[j]->setY(BOSS_SPAWN_Y-9*SCALESIZE);
+                                                    ^~~~~~~~~
+Game.cpp:92:37: error: ‘BOSS_SPAWN_Y’ was not declared in this scope
+               letterVector[j]->setY(BOSS_SPAWN_Y-8*SCALESIZE);
+                                     ^~~~~~~~~~~~
+Game.cpp:92:52: error: ‘SCALESIZE’ was not declared in this scope
+               letterVector[j]->setY(BOSS_SPAWN_Y-8*SCALESIZE);
+                                                    ^~~~~~~~~
+Game.cpp:96:45: error: ‘LETTER_LIFETIME’ was not declared in this scope
+         if(letterVector[j]->getLifetime() > LETTER_LIFETIME){
+                                             ^~~~~~~~~~~~~~~
+Game.cpp:99:13: error: ‘Letter’ was not declared in this scope
+             Letter* temp = letterVector[j];
+             ^~~~~~
+Game.cpp:99:13: note: suggested alternative: ‘extern’
+             Letter* temp = letterVector[j];
+             ^~~~~~
+             extern
+Game.cpp:99:21: error: ‘temp’ was not declared in this scope
+             Letter* temp = letterVector[j];
+                     ^~~~
+Game.cpp: At global scope:
+Game.cpp:109:6: error: ‘Game’ has not been declared
+ void Game::displayDynamicLetters(){
+      ^~~~
+Game.cpp: In function ‘void displayDynamicLetters()’:
+Game.cpp:110:22: error: ‘letterVector’ was not declared in this scope
+   for(int j = 0; j < letterVector.size(); j++){
+                      ^~~~~~~~~~~~
+Game.cpp:110:22: note: suggested alternative: ‘displayLetterVector’
+   for(int j = 0; j < letterVector.size(); j++){
+                      ^~~~~~~~~~~~
+                      displayLetterVector
+Game.cpp:113:81: error: ‘renderer’ was not declared in this scope
+       letterVector[j]->render(letterVector[j]->getX(), letterVector[j]->getY(), renderer);
+                                                                                 ^~~~~~~~
+Game.cpp:113:81: note: suggested alternative: ‘register’
+       letterVector[j]->render(letterVector[j]->getX(), letterVector[j]->getY(), renderer);
+                                                                                 ^~~~~~~~
+                                                                                 register
+Game.cpp: At global scope:
+Game.cpp:118:6: error: ‘Game’ has not been declared
+ void Game::displayScoreVector()
+      ^~~~
+Game.cpp: In function ‘void displayScoreVector()’:
+Game.cpp:120:21: error: ‘scoreVector’ was not declared in this scope
+   for(int j = 0;j < scoreVector.size(); j++){
+                     ^~~~~~~~~~~
+Game.cpp:120:21: note: suggested alternative: ‘displayScoreVector’
+   for(int j = 0;j < scoreVector.size(); j++){
+                     ^~~~~~~~~~~
+                     displayScoreVector
+Game.cpp:122:9: error: ‘pauseLevel’ was not declared in this scope
+     if(!pauseLevel){
+         ^~~~~~~~~~
+Game.cpp:124:75: error: ‘LETTER_LIFETIME’ was not declared in this scope
+       if(scoreVector[j]->getOnGround() && scoreVector[j]->getLifetime() > LETTER_LIFETIME){
+                                                                           ^~~~~~~~~~~~~~~
+Game.cpp:127:11: error: ‘Scorer’ was not declared in this scope
+           Scorer* temp = scoreVector[j];
+           ^~~~~~
+Game.cpp:127:19: error: ‘temp’ was not declared in this scope
+           Scorer* temp = scoreVector[j];
+                   ^~~~
+Game.cpp: At global scope:
+Game.cpp:137:1: error: ‘SDL_Texture’ does not name a type
+ SDL_Texture* Game::loadBackground()
+ ^~~~~~~~~~~
+Game.cpp:164:1: error: ‘SDL_Texture’ does not name a type
+ SDL_Texture* Game::loadAnimationSheet()
+ ^~~~~~~~~~~
+Game.cpp:181:6: error: ‘Game’ has not been declared
+ void Game::slowDown(){
+      ^~~~
+Game.cpp: In function ‘void slowDown()’:
+Game.cpp:183:21: error: ‘textVector’ was not declared in this scope
+   double newSpeed = textVector[0]->getSpeed() / 3;
+                     ^~~~~~~~~~
+Game.cpp:187:22: error: ‘letterVector’ was not declared in this scope
+   for(int i = 0; i < letterVector.size(); i++){
+                      ^~~~~~~~~~~~
+Game.cpp:187:22: note: suggested alternative: ‘displayLetterVector’
+   for(int i = 0; i < letterVector.size(); i++){
+                      ^~~~~~~~~~~~
+                      displayLetterVector
+Game.cpp:190:22: error: ‘scoreVector’ was not declared in this scope
+   for(int i = 0; i < scoreVector.size(); i++){
+                      ^~~~~~~~~~~
+Game.cpp:190:22: note: suggested alternative: ‘displayScoreVector’
+   for(int i = 0; i < scoreVector.size(); i++){
+                      ^~~~~~~~~~~
+                      displayScoreVector
+Game.cpp:193:3: error: ‘mainCharacter’ was not declared in this scope
+   mainCharacter->setSpeed((double)10);
+   ^~~~~~~~~~~~~
+Game.cpp:194:3: error: ‘boss’ was not declared in this scope
+   boss->setSpeed((double)10);
+   ^~~~
+Game.cpp:194:3: note: suggested alternative: ‘bool’
+   boss->setSpeed((double)10);
+   ^~~~
+   bool
+Game.cpp:195:3: error: ‘clock’ was not declared in this scope
+   clock->setSpeed((double)10);
+   ^~~~~
+Game.cpp:196:3: error: ‘door’ was not declared in this scope
+   door->setSpeed((double)10);
+   ^~~~
+Game.cpp:196:3: note: suggested alternative: ‘bool’
+   door->setSpeed((double)10);
+   ^~~~
+   bool
+Game.cpp:197:3: error: ‘worker’ was not declared in this scope
+   worker->setSpeed((double)10);
+   ^~~~~~
+Game.cpp: At global scope:
+Game.cpp:202:6: error: ‘Game’ has not been declared
+ void Game::speedUp(){
+      ^~~~
+Game.cpp: In function ‘void speedUp()’:
+Game.cpp:203:21: error: ‘textVector’ was not declared in this scope
+   double newSpeed = textVector[0]->getSpeed() * 3;
+                     ^~~~~~~~~~
+Game.cpp:207:22: error: ‘letterVector’ was not declared in this scope
+   for(int i = 0; i < letterVector.size(); i++){
+                      ^~~~~~~~~~~~
+Game.cpp:207:22: note: suggested alternative: ‘displayLetterVector’
+   for(int i = 0; i < letterVector.size(); i++){
+                      ^~~~~~~~~~~~
+                      displayLetterVector
+Game.cpp:210:22: error: ‘scoreVector’ was not declared in this scope
+   for(int i = 0; i < scoreVector.size(); i++){
+                      ^~~~~~~~~~~
+Game.cpp:210:22: note: suggested alternative: ‘displayScoreVector’
+   for(int i = 0; i < scoreVector.size(); i++){
+                      ^~~~~~~~~~~
+                      displayScoreVector
+Game.cpp:213:3: error: ‘mainCharacter’ was not declared in this scope
+   mainCharacter->setSpeed((double)1);
+   ^~~~~~~~~~~~~
+Game.cpp:214:3: error: ‘boss’ was not declared in this scope
+   boss->setSpeed((double)1);
+   ^~~~
+Game.cpp:214:3: note: suggested alternative: ‘bool’
+   boss->setSpeed((double)1);
+   ^~~~
+   bool
+Game.cpp:215:3: error: ‘clock’ was not declared in this scope
+   clock->setSpeed((double)1);
+   ^~~~~
+Game.cpp:216:3: error: ‘door’ was not declared in this scope
+   door->setSpeed((double)1);
+   ^~~~
+Game.cpp:216:3: note: suggested alternative: ‘bool’
+   door->setSpeed((double)1);
+   ^~~~
+   bool
+Game.cpp:217:3: error: ‘worker’ was not declared in this scope
+   worker->setSpeed((double)1);
+   ^~~~~~
+Game.cpp: At global scope:
+Game.cpp:221:6: error: ‘Game’ has not been declared
+ void Game::newLevel(){
+      ^~~~
+Game.cpp: In function ‘void newLevel()’:
+Game.cpp:222:3: error: ‘clock’ was not declared in this scope
+   clock->setMinuteHandAngle(0);
+   ^~~~~
+Game.cpp:223:3: error: ‘levelTime’ was not declared in this scope
+   levelTime = SDL_GetTicks();
+   ^~~~~~~~~
+Game.cpp:223:15: error: ‘SDL_GetTicks’ was not declared in this scope
+   levelTime = SDL_GetTicks();
+               ^~~~~~~~~~~~
+Game.cpp:224:3: error: ‘levelNum’ was not declared in this scope
+   levelNum++;
+   ^~~~~~~~
+Game.cpp:225:3: error: ‘currentLevel’ was not declared in this scope
+   currentLevel->setLevelNum(levelNum);
+   ^~~~~~~~~~~~
+Game.cpp:225:3: note: suggested alternative: ‘newLevel’
+   currentLevel->setLevelNum(levelNum);
+   ^~~~~~~~~~~~
+   newLevel
+Game.cpp:227:23: error: ‘textVector’ was not declared in this scope
+     double newSpeed = textVector[0]->getSpeed() + LEVEL_SPEED_INCREASE;
+                       ^~~~~~~~~~
+Game.cpp:227:51: error: ‘LEVEL_SPEED_INCREASE’ was not declared in this scope
+     double newSpeed = textVector[0]->getSpeed() + LEVEL_SPEED_INCREASE;
+                                                   ^~~~~~~~~~~~~~~~~~~~
+Game.cpp:233:23: error: ‘textVector’ was not declared in this scope
+     double newSpeed = textVector[0]->getSpeed() + .02*SCALESIZE;
+                       ^~~~~~~~~~
+Game.cpp:233:55: error: ‘SCALESIZE’ was not declared in this scope
+     double newSpeed = textVector[0]->getSpeed() + .02*SCALESIZE;
+                                                       ^~~~~~~~~
+Game.cpp: At global scope:
+Game.cpp:240:6: error: ‘Game’ has not been declared
+ void Game::eventHandler()
+      ^~~~
+Game.cpp: In function ‘void eventHandler()’:
+Game.cpp:242:24: error: ‘event’ was not declared in this scope
+   while(SDL_PollEvent(&event) != 0){
+                        ^~~~~
+Game.cpp:242:9: error: ‘SDL_PollEvent’ was not declared in this scope
+   while(SDL_PollEvent(&event) != 0){
+         ^~~~~~~~~~~~~
+Game.cpp:243:22: error: ‘SDL_QUIT’ was not declared in this scope
+     if(event.type == SDL_QUIT){
+                      ^~~~~~~~
+Game.cpp:244:7: error: ‘quit’ was not declared in this scope
+       quit = true;
+       ^~~~
+Game.cpp:246:13: error: ‘startLevel’ was not declared in this scope
+     else if(startLevel && event.key.keysym.sym==SDLK_ESCAPE && event.type == SDL_KEYUP){
+             ^~~~~~~~~~
+Game.cpp:246:13: note: suggested alternative: ‘newLevel’
+     else if(startLevel && event.key.keysym.sym==SDLK_ESCAPE && event.type == SDL_KEYUP){
+             ^~~~~~~~~~
+             newLevel
+Game.cpp:246:49: error: ‘SDLK_ESCAPE’ was not declared in this scope
+     else if(startLevel && event.key.keysym.sym==SDLK_ESCAPE && event.type == SDL_KEYUP){
+                                                 ^~~~~~~~~~~
+Game.cpp:246:78: error: ‘SDL_KEYUP’ was not declared in this scope
+     else if(startLevel && event.key.keysym.sym==SDLK_ESCAPE && event.type == SDL_KEYUP){
+                                                                              ^~~~~~~~~
+Game.cpp:248:7: error: ‘quitLevel’ was not declared in this scope
+       quitLevel = true;
+       ^~~~~~~~~
+Game.cpp:248:7: note: suggested alternative: ‘newLevel’
+       quitLevel = true;
+       ^~~~~~~~~
+       newLevel
+Game.cpp:249:7: error: ‘mainMenu’ was not declared in this scope
+       mainMenu->reset();
+       ^~~~~~~~
+Game.cpp:250:7: error: ‘screen’ was not declared in this scope
+       screen->setEndGame(true);
+       ^~~~~~
+Game.cpp:252:49: error: ‘SDLK_RETURN’ was not declared in this scope
+     else if(startLevel && event.key.keysym.sym==SDLK_RETURN && event.type == SDL_KEYUP){
+                                                 ^~~~~~~~~~~
+Game.cpp:253:7: error: ‘slowTime’ was not declared in this scope
+       slowTime = !slowTime;
+       ^~~~~~~~
+Game.cpp:253:7: note: suggested alternative: ‘slowDown’
+       slowTime = !slowTime;
+       ^~~~~~~~
+       slowDown
+Game.cpp:259:42: error: ‘SDL_MOUSEBUTTONDOWN’ was not declared in this scope
+     else if(!startLevel && event.type == SDL_MOUSEBUTTONDOWN){
+                                          ^~~~~~~~~~~~~~~~~~~
+Game.cpp:261:7: error: ‘SDL_GetMouseState’ was not declared in this scope
+       SDL_GetMouseState(&x, &y);
+       ^~~~~~~~~~~~~~~~~
+Game.cpp:262:30: error: ‘SCALESIZE’ was not declared in this scope
+       collisionHandler(x,y-2*SCALESIZE);
+                              ^~~~~~~~~
+Game.cpp:262:7: error: ‘collisionHandler’ was not declared in this scope
+       collisionHandler(x,y-2*SCALESIZE);
+       ^~~~~~~~~~~~~~~~
+Game.cpp:265:27: error: ‘SDL_TEXTINPUT’ was not declared in this scope
+     else if(event.type == SDL_TEXTINPUT){
+                           ^~~~~~~~~~~~~
+Game.cpp:266:7: error: ‘mainCharacter’ was not declared in this scope
+       mainCharacter->setTyping(true);
+       ^~~~~~~~~~~~~
+Game.cpp:267:7: error: ‘processInput’ was not declared in this scope
+       processInput(event.text.text[0]);
+       ^~~~~~~~~~~~
+Game.cpp: At global scope:
+Game.cpp:273:6: error: ‘Game’ has not been declared
+ void Game::processInput(char input)
+      ^~~~
+Game.cpp: In function ‘void processInput(char)’:
+Game.cpp:276:15: error: ‘SDLK_SPACE’ was not declared in this scope
+   if(input == SDLK_SPACE && startLevel){
+               ^~~~~~~~~~
+Game.cpp:276:29: error: ‘startLevel’ was not declared in this scope
+   if(input == SDLK_SPACE && startLevel){
+                             ^~~~~~~~~~
+Game.cpp:276:29: note: suggested alternative: ‘newLevel’
+   if(input == SDLK_SPACE && startLevel){
+                             ^~~~~~~~~~
+                             newLevel
+Game.cpp:277:5: error: ‘pauseLevel’ was not declared in this scope
+     pauseLevel = !pauseLevel;
+     ^~~~~~~~~~
+Game.cpp:277:5: note: suggested alternative: ‘newLevel’
+     pauseLevel = !pauseLevel;
+     ^~~~~~~~~~
+     newLevel
+Game.cpp:279:7: error: ‘mainCharacter’ was not declared in this scope
+       mainCharacter->unfreeze();
+       ^~~~~~~~~~~~~
+Game.cpp:280:7: error: ‘worker’ was not declared in this scope
+       worker->unfreeze();
+       ^~~~~~
+Game.cpp:281:7: error: ‘boss’ was not declared in this scope
+       boss->unfreeze();
+       ^~~~
+Game.cpp:281:7: note: suggested alternative: ‘bool’
+       boss->unfreeze();
+       ^~~~
+       bool
+Game.cpp:282:7: error: ‘mainMenu’ was not declared in this scope
+       mainMenu->setMenuDisplay(0);
+       ^~~~~~~~
+Game.cpp:285:7: error: ‘mainMenu’ was not declared in this scope
+       mainMenu->setMenuDisplay(6);
+       ^~~~~~~~
+Game.cpp:289:6: error: ‘startLevel’ was not declared in this scope
+   if(startLevel && !pauseLevel){
+      ^~~~~~~~~~
+Game.cpp:289:6: note: suggested alternative: ‘newLevel’
+   if(startLevel && !pauseLevel){
+      ^~~~~~~~~~
+      newLevel
+Game.cpp:289:21: error: ‘pauseLevel’ was not declared in this scope
+   if(startLevel && !pauseLevel){
+                     ^~~~~~~~~~
+Game.cpp:289:21: note: suggested alternative: ‘newLevel’
+   if(startLevel && !pauseLevel){
+                     ^~~~~~~~~~
+                     newLevel
+Game.cpp:290:23: error: ‘textVector’ was not declared in this scope
+    for(int i = 0; i < textVector.capacity(); i++){
+                       ^~~~~~~~~~
+Game.cpp:293:9: error: ‘Letter’ was not declared in this scope
+         Letter* letter = new Letter();
+         ^~~~~~
+Game.cpp:293:9: note: suggested alternative: ‘extern’
+         Letter* letter = new Letter();
+         ^~~~~~
+         extern
+Game.cpp:293:17: error: ‘letter’ was not declared in this scope
+         Letter* letter = new Letter();
+                 ^~~~~~
+Game.cpp:293:17: note: suggested alternative: ‘extern’
+         Letter* letter = new Letter();
+                 ^~~~~~
+                 extern
+Game.cpp:293:30: error: expected type-specifier before ‘Letter’
+         Letter* letter = new Letter();
+                              ^~~~~~
+Game.cpp:294:35: error: ‘renderer’ was not declared in this scope
+         letter->loadLetter(input, renderer);
+                                   ^~~~~~~~
+Game.cpp:294:35: note: suggested alternative: ‘register’
+         letter->loadLetter(input, renderer);
+                                   ^~~~~~~~
+                                   register
+Game.cpp:296:22: error: ‘TEXT_ROW_OFFSET’ was not declared in this scope
+         letter->setY(TEXT_ROW_OFFSET + i*TEXT_SIZE);
+                      ^~~~~~~~~~~~~~~
+Game.cpp:296:42: error: ‘TEXT_SIZE’ was not declared in this scope
+         letter->setY(TEXT_ROW_OFFSET + i*TEXT_SIZE);
+                                          ^~~~~~~~~
+Game.cpp:297:12: error: ‘slowTime’ was not declared in this scope
+         if(slowTime){
+            ^~~~~~~~
+Game.cpp:297:12: note: suggested alternative: ‘slowDown’
+         if(slowTime){
+            ^~~~~~~~
+            slowDown
+Game.cpp:298:28: error: ‘LETTER_SLOW_SPEED’ was not declared in this scope
+           letter->setSpeed(LETTER_SLOW_SPEED);
+                            ^~~~~~~~~~~~~~~~~
+Game.cpp:300:9: error: ‘letterVector’ was not declared in this scope
+         letterVector.push_back(letter);
+         ^~~~~~~~~~~~
+Game.cpp:300:9: note: suggested alternative: ‘displayLetterVector’
+         letterVector.push_back(letter);
+         ^~~~~~~~~~~~
+         displayLetterVector
+Game.cpp:301:27: error: ‘scoreboard’ was not declared in this scope
+         int letterScore = scoreboard->updateScore(LETTER_TYPED_SCORE, 1);
+                           ^~~~~~~~~~
+Game.cpp:301:51: error: ‘LETTER_TYPED_SCORE’ was not declared in this scope
+         int letterScore = scoreboard->updateScore(LETTER_TYPED_SCORE, 1);
+                                                   ^~~~~~~~~~~~~~~~~~
+Game.cpp:302:9: error: ‘mainCharacter’ was not declared in this scope
+         mainCharacter->setScoring(letterScore, 1);
+         ^~~~~~~~~~~~~
+Game.cpp:309:35: error: ‘textGenerator’ was not declared in this scope
+           textVector[i]->loadText(textGenerator->create());
+                                   ^~~~~~~~~~~~~
+Game.cpp:315:7: error: ‘scoreboard’ was not declared in this scope
+       scoreboard->setMultiplier(0);
+       ^~~~~~~~~~
+Game.cpp:318:7: error: ‘scoreboard’ was not declared in this scope
+       scoreboard->setMultiplier(scoreboard->getMultiplier()+1);
+       ^~~~~~~~~~
+Game.cpp:322:11: error: ‘toupper’ was not declared in this scope
+   else if(toupper(input) == startWord.front()){
+           ^~~~~~~
+Game.cpp:322:29: error: ‘startWord’ was not declared in this scope
+   else if(toupper(input) == startWord.front()){
+                             ^~~~~~~~~
+Game.cpp:324:5: error: ‘screen’ was not declared in this scope
+     screen->raiseLetter();
+     ^~~~~~
+Game.cpp:327:7: error: ‘quitLevel’ was not declared in this scope
+       quitLevel = false;
+       ^~~~~~~~~
+Game.cpp:327:7: note: suggested alternative: ‘newLevel’
+       quitLevel = false;
+       ^~~~~~~~~
+       newLevel
+Game.cpp:331:3: error: ‘mainMenu’ was not declared in this scope
+   mainMenu->setMenuDisplay(2);
+   ^~~~~~~~
+Game.cpp:334:5: error: ‘mainMenu’ was not declared in this scope
+     mainMenu->setMenuDisplay(1);
+     ^~~~~~~~
+Game.cpp:337:5: error: ‘mainMenu’ was not declared in this scope
+     mainMenu->setMenuDisplay(3);
+     ^~~~~~~~
+Game.cpp:340:5: error: ‘mainMenu’ was not declared in this scope
+     mainMenu->setMenuDisplay(4);
+     ^~~~~~~~
+Game.cpp:343:5: error: ‘mainMenu’ was not declared in this scope
+     mainMenu->setMenuDisplay(5);
+     ^~~~~~~~
+Game.cpp: At global scope:
+Game.cpp:347:6: error: ‘Game’ has not been declared
+ void Game::setupTrophies()
+      ^~~~
+Game.cpp: In function ‘void setupTrophies()’:
+Game.cpp:349:3: error: ‘trophyList’ was not declared in this scope
+   trophyList.resize(14);
+   ^~~~~~~~~~
+Game.cpp:351:21: error: ‘trophyFactory’ was not declared in this scope
+     trophyList[i] = trophyFactory->makeTrophy(NULL);
+                     ^~~~~~~~~~~~~
+Game.cpp:351:47: error: ‘NULL’ was not declared in this scope
+     trophyList[i] = trophyFactory->makeTrophy(NULL);
+                                               ^~~~
+Game.cpp:352:37: error: ‘animationSheet’ was not declared in this scope
+     trophyList[i]->setObjectTexture(animationSheet);
+                                     ^~~~~~~~~~~~~~
+Game.cpp: At global scope:
+Game.cpp:357:6: error: ‘Game’ has not been declared
+ void Game::dropTrophy()
+      ^~~~
+Game.cpp: In function ‘void dropTrophy()’:
+Game.cpp:359:6: error: ‘trophyDropIndex’ was not declared in this scope
+   if(trophyDropIndex < trophyList.size()){
+      ^~~~~~~~~~~~~~~
+Game.cpp:359:24: error: ‘trophyList’ was not declared in this scope
+   if(trophyDropIndex < trophyList.size()){
+                        ^~~~~~~~~~
+Game.cpp: At global scope:
+Game.cpp:365:6: error: ‘Game’ has not been declared
+ void Game::collisionHandler(double x, double y)
+      ^~~~
+Game.cpp: In function ‘void collisionHandler(double, double)’:
+Game.cpp:367:20: error: ‘NULL’ was not declared in this scope
+   int scoreValue = NULL;
+                    ^~~~
+Game.cpp:369:7: error: ‘startLevel’ was not declared in this scope
+   if(!startLevel && x && y){
+       ^~~~~~~~~~
+Game.cpp:369:7: note: suggested alternative: ‘newLevel’
+   if(!startLevel && x && y){
+       ^~~~~~~~~~
+       newLevel
+Game.cpp:370:10: error: ‘boss’ was not declared in this scope
+       if(boss->collisionCheck(x,y)){
+          ^~~~
+Game.cpp:370:10: note: suggested alternative: ‘bool’
+       if(boss->collisionCheck(x,y)){
+          ^~~~
+          bool
+Game.cpp:372:9: error: ‘strcpy’ was not declared in this scope
+         strcpy(scoreString, "+100");
+         ^~~~~~
+Game.cpp:372:9: note: suggested alternative: ‘struct’
+         strcpy(scoreString, "+100");
+         ^~~~~~
+         struct
+Game.cpp:375:15: error: ‘worker’ was not declared in this scope
+       else if(worker->collisionCheck(x,y)){
+               ^~~~~~
+Game.cpp:377:9: error: ‘strcpy’ was not declared in this scope
+         strcpy(scoreString, "+100");
+         ^~~~~~
+Game.cpp:377:9: note: suggested alternative: ‘struct’
+         strcpy(scoreString, "+100");
+         ^~~~~~
+         struct
+Game.cpp:380:15: error: ‘mainCharacter’ was not declared in this scope
+       else if(mainCharacter->collisionCheck(x,y)){
+               ^~~~~~~~~~~~~
+Game.cpp:382:9: error: ‘strcpy’ was not declared in this scope
+         strcpy(scoreString, "+100");
+         ^~~~~~
+Game.cpp:382:9: note: suggested alternative: ‘struct’
+         strcpy(scoreString, "+100");
+         ^~~~~~
+         struct
+Game.cpp:385:15: error: ‘door’ was not declared in this scope
+       else if(door->collisionCheck(x,y)){
+               ^~~~
+Game.cpp:385:15: note: suggested alternative: ‘bool’
+       else if(door->collisionCheck(x,y)){
+               ^~~~
+               bool
+Game.cpp:387:9: error: ‘strcpy’ was not declared in this scope
+         strcpy(scoreString, "+100");
+         ^~~~~~
+Game.cpp:387:9: note: suggested alternative: ‘struct’
+         strcpy(scoreString, "+100");
+         ^~~~~~
+         struct
+Game.cpp:390:15: error: ‘fountain’ was not declared in this scope
+       else if(fountain->collisionCheck(x,y)){
+               ^~~~~~~~
+Game.cpp:392:9: error: ‘strcpy’ was not declared in this scope
+         strcpy(scoreString, "+100");
+         ^~~~~~
+Game.cpp:392:9: note: suggested alternative: ‘struct’
+         strcpy(scoreString, "+100");
+         ^~~~~~
+         struct
+Game.cpp:394:15: error: ‘trashcan’ was not declared in this scope
+       else if(trashcan->collisionCheck(x,y)){
+               ^~~~~~~~
+Game.cpp:396:9: error: ‘strcpy’ was not declared in this scope
+         strcpy(scoreString, "+100");
+         ^~~~~~
+Game.cpp:396:9: note: suggested alternative: ‘struct’
+         strcpy(scoreString, "+100");
+         ^~~~~~
+         struct
+Game.cpp:399:15: error: ‘clock’ was not declared in this scope
+       else if(clock->collisionCheck(x,y)){
+               ^~~~~
+Game.cpp:401:9: error: ‘strcpy’ was not declared in this scope
+         strcpy(scoreString, "+100");
+         ^~~~~~
+Game.cpp:401:9: note: suggested alternative: ‘struct’
+         strcpy(scoreString, "+100");
+         ^~~~~~
+         struct
+Game.cpp:406:9: error: ‘strcpy’ was not declared in this scope
+         strcpy(scoreString, "+100");
+         ^~~~~~
+Game.cpp:406:9: note: suggested alternative: ‘struct’
+         strcpy(scoreString, "+100");
+         ^~~~~~
+         struct
+Game.cpp:410:9: error: ‘strcpy’ was not declared in this scope
+         strcpy(scoreString, "+500");
+         ^~~~~~
+Game.cpp:410:9: note: suggested alternative: ‘struct’
+         strcpy(scoreString, "+500");
+         ^~~~~~
+         struct
+Game.cpp:413:9: error: ‘Scorer’ was not declared in this scope
+         Scorer* score = new Scorer(scoreString, renderer, x,y);
+         ^~~~~~
+Game.cpp:413:17: error: ‘score’ was not declared in this scope
+         Scorer* score = new Scorer(scoreString, renderer, x,y);
+                 ^~~~~
+Game.cpp:413:17: note: suggested alternative: ‘short’
+         Scorer* score = new Scorer(scoreString, renderer, x,y);
+                 ^~~~~
+                 short
+Game.cpp:413:29: error: expected type-specifier before ‘Scorer’
+         Scorer* score = new Scorer(scoreString, renderer, x,y);
+                             ^~~~~~
+Game.cpp:414:9: error: ‘scoreboard’ was not declared in this scope
+         scoreboard->updateScore(scoreValue,2);
+         ^~~~~~~~~~
+Game.cpp:414:9: note: suggested alternative: ‘scoreValue’
+         scoreboard->updateScore(scoreValue,2);
+         ^~~~~~~~~~
+         scoreValue
+Game.cpp:415:12: error: ‘slowTime’ was not declared in this scope
+         if(slowTime){
+            ^~~~~~~~
+Game.cpp:415:12: note: suggested alternative: ‘slowDown’
+         if(slowTime){
+            ^~~~~~~~
+            slowDown
+Game.cpp:416:27: error: ‘LETTER_SLOW_SPEED’ was not declared in this scope
+           score->setSpeed(LETTER_SLOW_SPEED);
+                           ^~~~~~~~~~~~~~~~~
+Game.cpp:418:9: error: ‘scoreVector’ was not declared in this scope
+         scoreVector.push_back(score);
+         ^~~~~~~~~~~
+Game.cpp:418:9: note: suggested alternative: ‘scoreValue’
+         scoreVector.push_back(score);
+         ^~~~~~~~~~~
+         scoreValue
+Game.cpp:422:23: error: ‘letterVector’ was not declared in this scope
+    for(int i = 0; i < letterVector.size(); i++){
+                       ^~~~~~~~~~~~
+Game.cpp:422:23: note: suggested alternative: ‘displayLetterVector’
+    for(int i = 0; i < letterVector.size(); i++){
+                       ^~~~~~~~~~~~
+                       displayLetterVector
+Game.cpp:426:12: error: ‘boss’ was not declared in this scope
+         if(boss->collisionCheck(letterVector[i]->getX(),letterVector[i]->getY())){
+            ^~~~
+Game.cpp:426:12: note: suggested alternative: ‘bool’
+         if(boss->collisionCheck(letterVector[i]->getX(),letterVector[i]->getY())){
+            ^~~~
+            bool
+Game.cpp:428:33: error: ‘BOSS_SPAWN_Y’ was not declared in this scope
+           letterVector[i]->setY(BOSS_SPAWN_Y-90);
+                                 ^~~~~~~~~~~~
+Game.cpp:433:17: error: ‘worker’ was not declared in this scope
+         else if(worker->collisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
+                 ^~~~~~
+Game.cpp:435:33: error: ‘COWORKER_SPAWN_Y’ was not declared in this scope
+           letterVector[i]->setY(COWORKER_SPAWN_Y-40);
+                                 ^~~~~~~~~~~~~~~~
+Game.cpp:439:17: error: ‘mainCharacter’ was not declared in this scope
+         else if(mainCharacter->collisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
+                 ^~~~~~~~~~~~~
+Game.cpp:445:17: error: ‘door’ was not declared in this scope
+         else if(door->collisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
+                 ^~~~
+Game.cpp:445:17: note: suggested alternative: ‘bool’
+         else if(door->collisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
+                 ^~~~
+                 bool
+Game.cpp:452:17: error: ‘fountain’ was not declared in this scope
+         else if(fountain->collisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
+                 ^~~~~~~~
+Game.cpp:455:33: error: ‘LEFT_FOUNTAIN_HANDLE_SPAWN_Y’ was not declared in this scope
+           letterVector[i]->setY(LEFT_FOUNTAIN_HANDLE_SPAWN_Y - 20);
+                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Game.cpp:458:17: error: ‘trashcan’ was not declared in this scope
+         else if(trashcan->collisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
+                 ^~~~~~~~
+Game.cpp:462:17: error: ‘clock’ was not declared in this scope
+         else if(clock->collisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
+                 ^~~~~
+Game.cpp:467:11: error: ‘Scorer’ was not declared in this scope
+           Scorer* score = new Scorer("+100", renderer, letterVector[i]->getX(), letterVector[i]->getY());
+           ^~~~~~
+Game.cpp:467:19: error: ‘score’ was not declared in this scope
+           Scorer* score = new Scorer("+100", renderer, letterVector[i]->getX(), letterVector[i]->getY());
+                   ^~~~~
+Game.cpp:467:19: note: suggested alternative: ‘short’
+           Scorer* score = new Scorer("+100", renderer, letterVector[i]->getX(), letterVector[i]->getY());
+                   ^~~~~
+                   short
+Game.cpp:467:31: error: expected type-specifier before ‘Scorer’
+           Scorer* score = new Scorer("+100", renderer, letterVector[i]->getX(), letterVector[i]->getY());
+                               ^~~~~~
+Game.cpp:468:11: error: ‘scoreboard’ was not declared in this scope
+           scoreboard->updateScore(scoreValue,2);
+           ^~~~~~~~~~
+Game.cpp:468:11: note: suggested alternative: ‘scoreValue’
+           scoreboard->updateScore(scoreValue,2);
+           ^~~~~~~~~~
+           scoreValue
+Game.cpp:469:14: error: ‘slowTime’ was not declared in this scope
+           if(slowTime){
+              ^~~~~~~~
+Game.cpp:469:14: note: suggested alternative: ‘slowDown’
+           if(slowTime){
+              ^~~~~~~~
+              slowDown
+Game.cpp:470:29: error: ‘LETTER_SLOW_SPEED’ was not declared in this scope
+             score->setSpeed(LETTER_SLOW_SPEED);
+                             ^~~~~~~~~~~~~~~~~
+Game.cpp:472:11: error: ‘scoreVector’ was not declared in this scope
+           scoreVector.push_back(score);
+           ^~~~~~~~~~~
+Game.cpp:472:11: note: suggested alternative: ‘scoreValue’
+           scoreVector.push_back(score);
+           ^~~~~~~~~~~
+           scoreValue
+Game.cpp:474:13: error: ‘Letter’ was not declared in this scope
+             Letter* temp = letterVector[i];
+             ^~~~~~
+Game.cpp:474:13: note: suggested alternative: ‘extern’
+             Letter* temp = letterVector[i];
+             ^~~~~~
+             extern
+Game.cpp:474:21: error: ‘temp’ was not declared in this scope
+             Letter* temp = letterVector[i];
+                     ^~~~
+Game.cpp: At global scope:
+Game.cpp:485:6: error: ‘Game’ has not been declared
+ void Game::start()
+      ^~~~
+Game.cpp: In function ‘void start()’:
+Game.cpp:487:3: error: ‘currentLevel’ was not declared in this scope
+   currentLevel = new Level(1,LEVEL_ONE_SPEED, levelNum, renderer);
+   ^~~~~~~~~~~~
+Game.cpp:487:3: note: suggested alternative: ‘newLevel’
+   currentLevel = new Level(1,LEVEL_ONE_SPEED, levelNum, renderer);
+   ^~~~~~~~~~~~
+   newLevel
+Game.cpp:487:22: error: expected type-specifier before ‘Level’
+   currentLevel = new Level(1,LEVEL_ONE_SPEED, levelNum, renderer);
+                      ^~~~~
+Game.cpp:488:3: error: ‘textVector’ was not declared in this scope
+   textVector = populateTextVector();
+   ^~~~~~~~~~
+Game.cpp:488:16: error: ‘populateTextVector’ was not declared in this scope
+   textVector = populateTextVector();
+                ^~~~~~~~~~~~~~~~~~
+Game.cpp:488:16: note: suggested alternative: ‘explodeTextVector’
+   textVector = populateTextVector();
+                ^~~~~~~~~~~~~~~~~~
+                explodeTextVector
+Game.cpp:489:3: error: ‘loadBackground’ was not declared in this scope
+   loadBackground();
+   ^~~~~~~~~~~~~~
+Game.cpp:490:3: error: ‘loadAnimationSheet’ was not declared in this scope
+   loadAnimationSheet();
+   ^~~~~~~~~~~~~~~~~~
+Game.cpp:491:3: error: ‘mainCharacter’ was not declared in this scope
+   mainCharacter = new Character(renderer);
+   ^~~~~~~~~~~~~
+Game.cpp:491:23: error: expected type-specifier before ‘Character’
+   mainCharacter = new Character(renderer);
+                       ^~~~~~~~~
+Game.cpp:492:35: error: ‘animationSheet’ was not declared in this scope
+   mainCharacter->setObjectTexture(animationSheet);
+                                   ^~~~~~~~~~~~~~
+Game.cpp:493:3: error: ‘mainMenu’ was not declared in this scope
+   mainMenu->loadFromRenderedText();
+   ^~~~~~~~
+Game.cpp:495:3: error: ‘screen’ was not declared in this scope
+   screen = new GameScreen(renderer);
+   ^~~~~~
+Game.cpp:495:16: error: expected type-specifier before ‘GameScreen’
+   screen = new GameScreen(renderer);
+                ^~~~~~~~~~
+Game.cpp:496:3: error: ‘screenRaised’ was not declared in this scope
+   screenRaised = true;
+   ^~~~~~~~~~~~
+Game.cpp:498:3: error: ‘worker’ was not declared in this scope
+   worker = new Coworker(renderer);
+   ^~~~~~
+Game.cpp:498:16: error: expected type-specifier before ‘Coworker’
+   worker = new Coworker(renderer);
+                ^~~~~~~~
+Game.cpp:500:3: error: ‘boss’ was not declared in this scope
+   boss = new Boss(renderer);
+   ^~~~
+Game.cpp:500:3: note: suggested alternative: ‘bool’
+   boss = new Boss(renderer);
+   ^~~~
+   bool
+Game.cpp:500:14: error: expected type-specifier before ‘Boss’
+   boss = new Boss(renderer);
+              ^~~~
+Game.cpp:502:3: error: ‘trophyFactory’ was not declared in this scope
+   trophyFactory = new TrophyFactory(renderer);
+   ^~~~~~~~~~~~~
+Game.cpp:502:23: error: expected type-specifier before ‘TrophyFactory’
+   trophyFactory = new TrophyFactory(renderer);
+                       ^~~~~~~~~~~~~
+Game.cpp:504:3: error: ‘desk’ was not declared in this scope
+   desk = new Object(80, 82, 27, 16, MAIN_CHARACTER_DESK_SPAWN_X, MAIN_CHARACTER_DESK_SPAWN_Y, renderer);
+   ^~~~
+Game.cpp:504:14: error: expected type-specifier before ‘Object’
+   desk = new Object(80, 82, 27, 16, MAIN_CHARACTER_DESK_SPAWN_X, MAIN_CHARACTER_DESK_SPAWN_Y, renderer);
+              ^~~~~~
+Game.cpp:507:3: error: ‘trashcan’ was not declared in this scope
+   trashcan = new Trashcan(renderer);
+   ^~~~~~~~
+Game.cpp:507:18: error: expected type-specifier before ‘Trashcan’
+   trashcan = new Trashcan(renderer);
+                  ^~~~~~~~
+Game.cpp:510:3: error: ‘fountain’ was not declared in this scope
+   fountain = new Fountain(renderer);
+   ^~~~~~~~
+Game.cpp:510:18: error: expected type-specifier before ‘Fountain’
+   fountain = new Fountain(renderer);
+                  ^~~~~~~~
+Game.cpp:513:3: error: ‘clock’ was not declared in this scope
+   clock = new Clock(renderer);
+   ^~~~~
+Game.cpp:513:15: error: expected type-specifier before ‘Clock’
+   clock = new Clock(renderer);
+               ^~~~~
+Game.cpp:516:3: error: ‘door’ was not declared in this scope
+   door = new Door(renderer);
+   ^~~~
+Game.cpp:516:3: note: suggested alternative: ‘bool’
+   door = new Door(renderer);
+   ^~~~
+   bool
+Game.cpp:516:14: error: expected type-specifier before ‘Door’
+   door = new Door(renderer);
+              ^~~~
+Game.cpp:519:10: error: ‘quit’ was not declared in this scope
+   while(!quit){
+          ^~~~
+Game.cpp:520:21: error: ‘renderer’ was not declared in this scope
+     SDL_RenderClear(renderer);
+                     ^~~~~~~~
+Game.cpp:520:21: note: suggested alternative: ‘register’
+     SDL_RenderClear(renderer);
+                     ^~~~~~~~
+                     register
+Game.cpp:520:5: error: ‘SDL_RenderClear’ was not declared in this scope
+     SDL_RenderClear(renderer);
+     ^~~~~~~~~~~~~~~
+Game.cpp:521:5: error: ‘SDL_Rect’ was not declared in this scope
+     SDL_Rect dest = {.x = 0, .y = 0, .w = SCREEN_WIDTH, .h = SCREEN_HEIGHT};
+     ^~~~~~~~
+Game.cpp:522:30: error: ‘background’ was not declared in this scope
+     SDL_RenderCopy(renderer, background, NULL, &dest);
+                              ^~~~~~~~~~
+Game.cpp:522:42: error: ‘NULL’ was not declared in this scope
+     SDL_RenderCopy(renderer, background, NULL, &dest);
+                                          ^~~~
+Game.cpp:522:49: error: ‘dest’ was not declared in this scope
+     SDL_RenderCopy(renderer, background, NULL, &dest);
+                                                 ^~~~
+Game.cpp:522:5: error: ‘SDL_RenderCopy’ was not declared in this scope
+     SDL_RenderCopy(renderer, background, NULL, &dest);
+     ^~~~~~~~~~~~~~
+Game.cpp:528:8: error: ‘startLevel’ was not declared in this scope
+     if(startLevel && !quitLevel && screenDropped){
+        ^~~~~~~~~~
+Game.cpp:528:8: note: suggested alternative: ‘start’
+     if(startLevel && !quitLevel && screenDropped){
+        ^~~~~~~~~~
+        start
+Game.cpp:528:23: error: ‘quitLevel’ was not declared in this scope
+     if(startLevel && !quitLevel && screenDropped){
+                       ^~~~~~~~~
+Game.cpp:528:23: note: suggested alternative: ‘newLevel’
+     if(startLevel && !quitLevel && screenDropped){
+                       ^~~~~~~~~
+                       newLevel
+Game.cpp:528:36: error: ‘screenDropped’ was not declared in this scope
+     if(startLevel && !quitLevel && screenDropped){
+                                    ^~~~~~~~~~~~~
+Game.cpp:536:8: error: ‘startLevel’ was not declared in this scope
+     if(startLevel && !quitLevel){
+        ^~~~~~~~~~
+Game.cpp:536:8: note: suggested alternative: ‘start’
+     if(startLevel && !quitLevel){
+        ^~~~~~~~~~
+        start
+Game.cpp:536:23: error: ‘quitLevel’ was not declared in this scope
+     if(startLevel && !quitLevel){
+                       ^~~~~~~~~
+Game.cpp:536:23: note: suggested alternative: ‘newLevel’
+     if(startLevel && !quitLevel){
+                       ^~~~~~~~~
+                       newLevel
+Game.cpp:537:11: error: ‘levelTime’ was not declared in this scope
+       if(!levelTime){
+           ^~~~~~~~~
+Game.cpp:538:21: error: ‘SDL_GetTicks’ was not declared in this scope
+         levelTime = SDL_GetTicks();
+                     ^~~~~~~~~~~~
+Game.cpp:540:11: error: ‘SDL_GetTicks’ was not declared in this scope
+       if((SDL_GetTicks() - levelTime) > currentLevel->getLifetime()){
+           ^~~~~~~~~~~~
+Game.cpp:540:28: error: ‘levelTime’ was not declared in this scope
+       if((SDL_GetTicks() - levelTime) > currentLevel->getLifetime()){
+                            ^~~~~~~~~
+Game.cpp:548:10: error: ‘screenDropped’ was not declared in this scope
+       if(screenDropped){
+          ^~~~~~~~~~~~~
+Game.cpp:550:9: error: ‘scoreboard’ was not declared in this scope
+         scoreboard->render();
+         ^~~~~~~~~~
+Game.cpp:567:10: error: ‘pauseLevel’ was not declared in this scope
+       if(pauseLevel){
+          ^~~~~~~~~~
+Game.cpp:567:10: note: suggested alternative: ‘newLevel’
+       if(pauseLevel){
+          ^~~~~~~~~~
+          newLevel
+Game.cpp:580:9: error: ‘screenDropped’ was not declared in this scope
+         screenDropped = !screenRaised;
+         ^~~~~~~~~~~~~
+Game.cpp:586:9: error: ‘startWord’ was not declared in this scope
+         startWord = "START";
+         ^~~~~~~~~
+Game.cpp:586:9: note: suggested alternative: ‘start’
+         startWord = "START";
+         ^~~~~~~~~
+         start
+Game.cpp:595:8: error: ‘trophyDropIndex’ was not declared in this scope
+     if(trophyDropIndex < trophyList.size() && SDL_GetTicks() - trophyTime > 50){
+        ^~~~~~~~~~~~~~~
+Game.cpp:595:26: error: ‘trophyList’ was not declared in this scope
+     if(trophyDropIndex < trophyList.size() && SDL_GetTicks() - trophyTime > 50){
+                          ^~~~~~~~~~
+Game.cpp:595:47: error: ‘SDL_GetTicks’ was not declared in this scope
+     if(trophyDropIndex < trophyList.size() && SDL_GetTicks() - trophyTime > 50){
+                                               ^~~~~~~~~~~~
+Game.cpp:595:64: error: ‘trophyTime’ was not declared in this scope
+     if(trophyDropIndex < trophyList.size() && SDL_GetTicks() - trophyTime > 50){
+                                                                ^~~~~~~~~~
+Game.cpp:599:24: error: ‘trophyList’ was not declared in this scope
+     for(int i = 0; i < trophyList.size(); i++){
+                        ^~~~~~~~~~
+Game.cpp:608:8: error: ‘slowTime’ was not declared in this scope
+     if(slowTime){
+        ^~~~~~~~
+Game.cpp:608:8: note: suggested alternative: ‘slowDown’
+     if(slowTime){
+        ^~~~~~~~
+        slowDown
+Game.cpp:609:44: error: ‘SDL_BLENDMODE_BLEND’ was not declared in this scope
+       SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+                                            ^~~~~~~~~~~~~~~~~~~
+Game.cpp:609:7: error: ‘SDL_SetRenderDrawBlendMode’ was not declared in this scope
+       SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+       ^~~~~~~~~~~~~~~~~~~~~~~~~~
+Game.cpp:610:55: error: ‘slowRectAlpha’ was not declared in this scope
+       SDL_SetRenderDrawColor(renderer, 191, 220, 245, slowRectAlpha);
+                                                       ^~~~~~~~~~~~~
+Game.cpp:610:7: error: ‘SDL_SetRenderDrawColor’ was not declared in this scope
+       SDL_SetRenderDrawColor(renderer, 191, 220, 245, slowRectAlpha);
+       ^~~~~~~~~~~~~~~~~~~~~~
+Game.cpp:611:37: error: ‘slowRect’ was not declared in this scope
+       SDL_RenderFillRect(renderer, &slowRect);
+                                     ^~~~~~~~
+Game.cpp:611:37: note: suggested alternative: ‘slowDown’
+       SDL_RenderFillRect(renderer, &slowRect);
+                                     ^~~~~~~~
+                                     slowDown
+Game.cpp:611:7: error: ‘SDL_RenderFillRect’ was not declared in this scope
+       SDL_RenderFillRect(renderer, &slowRect);
+       ^~~~~~~~~~~~~~~~~~
+Game.cpp:612:44: error: ‘SDL_BLENDMODE_NONE’ was not declared in this scope
+       SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
+                                            ^~~~~~~~~~~~~~~~~~
+Game.cpp:617:13: error: ‘slowRectAlpha’ was not declared in this scope
+     else if(slowRectAlpha > 0){
+             ^~~~~~~~~~~~~
+Game.cpp:619:44: error: ‘SDL_BLENDMODE_BLEND’ was not declared in this scope
+       SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+                                            ^~~~~~~~~~~~~~~~~~~
+Game.cpp:619:7: error: ‘SDL_SetRenderDrawBlendMode’ was not declared in this scope
+       SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+       ^~~~~~~~~~~~~~~~~~~~~~~~~~
+Game.cpp:620:7: error: ‘SDL_SetRenderDrawColor’ was not declared in this scope
+       SDL_SetRenderDrawColor(renderer, 191, 220, 245, slowRectAlpha);
+       ^~~~~~~~~~~~~~~~~~~~~~
+Game.cpp:621:37: error: ‘slowRect’ was not declared in this scope
+       SDL_RenderFillRect(renderer, &slowRect);
+                                     ^~~~~~~~
+Game.cpp:621:37: note: suggested alternative: ‘slowDown’
+       SDL_RenderFillRect(renderer, &slowRect);
+                                     ^~~~~~~~
+                                     slowDown
+Game.cpp:621:7: error: ‘SDL_RenderFillRect’ was not declared in this scope
+       SDL_RenderFillRect(renderer, &slowRect);
+       ^~~~~~~~~~~~~~~~~~
+Game.cpp:622:44: error: ‘SDL_BLENDMODE_NONE’ was not declared in this scope
+       SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
+                                            ^~~~~~~~~~~~~~~~~~
+Game.cpp:627:8: error: ‘renderLevelDisplay’ was not declared in this scope
+     if(renderLevelDisplay)
+        ^~~~~~~~~~~~~~~~~~
+Game.cpp:629:5: error: ‘SDL_RenderPresent’ was not declared in this scope
+     SDL_RenderPresent(renderer);
+     ^~~~~~~~~~~~~~~~~
+make: *** [Makefile:11: all] Error 1

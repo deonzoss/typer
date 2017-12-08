@@ -129,6 +129,9 @@ class Fountain{
     int leftStreamIndex = 0;
     int rightStreamIndex = 0;
 
+
+    double TROPHY_WIDTH;
+
 };
 
 #endif

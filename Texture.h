@@ -67,7 +67,8 @@ class Texture
 		
 		double xPos = 0;
 		double speed = 0;
-
 };
+
+
 
 #endif

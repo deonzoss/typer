@@ -27,8 +27,16 @@ class Object
       renderQuad.y = value;
     }
 
+    void setX(int value){
+      renderQuad.x = value;
+    }
+
     int getY(){
       return renderQuad.y;
+    }
+    
+    int getX(){
+      return renderQuad.x;
     }
 
   private:
@@ -36,5 +44,9 @@ class Object
     SDL_Renderer* renderer = NULL;
     SDL_Rect objectClip;
     SDL_Rect renderQuad;
+
+
+
+
 };
 #endif

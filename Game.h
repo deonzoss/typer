@@ -6,7 +6,7 @@
 #include "Character.h"
 #include "Coworker.h"
 #include "Boss.h"
-#include "Screen.h"
+#include "GameScreen.h"
 #include "Level.h"
 #include "Object.h"
 #include "Trashcan.h"
@@ -15,6 +15,8 @@
 #include "Door.h"
 #include "Menu.h"
 #include "Scorer.h"
+#include "Trophy.h"
+#include "TrophyFactory.h"
 #include <vector>
 #ifndef Game_h
 #define Game_h
@@ -34,6 +36,8 @@ class Game
         void displayTextVector();
         
         void displayLetterVector();	
+
+        void explodeTextVector();
         
         void displayDynamicLetters();       
 
@@ -43,13 +47,17 @@ class Game
 
         void processInput(char input);
 
-        void collisionHandler();
+        void collisionHandler(double x, double y);
+
+        void setupTrophies();
+
+        void dropTrophy();
 
         void slowDown();
 
         void speedUp();
 
-        Level* newLevel(int levelNum);	
+        void newLevel();
 
         SDL_Texture* loadBackground();	
 
@@ -66,6 +74,8 @@ class Game
       std::vector<Texture*> textVector;
       std::vector<Letter*> letterVector;	
       std::vector<Scorer*> scoreVector; 
+      std::vector<Trophy*> trophyList;
+      TrophyFactory* trophyFactory;
       std::string startWord = "START"; 
       bool quit;
       SDL_Event event;
@@ -78,18 +88,26 @@ class Game
       Character* mainCharacter = NULL;
       Coworker* worker = NULL; 
       Boss* boss = NULL; 
-      Screen* screen = NULL;
+      GameScreen* screen = NULL;
       Trashcan* trashcan = NULL;
       Object* desk = NULL;
       Fountain* fountain = NULL;
       Clock* clock = NULL;
       Door* door = NULL; 
+      int levelNum = 1;
+      Uint32 levelTime = 0;
+      Uint32 trophyTime = 0;
+      int trophyDropIndex = 0;
       bool startLevel = false;
       bool quitLevel = false; 
       bool screenDropped = false;
       bool screenRaised = false;	
       bool pauseLevel = false;
+      bool renderLevelDisplay = false;
+      double scrollSpeed;
+      double wordRate;
       int strikes = 0;
+
 };
 
 #endif

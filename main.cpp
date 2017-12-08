@@ -10,7 +10,8 @@
 //#include "Texture.h"
 #include "Setup.h"
 #include "Game.h"
-#include "Window.h"
+#include "SdlWindow.h"
+#include "Level.h"
 //#include "Scoreboard.h"
 //#include "Character.h"
 //#include "Screen.h"
@@ -20,7 +21,7 @@ int main(int argc, char* args[])
 {
 	srand(time(NULL));
 	setup();
-	Window* window = new Window();	
+	SdlWindow* window = new SdlWindow();	
 	window->init();	
 	Game* newGame = new Game(window->getRenderer());
 	newGame->start();

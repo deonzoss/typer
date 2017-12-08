@@ -1,3 +1,5 @@
+#include <SDL2/SDL_ttf.h>
+
 #ifndef Scorer_h
 #define Scorer_h
 
@@ -39,6 +41,7 @@ class Scorer
     void loadFont()
     {
       font = TTF_OpenFont(CODE_FONT, CHARACTER_SCORE_FONT_SIZE);
+      //TTF_SetFontStyle(font, TTF_STYLE_BOLD);
       if(font == NULL){
         printf("Error loading character font\n");
       }
@@ -157,6 +160,7 @@ class Scorer
     Uint8 alpha = 255;
     char scoreString[6];
     double speed = 1;
+
 };
 
 #endif

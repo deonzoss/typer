@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <time.h>
 
+
 Letter::Letter()
 {
 	angle = 10 + (rand()%30);	
@@ -53,6 +54,7 @@ void Letter::move(){
 
 bool Letter::loadLetter(char letter, SDL_Renderer* renderer)
 {
+  this->letter = letter;
 	font = TTF_OpenFont(CODE_FONT, TEXT_SIZE);
 	if(font == NULL){
 		printf("SDL_ttf error: %s\n", TTF_GetError());
@@ -196,5 +198,10 @@ bool Letter::groundContact()
     return onGround;
 	}
 	return false;
+}
+
+char Letter::getLetter()
+{
+  return letter;
 }
 

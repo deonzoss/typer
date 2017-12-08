@@ -34,15 +34,34 @@ std::vector<Texture*> Game::populateTextVector()
 
 void Game::displayTextVector()
 {	
-  for(int j = 0; j < textVector.size(); j++){
-    if(textVector[j]->offScreen()){
-      textVector[j]->loadText(textGenerator->create());
-      strikes++;
-      printf("X\n"); 
-    }	
-    textVector[j]->render(textVector[j]->getXPos(),TEXT_ROW_OFFSET +  j*TEXT_SIZE);
-    if(!pauseLevel){
-      textVector[j]->move();	
+  for(int j = 0; j < textVector.capacity(); j++){
+    if(textVector[j]->getText().length() != 0){
+      if(textVector[j]->offScreen()){
+        textVector[j]->loadText(textGenerator->create());
+        strikes++;
+        screen->putFlagDown();
+      }	
+      textVector[j]->render(textVector[j]->getXPos(),SCREEN_END_YPOS+ TEXT_ROW_OFFSET +  j*TEXT_SIZE, NULL, NULL, NULL, SDL_FLIP_NONE);
+      if(!pauseLevel){
+        textVector[j]->move();	
+      }
+    }
+  }
+}
+
+void Game::explodeTextVector()
+{
+  for(int i = 0; i < textVector.capacity(); i++){
+    while(textVector[i]->getText().length() != 0){
+      Letter* letter = new Letter();
+      letter->loadLetter(textVector[i]->getText().front(), renderer);
+      letter->setX(textVector[i]->getXPos());
+      letter->setY(SCREEN_END_YPOS + TEXT_ROW_OFFSET + i*TEXT_SIZE);
+      if(slowTime){
+        letter->setSpeed(LETTER_SLOW_SPEED);
+      } 
+      letterVector.push_back(letter);
+      textVector[i]->popFront();
     }
   }
 }
@@ -199,6 +218,25 @@ void Game::speedUp(){
   return;
 }
 
+void Game::newLevel(){
+  clock->setMinuteHandAngle(0);
+  levelTime = SDL_GetTicks();
+  levelNum++;
+  currentLevel->setLevelNum(levelNum);
+  if(currentLevel->getRand()){
+    double newSpeed = textVector[0]->getSpeed() + LEVEL_SPEED_INCREASE; 
+    for(int i = 0; i < textVector.size(); i++){
+      textVector[i]->setSpeed(newSpeed);
+    } 
+  }
+  else{
+    double newSpeed = textVector[0]->getSpeed() + .02*SCALESIZE; 
+    for(int i = 0; i < textVector.size(); i++){
+      textVector[i]->setSpeed(newSpeed);
+    }
+  }
+}
+
 void Game::eventHandler()
 {
   while(SDL_PollEvent(&event) != 0){
@@ -206,6 +244,7 @@ void Game::eventHandler()
       quit = true;
     }
     else if(startLevel && event.key.keysym.sym==SDLK_ESCAPE && event.type == SDL_KEYUP){
+      explodeTextVector(); 
       quitLevel = true;
       mainMenu->reset();
       screen->setEndGame(true);
@@ -217,17 +256,10 @@ void Game::eventHandler()
       else
         speedUp();
     }
-    else if(event.type == SDL_MOUSEBUTTONDOWN){
+    else if(!startLevel && event.type == SDL_MOUSEBUTTONDOWN){
       int x,y;
       SDL_GetMouseState(&x, &y);
-      Letter* letter = new Letter();
-      letter->loadLetter('a', renderer);
-      letter->setX(x);
-      letter->setY(y);
-      if(slowTime){
-        letter->setSpeed(LETTER_SLOW_SPEED);
-      } 
-      letterVector.push_back(letter);
+      collisionHandler(x,y-2*SCALESIZE);
        
     } 
     else if(event.type == SDL_TEXTINPUT){
@@ -261,7 +293,7 @@ void Game::processInput(char input)
         Letter* letter = new Letter();
         letter->loadLetter(input, renderer);
         letter->setX(textVector[i]->getXPos());
-        letter->setY(TEXT_ROW_OFFSET + i*TEXT_SIZE);
+        letter->setY(SCREEN_END_YPOS + TEXT_ROW_OFFSET + i*TEXT_SIZE);
         if(slowTime){
           letter->setSpeed(LETTER_SLOW_SPEED);
         } 
@@ -288,6 +320,7 @@ void Game::processInput(char input)
     }	
   }
   else if(toupper(input) == startWord.front()){
+    mainMenu->setMenuDisplay(1);
     startWord.erase(startWord.begin()); 
     screen->raiseLetter(); 
     if(startWord.length() == 0){
@@ -312,103 +345,163 @@ void Game::processInput(char input)
   } 
 }
 
-Level* Game::newLevel(int levelNum){	
-  if(levelNum == 1){
-    Level* level = new Level();
-    level->setMaxWords(10);
-    level->setWordRate(1);
-    level->setSpeed(LEVEL_ONE_SPEED);	
-    return level;	
+void Game::setupTrophies()
+{
+  trophyList.resize(14);
+  for(int i = 0; i < 14; i++){
+    trophyList[i] = trophyFactory->makeTrophy(NULL); 
+    trophyList[i]->setObjectTexture(animationSheet);
   }
-  return NULL;
+
 }
 
-void Game::collisionHandler()
+void Game::dropTrophy()
 {
-  for(int i = 0; i < letterVector.size(); i++){
-    if(letterVector[i]->getOnGround() == false){
-      int scoreValue = NULL;
-      bool deleteLetter = false;
-      if(boss->collisionCheck(letterVector[i]->getX(),letterVector[i]->getY())){
+  if(trophyDropIndex < trophyList.size()){
+    trophyList[trophyDropIndex]->setDrop(true);
+    trophyDropIndex++;
+  }
+}
+
+void Game::collisionHandler(double x, double y)
+{
+  int scoreValue = NULL;
+  char scoreString[5];
+  if(!startLevel && x && y){
+      if(boss->collisionCheck(x,y)){
         scoreValue = 100; 
-        letterVector[i]->setY(BOSS_SPAWN_Y-9*SCALESIZE);
-        letterVector[i]->setOnGround(true);
-        letterVector[i]->setDynamic(1); 
+        strcpy(scoreString, "+100");
         boss->setHeavyHead(true);
       } 
-      else if(worker->collisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
+      else if(worker->collisionCheck(x,y)){
         scoreValue = 100; 
-        letterVector[i]->setY(COWORKER_SPAWN_Y-4*SCALESIZE);
-        letterVector[i]->setOnGround(true);
+        strcpy(scoreString, "+100");
         worker->setHeavyHead(true);
       }
-      else if(mainCharacter->collisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
+      else if(mainCharacter->collisionCheck(x,y)){
         scoreValue = 100;
-        letterVector[i]->setY(70*SCALESIZE);
-        letterVector[i]->setOnGround(true);
+        strcpy(scoreString, "+100");
         mainCharacter->setHeavyHead(true);
       }
-      else if(door->collisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
+      else if(door->collisionCheck(x,y)){
         scoreValue = 100;
-        letterVector[i]->setDynamic(2);
-        letterVector[i]->setY(71*SCALESIZE);
-        letterVector[i]->setOnGround(true);
+        strcpy(scoreString, "+100");
         door->setAnimate(true);
       }
-      else if(fountain->collisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
+      else if(fountain->collisionCheck(x,y)){
         scoreValue = 100;
-        letterVector[i]->setDynamic(2);
-        letterVector[i]->setY(LEFT_FOUNTAIN_HANDLE_SPAWN_Y - 2*SCALESIZE);
-        letterVector[i]->setOnGround(true);
+        strcpy(scoreString, "+100");
       }
-      else if(trashcan->collisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
+      else if(trashcan->collisionCheck(x,y)){
         scoreValue = 100; 
-        deleteLetter = true;
+        strcpy(scoreString, "+100");
+        trashcan->animate();
       }
-      else if(clock->collisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
+      else if(clock->collisionCheck(x,y)){
         scoreValue = 100; 
-        deleteLetter = true; 
+        strcpy(scoreString, "+100");
       }
-      else if(worker->computerCollisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
+      else if(worker->computerCollisionCheck(x,y)){
         worker->updateComputer();
         scoreValue = 100; 
-        deleteLetter = true; 
+        strcpy(scoreString, "+100");
+      }
+      else if(boss->coffeeCollisionCheck(x,y)){
+        scoreValue = 500;
+        strcpy(scoreString, "+500");
       }
       if(scoreValue){ 
-        Scorer* score = new Scorer("+100", renderer, letterVector[i]->getX(), letterVector[i]->getY());
+        Scorer* score = new Scorer(scoreString, renderer, x,y);
         scoreboard->updateScore(scoreValue,2); 
         if(slowTime){
           score->setSpeed(LETTER_SLOW_SPEED);
         }
         scoreVector.push_back(score); 
-        if(deleteLetter){ 
-          Letter* temp = letterVector[i];	
-          letterVector.erase(letterVector.begin()+i);
-          delete(temp);
+      }
+  }
+  else if (startLevel && !x && !y){ 
+   for(int i = 0; i < letterVector.size(); i++){
+      if(letterVector[i]->getOnGround() == false){
+        int scoreValue = NULL;
+        bool deleteLetter = false;
+        if(boss->collisionCheck(letterVector[i]->getX(),letterVector[i]->getY())){
+          scoreValue = 100; 
+          letterVector[i]->setY(BOSS_SPAWN_Y-90);
+          letterVector[i]->setOnGround(true);
+          letterVector[i]->setDynamic(1); 
+          boss->setHeavyHead(true);
+        } 
+        else if(worker->collisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
+          scoreValue = 100; 
+          letterVector[i]->setY(COWORKER_SPAWN_Y-40);
+          letterVector[i]->setOnGround(true);
+          worker->setHeavyHead(true);
+        }
+        else if(mainCharacter->collisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
+          scoreValue = 100;
+          letterVector[i]->setY(700);
+          letterVector[i]->setOnGround(true);
+          mainCharacter->setHeavyHead(true);
+        }
+        else if(door->collisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
+          scoreValue = 100;
+          letterVector[i]->setDynamic(2);
+          letterVector[i]->setY(710);
+          letterVector[i]->setOnGround(true);
+          door->setAnimate(true);
+        }
+        else if(fountain->collisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
+          scoreValue = 100;
+          letterVector[i]->setDynamic(2);
+          letterVector[i]->setY(LEFT_FOUNTAIN_HANDLE_SPAWN_Y - 20);
+          letterVector[i]->setOnGround(true);
+        }
+        else if(trashcan->collisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
+          scoreValue = 100; 
+          deleteLetter = true;
+        }
+        else if(clock->collisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
+          scoreValue = 100; 
+          deleteLetter = true; 
+        }
+        if(scoreValue){ 
+          Scorer* score = new Scorer("+100", renderer, letterVector[i]->getX(), letterVector[i]->getY());
+          scoreboard->updateScore(scoreValue,2); 
+          if(slowTime){
+            score->setSpeed(LETTER_SLOW_SPEED);
+          }
+          scoreVector.push_back(score); 
+          if(deleteLetter){ 
+            Letter* temp = letterVector[i];	
+            letterVector.erase(letterVector.begin()+i);
+            delete(temp);
+          }
         }
       }
     }
   }
 }
+
+
 void Game::start()
 {	
-  currentLevel = newLevel(1);
-  textVector = populateTextVector();
+  currentLevel = new Level(1,LEVEL_ONE_SPEED, levelNum, renderer);
   loadBackground();		
   loadAnimationSheet();	
   mainCharacter = new Character(renderer);
   mainCharacter->setObjectTexture(animationSheet);
   mainMenu->loadFromRenderedText(); 
   mainMenu->setObjectTexture(animationSheet); 
-  screen = new Screen(renderer);
+  screen = new GameScreen(renderer);
   screenRaised = true; 
   screen->setObjectTexture(animationSheet);
   worker = new Coworker(renderer);
   worker->setObjectTexture(animationSheet); 
   boss = new Boss(renderer);
   boss->setObjectTexture(animationSheet);
-  
-  desk = new Object(80, 82, 27, 16, 0, 76*SCALESIZE, renderer);
+  trophyFactory = new TrophyFactory(renderer);
+  setupTrophies();
+  desk = new Object(80, 82, 27, 16, MAIN_CHARACTER_DESK_SPAWN_X, MAIN_CHARACTER_DESK_SPAWN_Y, renderer);
   desk->setObjectTexture(animationSheet);
  
   trashcan = new Trashcan(renderer);
@@ -441,13 +534,25 @@ void Game::start()
 
    
     if(startLevel && !quitLevel){
+      if(!levelTime){
+        levelTime = SDL_GetTicks();
+      }
+      if((SDL_GetTicks() - levelTime) > currentLevel->getLifetime()){
+        newLevel();
+      }
+      else{
+        double newAngle = ((SDL_GetTicks()- levelTime)/(double)currentLevel->getLifetime()) * 360;
+        clock->setMinuteHandAngle(newAngle);
+      }
       screen->renderScreen(); 
       if(screenDropped){
+        if(textVector[0] == NULL || textVector[0]->getText().length() == 0){
+          textVector = populateTextVector();
+        }
         displayTextVector();	
         scoreboard->render();
         screen->renderFrame();	
-        displayScoreVector(); 
-        collisionHandler(); 
+        collisionHandler(NULL, NULL); 
       } 
       else if (screen->getLettersRaised()){
         mainMenu->setRaiseMenu(true);
@@ -468,6 +573,7 @@ void Game::start()
         worker->freeze(); 
         boss->freeze(); 
       }   
+      //currentLevel->render();
     }
     
     else if(quitLevel){
@@ -489,8 +595,16 @@ void Game::start()
       mainMenu->render();
       screen->renderScreen(); 
     }
+    if(trophyDropIndex < trophyList.size() && SDL_GetTicks() - trophyTime > 50){ 
+      dropTrophy();
+      trophyTime = SDL_GetTicks();
+    }
+    for(int i = 0; i < trophyList.size(); i++){
+      trophyList[i]->render();
+    }
     mainCharacter->render();	
     displayLetterVector();	
+    displayScoreVector(); 
     
     eventHandler();	//for typing	
 
@@ -513,12 +627,15 @@ void Game::start()
         slowRectAlpha=0;
       }
     } 
+    if(renderLevelDisplay)
+      currentLevel->render();
     SDL_RenderPresent(renderer);
     /*if(strikes == 3){
       quitLevel = true;
       screen->setEndGame(true); 
       strikes = 0; 
     }*/ 
+
     
   }
 }

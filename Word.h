@@ -1,3 +1,5 @@
+#include "Setup.h"
+
 #ifndef Word_h
 #define Word_h
 
@@ -51,7 +53,7 @@ class Word
 
       if(shadow){
         SDL_Surface* shadowSurface = TTF_RenderText_Solid(font, string, shadowColor);
-        shadowTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+        shadowTexture = SDL_CreateTextureFromSurface(renderer, shadowSurface);
         
         SDL_FreeSurface(shadowSurface);
       }
@@ -94,6 +96,11 @@ class Word
     SDL_Color shadowColor;
     char fontString[30];
     bool shadow = false;
+
+
+
+
+
 }; 
 
 #endif  

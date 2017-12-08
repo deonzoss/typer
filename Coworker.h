@@ -160,6 +160,9 @@ class Coworker
     bool heavyHead = false;
     bool frozen = false;
     double speed = 1;
+
+
+
 };
 
 #endif

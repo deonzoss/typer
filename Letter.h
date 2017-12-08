@@ -44,6 +44,8 @@ class Letter
     double getSpeed();
 
     void setSpeed(double value); 
+
+    char getLetter();
   
   private:
 		SDL_Texture* texture = NULL;

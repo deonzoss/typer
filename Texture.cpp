@@ -8,7 +8,6 @@
 #include "Setup.h"
 
 Texture::Texture(){
-	xPos = SCREEN_WIDTH;
 }
 
 Texture::~Texture(){
@@ -17,7 +16,7 @@ Texture::~Texture(){
 
 bool Texture::offScreen()
 {
-	if(xPos < (0-((TEXT_SIZE/2)*length()))){
+	if(xPos < (OFFSET-((TEXT_SIZE/2)*length()))){
 		return true;
 	}
 
@@ -46,7 +45,7 @@ bool Texture::loadText(std::string text)
 			return false;
 	}
 
-	xPos = SCREEN_WIDTH;
+	xPos = OFFSET+130*SCALESIZE;
 	return true;
 }
 
@@ -54,6 +53,10 @@ bool Texture::loadText(std::string text)
 
 bool Texture::loadFromRenderedText(std::string textureText)
 {	
+
+  if(textureText.length() == 0){
+    return false;
+  }
 	SDL_Surface* textSurface = TTF_RenderText_Solid(gFont, textureText.c_str(), CODE_COLOR);	
 	
 	
