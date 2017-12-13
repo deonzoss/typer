@@ -7,7 +7,7 @@
 class Door{
   public:
     Door(SDL_Renderer* renderer){
-      object = new Object(109, 84, 4, 2, OFFSET + 44*SCALESIZE, 73*SCALESIZE, renderer);
+      object = new Object(109, 84, 4, 2, OFFSET + 44*SCALESIZE, 79*SCALESIZE, renderer);
       this->renderer = renderer;
       windowWorkers[0].x = 46;
       windowWorkers[0].y = 114;
@@ -40,7 +40,7 @@ class Door{
         animate = false;
         windowWorkersIndex = 0;
         windowWorkerIndex = 0; 
-        object->setY(73*SCALESIZE);
+        object->setY(79*SCALESIZE);
       }
 
       
@@ -94,13 +94,13 @@ class Door{
         windowWorkersIndex = 1;
         windowWorkerIndex = 1;
         handleLifetime = SDL_GetTicks(); 
-        object->setY(74*SCALESIZE); 
+        object->setY(80*SCALESIZE); 
       }
     }
 
     bool collisionCheck(double x, double y){
       if(x>= (OFFSET + 43*SCALESIZE) && x <= (OFFSET + 48*SCALESIZE)){
-        if(y >= 71*SCALESIZE && y <= 76*SCALESIZE){
+        if(y >= 77*SCALESIZE && y <= 82*SCALESIZE){
           return true;
         }
       } 

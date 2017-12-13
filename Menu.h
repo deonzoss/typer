@@ -11,7 +11,7 @@ class Menu
       loadFont();
       for(int i = 0; i < 4; i++){
         menuFrames[i].w = 23;
-        menuFrames[i].h = 5;
+        menuFrames[i].h = 6;
         menuFrames[i].x = 1;
         menuFrames[i].y = 58; 
       }

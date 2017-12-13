@@ -5,7 +5,7 @@ CC = g++
 
 COMPILER_FLAGS = -Wall -Werror -w -g
 
-LINKER_FLAGS = -lX11 -lSDL2 -lSDL2_image -lSDL2_ttf 
+LINKER_FLAGS = -lX11 -lSDL2 -lSDL2_mixer -lSDL2_image -lSDL2_ttf 
 
 all: $(OBJS)
 	$(CC) $(OBJS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o  $(OBJ_NAME)

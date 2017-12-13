@@ -204,20 +204,9 @@ class Character
 
     void render()
     {
-      SDL_Rect renderQuad = {OFFSET + 6*SCALESIZE,79*SCALESIZE, charClips[0].w*SCALESIZE, charClips[0].h*SCALESIZE};
+      SDL_Rect renderQuad = {OFFSET + 6*SCALESIZE,85*SCALESIZE, charClips[0].w*SCALESIZE, charClips[0].h*SCALESIZE};
       SDL_RenderCopy(renderer, objectTexture, &charClips[0], &renderQuad);
      
-      if(!heavyHead){ 
-        renderQuad = {OFFSET + 8*SCALESIZE,72*SCALESIZE, charHead.w*SCALESIZE, charHead.h*SCALESIZE};
-        SDL_RenderCopy(renderer, objectTexture, &charHead, &renderQuad);
-      } 
-      else{
-        if((SDL_GetTicks() - heavyHeadTime) > LETTER_LIFETIME){
-          heavyHead = false;
-        }
-        renderQuad = {OFFSET + 8*SCALESIZE,73*SCALESIZE, charHead.w*SCALESIZE, charHead.h*SCALESIZE};
-        SDL_RenderCopy(renderer, objectTexture, &charHead, &renderQuad);
-      } 
       
       if(!frozen){
         tryToType();	
@@ -240,6 +229,18 @@ class Character
           }
         }
       }
+      
+      if(!heavyHead){ 
+        renderQuad = {OFFSET + 8*SCALESIZE,78*SCALESIZE, charHead.w*SCALESIZE, charHead.h*SCALESIZE};
+        SDL_RenderCopy(renderer, objectTexture, &charHead, &renderQuad);
+      } 
+      else{
+        if((SDL_GetTicks() - heavyHeadTime) > LETTER_LIFETIME){
+          heavyHead = false;
+        }
+        renderQuad = {OFFSET + 8*SCALESIZE,79*SCALESIZE, charHead.w*SCALESIZE, charHead.h*SCALESIZE};
+        SDL_RenderCopy(renderer, objectTexture, &charHead, &renderQuad);
+      } 
       
       for(int i = 0; i < scoreVector.size(); i++){		
         renderQuad = {scoreVector[i]->getXPos()+.2*SCALESIZE, scoreVector[i]->getYPos()+.2*SCALESIZE, scoreVector[i]->getWidth(), scoreVector[i]->getHeight()};
@@ -267,7 +268,7 @@ class Character
           charIndex = 1;
       }
       else if((SDL_GetTicks() - typeTime) < 300){
-        SDL_Rect renderQuad = {OFFSET + 6*SCALESIZE,79*SCALESIZE, charClips[0].w*SCALESIZE, charClips[0].h*SCALESIZE};
+        SDL_Rect renderQuad = {OFFSET + 6*SCALESIZE,85*SCALESIZE, charClips[0].w*SCALESIZE, charClips[0].h*SCALESIZE};
         SDL_RenderCopy(renderer, objectTexture, &charClips[charIndex], &renderQuad);	
       }
     }
@@ -297,12 +298,12 @@ class Character
       if(blink && ((SDL_GetTicks() - blinkTime) < 100)){
         if(!heavyHead){ 
           SDL_Rect blinkingEyes = {46,75,4,1};
-          SDL_Rect renderQuad = {OFFSET + 10*SCALESIZE,75*SCALESIZE, blinkingEyes.w*SCALESIZE, blinkingEyes.h*SCALESIZE};
+          SDL_Rect renderQuad = {OFFSET + 10*SCALESIZE,81*SCALESIZE, blinkingEyes.w*SCALESIZE, blinkingEyes.h*SCALESIZE};
           SDL_RenderCopy(renderer, objectTexture, &blinkingEyes, &renderQuad);
         }
         else{
           SDL_Rect blinkingEyes = {46,75,4,1};
-          SDL_Rect renderQuad = {OFFSET + 10*SCALESIZE,76*SCALESIZE, blinkingEyes.w*SCALESIZE, blinkingEyes.h*SCALESIZE};
+          SDL_Rect renderQuad = {OFFSET + 10*SCALESIZE,82*SCALESIZE, blinkingEyes.w*SCALESIZE, blinkingEyes.h*SCALESIZE};
           SDL_RenderCopy(renderer, objectTexture, &blinkingEyes, &renderQuad);
         } 
       }
@@ -337,7 +338,7 @@ class Character
 
     bool collisionCheck(double x, double y){
       if(x >= (OFFSET + 8*SCALESIZE) && x <= (OFFSET + 14*SCALESIZE)){
-        if(y >= 71*SCALESIZE && y <= 76*SCALESIZE){
+        if(y >= 77*SCALESIZE && y <= 82*SCALESIZE){
           heavyHeadTime = SDL_GetTicks(); 
           return true;
         }

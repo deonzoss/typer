@@ -1,4 +1,5 @@
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_mixer.h>
 #include "Setup.h"
 #include "Letter.h"
 #include "TextGenerator.h"
@@ -36,6 +37,8 @@ class Game
         void displayTextVector();
         
         void displayLetterVector();	
+
+        void loadSounds();
 
         void explodeTextVector();
         
@@ -97,6 +100,7 @@ class Game
       int levelNum = 1;
       Uint32 levelTime = 0;
       Uint32 trophyTime = 0;
+      Uint32 soundTime = 0;
       int trophyDropIndex = 0;
       bool startLevel = false;
       bool quitLevel = false; 
@@ -107,6 +111,22 @@ class Game
       double scrollSpeed;
       double wordRate;
       int strikes = 0;
+      Mix_Chunk *pop = NULL;
+      Mix_Chunk *hit = NULL;
+      Mix_Chunk *startLetterSound = NULL;
+      Mix_Chunk *backgroundPrinter = NULL;
+      Mix_Chunk *backgroundRandom = NULL;
+      Mix_Chunk *flagSound = NULL;
+      Mix_Chunk *pauseSound = NULL;
+      Mix_Chunk *levelUpSound = NULL;
+      Mix_Chunk *trophySound = NULL;
+      Mix_Chunk *screenSlideSound = NULL;
+      Mix_Chunk *invalidSound = NULL;
+      Mix_Chunk *groundSound = NULL;
+      Mix_Chunk *screenSound = NULL;
+      Mix_Chunk *screenSoundReverse = NULL;
+      Mix_Chunk *allLettersPop = NULL;
+
 
 };
 

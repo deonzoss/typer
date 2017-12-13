@@ -7,8 +7,33 @@ Game::Game(SDL_Renderer* renderer)
   textGenerator = new TextGenerator(renderer);	
   scoreboard = new Scoreboard(renderer);
   mainMenu = new Menu(renderer);
+  loadSounds();
   quit = false;
 }
+
+void Game::loadSounds()
+{
+  pop = Mix_LoadWAV("sounds/pop1.flac");
+  hit = Mix_LoadWAV("sounds/hit2.wav");
+  startLetterSound = Mix_LoadWAV("sounds/startLetterSound.wav");
+  backgroundPrinter = Mix_LoadWAV("sounds/backgroundPrinter.wav");
+  backgroundRandom = Mix_LoadWAV("sounds/backgroundRandom.wav");
+  flagSound = Mix_LoadWAV("sounds/flag.wav");
+  pauseSound = Mix_LoadWAV("sounds/pause.wav");
+  levelUpSound = Mix_LoadWAV("sounds/level.wav");
+  trophySound = Mix_LoadWAV("sounds/trophy.wav");
+  screenSlideSound = Mix_LoadWAV("sounds/screenSlide.wav");
+  invalidSound = Mix_LoadWAV("sounds/invalid.mp3");
+  groundSound = Mix_LoadWAV("sounds/hit.wav");
+  screenSound = Mix_LoadWAV("sounds/screenSlide2.wav");
+  screenSoundReverse = Mix_LoadWAV("sounds/screenSlide2Reverse.wav");
+  allLettersPop= Mix_LoadWAV("sounds/gameOverLetters.wav");
+
+  if(pop == NULL || hit == NULL || startLetterSound == NULL || backgroundPrinter == NULL || backgroundRandom == NULL || flagSound == NULL || pauseSound == NULL || levelUpSound == NULL || trophySound == NULL || screenSlideSound == NULL || invalidSound == NULL){
+    printf("Error loading sound\n");
+  } 
+}
+
 
 	
 std::vector<Texture*> Game::makeTextVector()
@@ -39,6 +64,7 @@ void Game::displayTextVector()
       if(textVector[j]->offScreen()){
         textVector[j]->loadText(textGenerator->create());
         strikes++;
+        Mix_PlayChannel(-1, flagSound, 0);
         screen->putFlagDown();
       }	
       textVector[j]->render(textVector[j]->getXPos(),SCREEN_END_YPOS+ TEXT_ROW_OFFSET +  j*TEXT_SIZE, NULL, NULL, NULL, SDL_FLIP_NONE);
@@ -74,7 +100,6 @@ void Game::displayLetterVector()
       letterVector[j]->render(letterVector[j]->getX(), letterVector[j]->getY(), renderer);
     } 
     if(!pauseLevel){
-      letterVector[j]->move();
       if(letterVector[j]->getOnGround()){ 
         if(dynamic == 1){
           if(boss->getWalking()){
@@ -99,6 +124,15 @@ void Game::displayLetterVector()
             Letter* temp = letterVector[j];	
             letterVector.erase(letterVector.begin()+j);
             delete(temp);
+          }
+        }
+      }
+      else{
+        letterVector[j]->move();
+        if(letterVector[j]->getOnGround()){
+          if(SDL_GetTicks() - soundTime >= 20){
+            Mix_PlayChannel(-1, groundSound, 0);
+            soundTime = SDL_GetTicks();
           }
         }
       }
@@ -245,6 +279,8 @@ void Game::eventHandler()
     }
     else if(startLevel && event.key.keysym.sym==SDLK_ESCAPE && event.type == SDL_KEYUP){
       explodeTextVector(); 
+      Mix_PlayChannel(-1, screenSoundReverse, 0);
+      Mix_PlayChannel(-1, allLettersPop, 0);
       quitLevel = true;
       mainMenu->reset();
       screen->setEndGame(true);
@@ -290,6 +326,13 @@ void Game::processInput(char input)
 	  for(int i = 0; i < textVector.capacity(); i++){
 		  if(textVector[i]->hasText() && textVector[i]->getText().front() == input){
         match = true;	
+
+        //Play Sound
+        if(SDL_GetTicks() - soundTime >= 20){
+          Mix_PlayChannel(-1, pop, 0);
+          soundTime = SDL_GetTicks();
+        }
+
         Letter* letter = new Letter();
         letter->loadLetter(input, renderer);
         letter->setX(textVector[i]->getXPos());
@@ -320,11 +363,16 @@ void Game::processInput(char input)
     }	
   }
   else if(toupper(input) == startWord.front()){
+    if(SDL_GetTicks() - soundTime >= 20){
+      Mix_PlayChannel(-1, startLetterSound, 0);
+      soundTime = SDL_GetTicks();
+    }
     mainMenu->setMenuDisplay(1);
     startWord.erase(startWord.begin()); 
     screen->raiseLetter(); 
     if(startWord.length() == 0){
       startLevel = true;
+      Mix_PlayChannel(-1, screenSound, 0);
       quitLevel = false; 
 	  }
   }
@@ -347,8 +395,8 @@ void Game::processInput(char input)
 
 void Game::setupTrophies()
 {
-  trophyList.resize(14);
-  for(int i = 0; i < 14; i++){
+  trophyList.resize(25);
+  for(int i = 0; i < 25; i++){
     trophyList[i] = trophyFactory->makeTrophy(NULL); 
     trophyList[i]->setObjectTexture(animationSheet);
   }
@@ -411,6 +459,9 @@ void Game::collisionHandler(double x, double y)
         strcpy(scoreString, "+500");
       }
       if(scoreValue){ 
+        
+        Mix_PlayChannel(-1, hit, 0);
+       
         Scorer* score = new Scorer(scoreString, renderer, x,y);
         scoreboard->updateScore(scoreValue,2); 
         if(slowTime){
@@ -439,14 +490,14 @@ void Game::collisionHandler(double x, double y)
         }
         else if(mainCharacter->collisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
           scoreValue = 100;
-          letterVector[i]->setY(700);
+          letterVector[i]->setY(76*SCALESIZE);
           letterVector[i]->setOnGround(true);
           mainCharacter->setHeavyHead(true);
         }
         else if(door->collisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
           scoreValue = 100;
           letterVector[i]->setDynamic(2);
-          letterVector[i]->setY(710);
+          letterVector[i]->setY(77*SCALESIZE);
           letterVector[i]->setOnGround(true);
           door->setAnimate(true);
         }
@@ -459,12 +510,19 @@ void Game::collisionHandler(double x, double y)
         else if(trashcan->collisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
           scoreValue = 100; 
           deleteLetter = true;
+          trashcan->animate();
         }
         else if(clock->collisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
           scoreValue = 100; 
           deleteLetter = true; 
         }
+        else if(worker->computerCollisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
+          worker->updateComputer();
+          scoreValue = 100; 
+          deleteLetter = true;
+        }
         if(scoreValue){ 
+          Mix_PlayChannel(-1, hit, 0);
           Scorer* score = new Scorer("+100", renderer, letterVector[i]->getX(), letterVector[i]->getY());
           scoreboard->updateScore(scoreValue,2); 
           if(slowTime){
@@ -515,6 +573,8 @@ void Game::start()
   
   door = new Door(renderer);
   door->setObjectTexture(animationSheet); 
+ 
+  //Mix_PlayChannel(-1, backgroundPrinter, 0);
   
   while(!quit){
     SDL_RenderClear(renderer);
@@ -538,6 +598,7 @@ void Game::start()
         levelTime = SDL_GetTicks();
       }
       if((SDL_GetTicks() - levelTime) > currentLevel->getLifetime()){
+        Mix_PlayChannel(-1, levelUpSound, 0);
         newLevel();
       }
       else{
