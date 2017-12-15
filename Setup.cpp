@@ -86,7 +86,7 @@ double TROPHY_WIDTH;
 
 bool init(){
 
-	if (SDL_Init(SDL_INIT_VIDEO) < 0){
+	if (SDL_Init(SDL_INIT_EVERYTHING) < 0){
 		printf("SDL_Error: %s\n", SDL_GetError());
 		return false;	
 	}
@@ -210,7 +210,7 @@ bool setup(){
   LETTER_LIFETIME = 2000;
 
   //ENVIRONMENT VARIABLES
-  GROUND_VALUE = (100*SCALESIZE)-TEXT_SIZE;
+  GROUND_VALUE = (103*SCALESIZE)-TEXT_SIZE;
 
   //OBJECTS
   MAIN_CHARACTER_OBJECT_Y = 81;

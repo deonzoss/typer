@@ -132,6 +132,9 @@ class Menu
         if(transition && !scrollDownPrevFrame){
           displayPreviousBorder(); 
           displayPreviousMenuFrame(); 
+          for(int i = 0; i < prevWordVector.size(); i++){
+            prevWordVector[i]->render();
+          }
           if(prevBorderType==2) 
             characterText->render();
           else if(prevBorderType==3)
@@ -160,6 +163,11 @@ class Menu
         displayPauseMenu();
         return;
       } 
+      
+      for(int i = 0; i < wordVector.size(); i++){
+        wordVector[i]->render();
+      }
+     
       floatText(); 
       SDL_Rect renderQuad = {typeStartXPos+.3*SCALESIZE, typeStartYPos+.3*SCALESIZE, typeStartWidth, typeStartHeight};
       SDL_RenderCopyEx(renderer, typeStartShadow, NULL, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
@@ -235,11 +243,22 @@ class Menu
       if(borderType != menuDisplay){ 
         makeBorder(SCREEN_WIDTH - (2*SCALESIZE), SCREEN_HEIGHT/2, SCALESIZE , 0);
       }
+      if(wordVectorType != menuDisplay){
+        Word* word = new Word(renderer, currentBorderRect.x+1*SCALESIZE, currentBorderRect.y+15*SCALESIZE, "Trophies", 1, MENU_FONT_COLOR, SHADOW_COLOR, MAIN_MENU_FONT_SIZE, .1*SCALESIZE);
+        wordVector.push_back(word);
+        wordVectorType = menuDisplay;
+      }
+
     }
 
     void displayLevelMenu(){
       if(borderType != menuDisplay){ 
         makeBorder(SCREEN_WIDTH - (2*SCALESIZE), SCREEN_HEIGHT/2, SCALESIZE , 0);
+      }
+      if(wordVectorType != menuDisplay){
+        Word* word = new Word(renderer, currentBorderRect.x+1*SCALESIZE, currentBorderRect.y+15*SCALESIZE, "Difficulty Rating: ", 1, MENU_FONT_COLOR, SHADOW_COLOR, MAIN_MENU_FONT_SIZE, .1*SCALESIZE);
+        wordVector.push_back(word);
+        wordVectorType = menuDisplay;
       }
     }
     
@@ -278,6 +297,10 @@ class Menu
       currentOutlineRect = {currentBorderRect.x+1*SCALESIZE, currentBorderRect.y + SCALESIZE, currentBorderRect.w-2*SCALESIZE, currentBorderRect.h-2*SCALESIZE};
     
       transition= true; 
+      prevWordVectorType = wordVectorType;
+      prevWordVector = wordVector;
+      std::vector<Word*>().swap(wordVector);
+      wordVectorType = NULL;
     }
 
     void displayBorder(){
@@ -288,11 +311,19 @@ class Menu
         if(currentBorderRect.y < tipTextYPos){
           currentBorderRect.y+=1*SCALESIZE;
           currentOutlineRect.y+=1*SCALESIZE; 
+       
+          for(int i = 0; i < wordVector.size(); i++){
+            wordVector[i]->setY(wordVector[i]->getY()+1*SCALESIZE);
+          }
         } 
       }
       else if(currentBorderRect.y < MENU_FRAMES_SPAWN_Y-SCALESIZE & !raiseMenu){
         currentBorderRect.y+=1*SCALESIZE;
         currentOutlineRect.y+=1*SCALESIZE; 
+        
+        for(int i = 0; i < wordVector.size(); i++){
+          wordVector[i]->setY(wordVector[i]->getY()+1*SCALESIZE);
+        }
         
         if(borderType >= 2 && borderType <=5){
          
@@ -320,6 +351,9 @@ class Menu
         return;
       }
       if(previousBorderRect.y > (0-previousBorderRect.h+MENU_FRAMES_SPAWN_Y)){
+        for(int i = 0; i < prevWordVector.size(); i++){
+          prevWordVector[i]->setY(prevWordVector[i]->getY()-1*SCALESIZE);
+        }
         previousBorderRect.y-=1*SCALESIZE;
         previousOutlineRect.y-=1*SCALESIZE; 
         SDL_SetRenderDrawColor(renderer, 65, 111, 153, 0xFF);
@@ -352,7 +386,7 @@ class Menu
                 transition = false;
               }
             }
-            else if(prevBorderType == 3)
+            else if(prevBorderType == 3){
               if(levelText->getY()<4*SCALESIZE){
                 levelText->setY(levelText->getY()+1*SCALESIZE);    
                 menuFramesYPos[prevBorderType-2] += 1*SCALESIZE;
@@ -361,7 +395,8 @@ class Menu
                 scrollDownPrevFrame=false;
                 transition = false;
               }
-            else if(prevBorderType == 4)
+            }
+            else if(prevBorderType == 4){
               if(scoreboardText->getY()<4*SCALESIZE){
                 scoreboardText->setY(scoreboardText->getY()+1*SCALESIZE);    
                 menuFramesYPos[prevBorderType-2] += 1*SCALESIZE;
@@ -370,7 +405,8 @@ class Menu
                 scrollDownPrevFrame=false;
                 transition = false;
               }
-            else if(prevBorderType == 5)
+            }
+            else if(prevBorderType == 5){
               if(optionsText->getY()<4*SCALESIZE){
                 optionsText->setY(optionsText->getY()+1*SCALESIZE);    
                 menuFramesYPos[prevBorderType-2] += 1*SCALESIZE;
@@ -379,6 +415,10 @@ class Menu
                 scrollDownPrevFrame=false;
                 transition = false;
               }
+            }
+            for(int i = 0; i < prevWordVector.size(); i++){
+              prevWordVector[i]->setY(prevWordVector[i]->getY()-1*SCALESIZE);
+            }
 
           }
         }
@@ -407,7 +447,12 @@ class Menu
 
     void floatText(){
       if(floatUp){
-        typeStartYPos -= .1*SCALESIZE;
+        if(typeStartYPos > GROUND_VALUE){
+          typeStartYPos -= .4*SCALESIZE;
+        }
+        else{
+          typeStartYPos -= .1*SCALESIZE;
+        }
       }
       else if(typeStartYPos < GROUND_VALUE){ 
         typeStartYPos += .1*SCALESIZE;
@@ -477,7 +522,11 @@ class Menu
     bool raiseMenu = false;
     int borderType = 0;
     int prevBorderType = -1;
-    
+
+    std::vector<Word*> wordVector;
+    int wordVectorType = NULL;
+    std::vector<Word*> prevWordVector;    
+    int prevWordVectorType = NULL;
    
 };
 

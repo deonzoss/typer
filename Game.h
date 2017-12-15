@@ -111,8 +111,22 @@ class Game
       double scrollSpeed;
       double wordRate;
       int strikes = 0;
-      Mix_Chunk *pop = NULL;
-      Mix_Chunk *hit = NULL;
+      Mix_Chunk *pop1 = NULL;
+      Mix_Chunk *pop2 = NULL;
+      Mix_Chunk *pop3 = NULL;
+      Mix_Chunk *pop4 = NULL;
+      Mix_Chunk *pop5 = NULL;
+      Mix_Chunk *pop6 = NULL;
+      Mix_Chunk *hit1 = NULL;
+      Mix_Chunk *hit2 = NULL;
+      Mix_Chunk *hit3 = NULL;
+      Mix_Chunk *hit4 = NULL;
+      Mix_Chunk *hit5 = NULL;
+      Mix_Chunk *hit6 = NULL;
+      Mix_Chunk *hit7 = NULL;
+      Mix_Chunk *hit8 = NULL;
+      Mix_Chunk *hit9 = NULL;
+      Mix_Chunk *hit10 = NULL;
       Mix_Chunk *startLetterSound = NULL;
       Mix_Chunk *backgroundPrinter = NULL;
       Mix_Chunk *backgroundRandom = NULL;
@@ -126,6 +140,7 @@ class Game
       Mix_Chunk *screenSound = NULL;
       Mix_Chunk *screenSoundReverse = NULL;
       Mix_Chunk *allLettersPop = NULL;
+      Mix_Music *gameplayMusic = NULL;
 
 
 };

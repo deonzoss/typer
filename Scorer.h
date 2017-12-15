@@ -49,7 +49,7 @@ class Scorer
     }
 
     void loadTexture(){
-      SDL_Surface* textSurface = TTF_RenderText_Solid(font, scoreString, {241,40,40});
+      SDL_Surface* textSurface = TTF_RenderText_Solid(font, scoreString, {142,74,74});
       SDL_Surface* shadowSurface = TTF_RenderText_Solid(font, scoreString, SHADOW_COLOR);
       
       if(!textSurface){

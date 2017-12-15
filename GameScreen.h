@@ -54,6 +54,37 @@ class GameScreen
       }
       
       endXPos = SCREEN_WIDTH/2 - (endFrames[0].w*SCALESIZE*9)/2;
+
+      Object* number3 = new Object( 66, 100, 6, 9, 1*6*SCALESIZE + OFFSET + 13*SCALESIZE, 56*SCALESIZE, renderer);
+      Object* number2= new Object( 66 + 1*6, 100, 6, 9, 5*6*SCALESIZE + OFFSET + 13*SCALESIZE, 56*SCALESIZE, renderer);
+      Object* number1= new Object( 66 + 2*6, 100, 6, 9, 9*6*SCALESIZE + OFFSET + 13*SCALESIZE, 56*SCALESIZE, renderer);
+      Object* period1= new Object( 66 + 3*6, 100, 6, 9, 2*6*SCALESIZE + OFFSET + 13*SCALESIZE, 56*SCALESIZE, renderer);
+      Object* period2= new Object( 66 + 3*6, 100, 6, 9, 3*6*SCALESIZE + OFFSET + 13*SCALESIZE, 56*SCALESIZE, renderer);
+      Object* period3= new Object( 66 + 3*6, 100, 6, 9, 4*6*SCALESIZE + OFFSET + 13*SCALESIZE, 56*SCALESIZE, renderer);
+      Object* period4= new Object( 66 + 3*6, 100, 6, 9, 6*6*SCALESIZE + OFFSET + 13*SCALESIZE, 56*SCALESIZE, renderer);
+      Object* period5= new Object( 66 + 3*6, 100, 6, 9, 7*6*SCALESIZE + OFFSET + 13*SCALESIZE, 56*SCALESIZE, renderer);
+      Object* period6= new Object( 66 + 3*6, 100, 6, 9, 8*6*SCALESIZE + OFFSET + 13*SCALESIZE, 56*SCALESIZE, renderer);
+      Object* period7= new Object( 66 + 3*6, 100, 6, 9, 10*6*SCALESIZE + OFFSET + 13*SCALESIZE, 56*SCALESIZE, renderer);
+      Object* period8= new Object( 66 + 3*6, 100, 6, 9, 11*6*SCALESIZE + OFFSET + 13*SCALESIZE, 56*SCALESIZE, renderer);
+      Object* period9= new Object( 66 + 3*6, 100, 6, 9, 12*6*SCALESIZE + OFFSET + 13*SCALESIZE, 56*SCALESIZE, renderer);
+      Object* letterG= new Object( 66 + 4*6, 100, 6, 9, 13*6*SCALESIZE + OFFSET + 13*SCALESIZE, 56*SCALESIZE, renderer);
+      Object* letterO= new Object( 66 + 5*6, 100, 6, 9, 14*6*SCALESIZE + OFFSET + 13*SCALESIZE, 56*SCALESIZE, renderer);
+      Object* exclamation= new Object( 66 + 6*6, 100, 6, 9, 15*6*SCALESIZE + OFFSET + 13*SCALESIZE, 56*SCALESIZE, renderer);
+      countDownFrames[0] = number3;
+      countDownFrames[1] = period1;
+      countDownFrames[2] = period2;
+      countDownFrames[3] = period3;
+      countDownFrames[4] = number2;
+      countDownFrames[5] = period4;
+      countDownFrames[6] = period5;
+      countDownFrames[7] = period6;
+      countDownFrames[8] = number1;
+      countDownFrames[9] = period7;
+      countDownFrames[10] = period8;
+      countDownFrames[11] = period9;
+      countDownFrames[12] = letterG;
+      countDownFrames[13] = letterO;
+      countDownFrames[14] = exclamation;
     }
 
     ~GameScreen()
@@ -89,9 +120,19 @@ class GameScreen
       else{
         wholeScreenYPos = SCREEN_END_YPOS;
         screenDropped = true; 
-        return true; 
+        if(countDown!=true){
+          countDown = true;
+        }
+        return screenDropped; 
       }
       return false;
+    }
+
+    void countDownAnimate(){
+      for(int i = 0; i < 15; i++){
+       // countDownFrames[i]->render();
+      }
+      countDownDone = true;
     }
 
     bool liftScreen(){
@@ -127,7 +168,7 @@ class GameScreen
     void renderScreen()
     {
       SDL_Rect renderQuad; 
-
+      
       
       for(int i = 0; i < flagsDown; i++){
         if(flags[i]->getY()<FLAG_YPOS + (8*SCALESIZE)){
@@ -209,6 +250,10 @@ class GameScreen
         leftFrameExtension->render();
         rightFrameExtension->render();
       }
+      
+      if(countDown){
+        countDownAnimate();
+      }
      
       renderQuad = {wholeScreenXPos,wholeScreenYPos,wholeScreen.w*SCALESIZE,wholeScreen.h*SCALESIZE};	
       SDL_RenderCopy(renderer, objectTexture,&wholeScreen, &renderQuad);
@@ -274,6 +319,10 @@ class GameScreen
       rightFrameExtension->setObjectTexture(objectTexture);
       blankWallLeft->setObjectTexture(objectTexture);
       blankWallRight->setObjectTexture(objectTexture);
+
+      for(int i = 0; i < 15; i++){
+        countDownFrames[i]->setObjectTexture(objectTexture);
+      }
     }
     
     void setEndGame(int value){
@@ -301,13 +350,17 @@ class GameScreen
     SDL_Rect wholeScreen;
     SDL_Rect startFrames[5]; 
     SDL_Rect endFrames[9]; 
+    Object* countDownFrames[15];
     Object* entireBar;
     Object* leftFrameExtension;
     Object* rightFrameExtension;
     Object* blankWallLeft;
     Object* blankWallRight;
     Object* flags[3];
+    Uint32 countTime;
     bool screenDropped = false;
+    bool countDownDone = false;
+    bool countDown = false;
     bool lettersRaised = false; 
     bool lettersDropped = true; 
     bool endLettersDropped = false; 

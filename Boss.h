@@ -135,27 +135,25 @@ class Boss
       if(splash){
         if(SDL_GetTicks() - coffeeTime > 100){
           coffeeTime = SDL_GetTicks();
-          if(coffeeAscend){ 
-            coffeeIndex++;
-            if(coffeeIndex == 3)
-              coffeeAscend = false;
-          }
-          else{
-            coffeeIndex--;
-            if(coffeeIndex == 0){
-              coffeeAscend = true;
-              splash = false;
-            }
-          }
+          coffeeIndex++;
         }
-        if(facingRight)
+        if(coffeeIndex == 6){
+          splash = false;
+        }
+        if(facingRight){
           coffeeClips[coffeeIndex]->setX(xPos+10*SCALESIZE);
-        else
+          printf("%d\n", coffeeIndex);
+        }
+        else{
           coffeeClips[coffeeIndex]->setX(xPos+5*SCALESIZE);
-        if(walkingFrameIndex%2 && walking)
+          printf("%d\n", coffeeIndex);
+        }
+        if(walkingFrameIndex%2 && walking){
           coffeeClips[coffeeIndex]->setY(BOSS_SPAWN_Y+2*SCALESIZE);
-        else
+        }
+        else{
           coffeeClips[coffeeIndex]->setY(BOSS_SPAWN_Y+1*SCALESIZE);
+        }
 
 
         coffeeClips[coffeeIndex]->render();
@@ -224,6 +222,7 @@ class Boss
       if(facingRight){   
         if(x >= (xPos+9*SCALESIZE) && (x <= xPos+(13*SCALESIZE))){
             if(y >= (BOSS_SPAWN_Y + 2*SCALESIZE) && y <= (BOSS_SPAWN_Y + 6*SCALESIZE)){
+              coffeeIndex = 0;
               splash = true;
               return true;
             }
@@ -232,6 +231,7 @@ class Boss
       else{
         if(x >= (xPos+5*SCALESIZE) && (x <= xPos+(9*SCALESIZE))){
             if(y >= (BOSS_SPAWN_Y + 2*SCALESIZE) && y <= (BOSS_SPAWN_Y + 6*SCALESIZE)){
+              coffeeIndex = 0;
               splash = true;
               return true;
             }
@@ -266,7 +266,7 @@ class Boss
         charLeftClips[i].h = BOSS_OBJECT_H;
       }
 
-      for(int i = 0; i < 4; i++){
+      for(int i = 0; i < 7; i++){
         coffeeClips[i] = new Object(11 + (3*i), 139, 2, 6, BOSS_SPAWN_X, BOSS_SPAWN_Y+1*SCALESIZE, renderer);
       }
     }
@@ -274,7 +274,7 @@ class Boss
     void setObjectTexture(SDL_Texture* texture)
     {
       this->objectTexture = texture;
-      for(int i = 0; i < 4; i++){
+      for(int i = 0; i < 7; i++){
         coffeeClips[i]->setObjectTexture(texture);
       }
     }
@@ -309,7 +309,7 @@ class Boss
     SDL_Renderer* renderer = NULL;
     SDL_Rect charRightClips[5];
     SDL_Rect charLeftClips[5];
-    Object* coffeeClips[4];
+    Object* coffeeClips[7];
     SDL_Rect charHeadRight; 
     SDL_Rect charHeadLeft; 
     SDL_Color scoreColor;
@@ -327,7 +327,6 @@ class Boss
     double xPos = BOSS_SPAWN_X;
     int walkingFrameIndex = 1;
     int coffeeIndex = 0;
-    bool coffeeAscend = true;
     bool splash = false;
     double speed = 1;
 

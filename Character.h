@@ -211,7 +211,6 @@ class Character
       if(!frozen){
         tryToType();	
         tryToScore();			
-        tryToBlink();
 
         if(!scoreVector.empty()){
           for(int i = 0; i < scoreVector.size(); i++){
@@ -241,6 +240,10 @@ class Character
         renderQuad = {OFFSET + 8*SCALESIZE,79*SCALESIZE, charHead.w*SCALESIZE, charHead.h*SCALESIZE};
         SDL_RenderCopy(renderer, objectTexture, &charHead, &renderQuad);
       } 
+     
+      if(!frozen){   
+        tryToBlink();
+      }
       
       for(int i = 0; i < scoreVector.size(); i++){		
         renderQuad = {scoreVector[i]->getXPos()+.2*SCALESIZE, scoreVector[i]->getYPos()+.2*SCALESIZE, scoreVector[i]->getWidth(), scoreVector[i]->getHeight()};

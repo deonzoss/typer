@@ -13,8 +13,26 @@ Game::Game(SDL_Renderer* renderer)
 
 void Game::loadSounds()
 {
-  pop = Mix_LoadWAV("sounds/pop1.flac");
-  hit = Mix_LoadWAV("sounds/hit2.wav");
+  gameplayMusic = Mix_LoadMUS("sounds/music1.wav");
+  if(!gameplayMusic){
+    printf("%s\n", Mix_GetError());
+  }
+  pop1 = Mix_LoadWAV("sounds/pop1.wav");
+  pop2 = Mix_LoadWAV("sounds/pop2.wav");
+  pop3 = Mix_LoadWAV("sounds/pop3.wav");
+  pop4 = Mix_LoadWAV("sounds/pop4.wav");
+  pop5 = Mix_LoadWAV("sounds/pop5.wav");
+  pop6 = Mix_LoadWAV("sounds/pop6.wav");
+  hit1 = Mix_LoadWAV("sounds/hit1.wav");
+  hit2 = Mix_LoadWAV("sounds/hit2.wav");
+  hit3 = Mix_LoadWAV("sounds/hit3.wav");
+  hit4 = Mix_LoadWAV("sounds/hit4.wav");
+  hit5 = Mix_LoadWAV("sounds/hit5.wav");
+  hit6 = Mix_LoadWAV("sounds/hit6.wav");
+  hit7 = Mix_LoadWAV("sounds/hit7.wav");
+  hit8 = Mix_LoadWAV("sounds/hit8.wav");
+  hit9 = Mix_LoadWAV("sounds/hit9.wav");
+  hit10 = Mix_LoadWAV("sounds/hit10.wav");
   startLetterSound = Mix_LoadWAV("sounds/startLetterSound.wav");
   backgroundPrinter = Mix_LoadWAV("sounds/backgroundPrinter.wav");
   backgroundRandom = Mix_LoadWAV("sounds/backgroundRandom.wav");
@@ -22,14 +40,13 @@ void Game::loadSounds()
   pauseSound = Mix_LoadWAV("sounds/pause.wav");
   levelUpSound = Mix_LoadWAV("sounds/level.wav");
   trophySound = Mix_LoadWAV("sounds/trophy.wav");
-  screenSlideSound = Mix_LoadWAV("sounds/screenSlide.wav");
-  invalidSound = Mix_LoadWAV("sounds/invalid.mp3");
+  invalidSound = Mix_LoadWAV("sounds/invalid.wav");
   groundSound = Mix_LoadWAV("sounds/hit.wav");
   screenSound = Mix_LoadWAV("sounds/screenSlide2.wav");
   screenSoundReverse = Mix_LoadWAV("sounds/screenSlide2Reverse.wav");
   allLettersPop= Mix_LoadWAV("sounds/gameOverLetters.wav");
 
-  if(pop == NULL || hit == NULL || startLetterSound == NULL || backgroundPrinter == NULL || backgroundRandom == NULL || flagSound == NULL || pauseSound == NULL || levelUpSound == NULL || trophySound == NULL || screenSlideSound == NULL || invalidSound == NULL){
+  if(pop1 == NULL || hit1 == NULL || startLetterSound == NULL || backgroundPrinter == NULL || backgroundRandom == NULL || flagSound == NULL || pauseSound == NULL || levelUpSound == NULL || trophySound == NULL || invalidSound == NULL){
     printf("Error loading sound\n");
   } 
 }
@@ -131,7 +148,7 @@ void Game::displayLetterVector()
         letterVector[j]->move();
         if(letterVector[j]->getOnGround()){
           if(SDL_GetTicks() - soundTime >= 20){
-            Mix_PlayChannel(-1, groundSound, 0);
+            //Mix_PlayChannel(-1, groundSound, 0);
             soundTime = SDL_GetTicks();
           }
         }
@@ -281,6 +298,7 @@ void Game::eventHandler()
       explodeTextVector(); 
       Mix_PlayChannel(-1, screenSoundReverse, 0);
       Mix_PlayChannel(-1, allLettersPop, 0);
+      Mix_PauseMusic();
       quitLevel = true;
       mainMenu->reset();
       screen->setEndGame(true);
@@ -328,10 +346,25 @@ void Game::processInput(char input)
         match = true;	
 
         //Play Sound
-        if(SDL_GetTicks() - soundTime >= 20){
-          Mix_PlayChannel(-1, pop, 0);
-          soundTime = SDL_GetTicks();
-        }
+          int randInt = rand()%6 + 1;
+          if(randInt == 1){
+            Mix_PlayChannel(-1, pop1, 0);
+          }
+          else if(randInt == 2){
+            Mix_PlayChannel(-1, pop2, 0);
+          }
+          else if(randInt == 3){
+            Mix_PlayChannel(-1, pop3, 0);
+          }
+          else if(randInt == 4){
+            Mix_PlayChannel(-1, pop4, 0);
+          }
+          else if(randInt == 5){
+            Mix_PlayChannel(-1, pop5, 0);
+          }
+          else if(randInt == 6){
+            Mix_PlayChannel(-1, pop6, 0);
+          }
 
         Letter* letter = new Letter();
         letter->loadLetter(input, renderer);
@@ -355,6 +388,10 @@ void Game::processInput(char input)
     }
 
     if(!match){
+        if(SDL_GetTicks() - soundTime >= 20){
+          Mix_PlayChannel(-1, invalidSound, 0);
+          soundTime = SDL_GetTicks();
+        }
       scoreboard->setMultiplier(0);
     }
     else{
@@ -363,14 +400,13 @@ void Game::processInput(char input)
     }	
   }
   else if(toupper(input) == startWord.front()){
-    if(SDL_GetTicks() - soundTime >= 20){
-      Mix_PlayChannel(-1, startLetterSound, 0);
-      soundTime = SDL_GetTicks();
-    }
+    Mix_PlayChannel(-1, startLetterSound, 0);
+    soundTime = SDL_GetTicks();
     mainMenu->setMenuDisplay(1);
     startWord.erase(startWord.begin()); 
     screen->raiseLetter(); 
     if(startWord.length() == 0){
+      scoreboard->reset();
       startLevel = true;
       Mix_PlayChannel(-1, screenSound, 0);
       quitLevel = false; 
@@ -460,7 +496,7 @@ void Game::collisionHandler(double x, double y)
       }
       if(scoreValue){ 
         
-        Mix_PlayChannel(-1, hit, 0);
+        Mix_PlayChannel(-1, hit1, 0);
        
         Scorer* score = new Scorer(scoreString, renderer, x,y);
         scoreboard->updateScore(scoreValue,2); 
@@ -522,7 +558,38 @@ void Game::collisionHandler(double x, double y)
           deleteLetter = true;
         }
         if(scoreValue){ 
-          Mix_PlayChannel(-1, hit, 0);
+        
+          int multValue = scoreboard->getMultValue();
+          if(multValue == 1){
+            Mix_PlayChannel(-1, hit1, 0);
+          }
+          else if(multValue == 2){
+            Mix_PlayChannel(-1, hit2, 0);
+          }
+          else if(multValue == 3){
+            Mix_PlayChannel(-1, hit3, 0);
+          }
+          else if(multValue == 4){
+            Mix_PlayChannel(-1, hit4, 0);
+          }
+          else if(multValue == 5){
+            Mix_PlayChannel(-1, hit5, 0);
+          }
+          else if(multValue == 6){
+            Mix_PlayChannel(-1, hit6, 0);
+          }
+          else if(multValue == 7){
+            Mix_PlayChannel(-1, hit7, 0);
+          }
+          else if(multValue == 8){
+            Mix_PlayChannel(-1, hit8, 0);
+          }
+          else if(multValue == 9){
+            Mix_PlayChannel(-1, hit9, 0);
+          }
+          else if(multValue == 10){
+            Mix_PlayChannel(-1, hit10, 0);
+          }
           Scorer* score = new Scorer("+100", renderer, letterVector[i]->getX(), letterVector[i]->getY());
           scoreboard->updateScore(scoreValue,2); 
           if(slowTime){
@@ -573,13 +640,22 @@ void Game::start()
   
   door = new Door(renderer);
   door->setObjectTexture(animationSheet); 
+
+  Object* mouse = new Object(149, 68, 6, 6, 0, 0, renderer);
+  mouse->setObjectTexture(animationSheet);
+  int mouseY;
+  int mouseX;
  
   //Mix_PlayChannel(-1, backgroundPrinter, 0);
+  Mix_PlayChannel(-1, pauseSound, 0);
   
   while(!quit){
     SDL_RenderClear(renderer);
     SDL_Rect dest = {.x = 0, .y = 0, .w = SCREEN_WIDTH, .h = SCREEN_HEIGHT}; 
     SDL_RenderCopy(renderer, background, NULL, &dest);	
+
+
+    
 
     door->render();  
     clock->render(); 
@@ -594,11 +670,19 @@ void Game::start()
 
    
     if(startLevel && !quitLevel){
+      if(Mix_PlayingMusic() == 0){
+        if(Mix_PlayMusic(gameplayMusic, -1) == -1){
+         // printf("music error\n");
+        }
+      }
+      else if(Mix_PausedMusic() == 1){
+        Mix_ResumeMusic();
+      }
       if(!levelTime){
         levelTime = SDL_GetTicks();
       }
       if((SDL_GetTicks() - levelTime) > currentLevel->getLifetime()){
-        Mix_PlayChannel(-1, levelUpSound, 0);
+        //Mix_PlayChannel(-1, levelUpSound, 0);
         newLevel();
       }
       else{
@@ -690,6 +774,12 @@ void Game::start()
     } 
     if(renderLevelDisplay)
       currentLevel->render();
+    
+    SDL_GetMouseState(&mouseX, &mouseY);
+    SDL_ShowCursor(0);
+    mouse->setX(mouseX);
+    mouse->setY(mouseY);
+    mouse->render();
     SDL_RenderPresent(renderer);
     /*if(strikes == 3){
       quitLevel = true;

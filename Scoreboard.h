@@ -15,6 +15,7 @@ class Scoreboard
 			multColorVal = 50;		
 			loadFont(SCOREBOARD_FONT_SIZE);	
 			loadScoreWord();	
+      animationTime= SDL_GetTicks();
 		}
 		
 		~Scoreboard()
@@ -42,6 +43,39 @@ class Scoreboard
 			}
 								
 		}
+
+    void reset(){
+      animating=true;
+      animateDescending=false;
+      score= 0;
+      currentLevel = 0;
+      multiplier = 0;
+      multValue = 1;	
+		  incScore = false;
+      objectScore = false;
+      wordScore = false;
+		  multColorDesc = false;
+    }
+
+    void animate(){
+      if(SDL_GetTicks() - animationTime > 10){	
+        animationTime = SDL_GetTicks();
+        if(!animateDescending && animationIndex < MAX_MULTIPLIER_VAL-1){
+          animationIndex+=2;
+        }
+        else{
+          animateDescending = true;
+        }
+        if(animateDescending == true){
+          animationIndex-=2;
+          if(animationIndex == 0){
+            animating = false;
+          }
+        }
+      }
+      SDL_Rect multRenderQuad = {MULTIPLIER_X - 1*SCALESIZE,MULTIPLIER_Y,multClips[animationIndex].w*SCALESIZE,multClips[animationIndex].h*SCALESIZE};
+      SDL_RenderCopy(renderer, objectTexture, &multClips[animationIndex], &multRenderQuad);	
+    }
 		
 		void loadFont(double fontSize){
 			font = TTF_OpenFont(CODE_FONT, fontSize);
@@ -83,6 +117,7 @@ class Scoreboard
 		{
 			free();	
 
+
 			char scoreString[10];
 			strcpy(scoreString, std::to_string(score).c_str());
 			
@@ -93,7 +128,7 @@ class Scoreboard
 					wordScore = false;	
 			}
       else if(objectScore){
-        fontColor = {241,40,40};
+        fontColor = {142,74,74};
         if(SDL_GetTicks()-time > 100)
           objectScore = false;
       }
@@ -225,26 +260,32 @@ class Scoreboard
 
 
 
+      if(animating){
+        animate();
+      }
+      else{
 
-      SDL_Rect multRenderQuad = {MULTIPLIER_X - 1*SCALESIZE,MULTIPLIER_Y,blankMultDisplay.w*SCALESIZE,blankMultDisplay.h*SCALESIZE};
+        SDL_Rect multRenderQuad = {MULTIPLIER_X - 1*SCALESIZE,MULTIPLIER_Y,blankMultDisplay.w*SCALESIZE,blankMultDisplay.h*SCALESIZE};
 
-      SDL_RenderCopy(renderer, objectTexture, &blankMultDisplay, &multRenderQuad);	
+        SDL_RenderCopy(renderer, objectTexture, &blankMultDisplay, &multRenderQuad);	
 
 
-			if(multiplier){	
+        if(multiplier){	
 
-				multRenderQuad = {MULTIPLIER_X - 1*SCALESIZE,MULTIPLIER_Y,multClips[multiplier-1].w*SCALESIZE,multClips[multiplier-1].h*SCALESIZE};
+          multRenderQuad = {MULTIPLIER_X - 1*SCALESIZE,MULTIPLIER_Y,multClips[multiplier-1].w*SCALESIZE,multClips[multiplier-1].h*SCALESIZE};
 
-				SDL_RenderCopy(renderer, objectTexture, &multClips[multiplier-1], &multRenderQuad);	
-			}		
-			
-			if(multValue > 1){	
-				scoreRenderQuad = {multTextureX + .1*SCALESIZE - OFFSET, multTextureY - .7*SCALESIZE, multTextureWidth, multTextureHeight};
-				SDL_RenderCopyEx(renderer, shadowMultTexture, NULL, &scoreRenderQuad, 0.0, NULL, SDL_FLIP_NONE);
-				
-				scoreRenderQuad = {multTextureX - .2*SCALESIZE - OFFSET, multTextureY - 1*SCALESIZE, multTextureWidth, multTextureHeight};
-				SDL_RenderCopyEx(renderer, multTexture, NULL, &scoreRenderQuad, 0.0, NULL, SDL_FLIP_NONE);
-			}
+          SDL_RenderCopy(renderer, objectTexture, &multClips[multiplier-1], &multRenderQuad);	
+        }		
+        
+        if(multValue > 1){	
+          scoreRenderQuad = {multTextureX + .1*SCALESIZE - OFFSET, multTextureY - .7*SCALESIZE, multTextureWidth, multTextureHeight};
+          SDL_RenderCopyEx(renderer, shadowMultTexture, NULL, &scoreRenderQuad, 0.0, NULL, SDL_FLIP_NONE);
+          
+          scoreRenderQuad = {multTextureX - .2*SCALESIZE - OFFSET, multTextureY - 1*SCALESIZE, multTextureWidth, multTextureHeight};
+          SDL_RenderCopyEx(renderer, multTexture, NULL, &scoreRenderQuad, 0.0, NULL, SDL_FLIP_NONE);
+        }
+      }
+        
 		
 			
 		}
@@ -317,6 +358,11 @@ class Scoreboard
 			return multiplier;
 		}
 
+    int getMultValue()
+    {
+      return multValue;
+    }
+
 
 	private:
 		SDL_Texture* fontTexture = NULL;	//number following "SCORE: "
@@ -327,12 +373,14 @@ class Scoreboard
 		TTF_Font* font = NULL;
 		SDL_Renderer* renderer = NULL;
 		SDL_Rect multClips[MAX_MULTIPLIER_VAL];
-	        SDL_Rect blankMultDisplay;	
-                SDL_Color fontColor;	
+    SDL_Rect blankMultDisplay;	
+    SDL_Color fontColor;	
 		SDL_Color multColor;	
 		int multColorVal;
 	
 		Uint32 time;	
+    Uint32 animationTime;
+    int animationIndex = 0;
 		
 		int score= 0;
 		int currentLevel = 0;
@@ -358,6 +406,8 @@ class Scoreboard
     bool objectScore = false;
     bool wordScore = false;
 		bool multColorDesc = false;
+    bool animating = true;
+    bool animateDescending = false;
 
 };
 
