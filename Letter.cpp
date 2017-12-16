@@ -9,41 +9,36 @@
 
 Letter::Letter()
 {
-	angle = 10 + (rand()%30);	
-	velocity = 1*SCALESIZE + (rand()%(2*(int)SCALESIZE));	
-  randXChange = (rand()%((int)(.5*SCALESIZE))); 
-	randGroundValue = GROUND_VALUE + (rand()%(3*(int)SCALESIZE));
+  angle = 10 + (rand()%30);
+  velocity = 1*SCALESIZE + (rand()%(2*(int)SCALESIZE));
+  randXChange = (rand()%((int)(.5*SCALESIZE)));
+  randGroundValue = GROUND_VALUE + (rand()%(3*(int)SCALESIZE));
 }
 
 Letter::~Letter()
 {
-	SDL_DestroyTexture(texture);
-	SDL_DestroyTexture(shadowTexture);	
-	TTF_CloseFont(font);
+  SDL_DestroyTexture(texture);
+  SDL_DestroyTexture(shadowTexture);
+  TTF_CloseFont(font);
 }
 
 void Letter::move(){
 
-	if(onGround){
-		return;
-	}	
-	
+  if(onGround){
+    return;
+  }
 	double radians = angle*PI/180.0;
-	
   if(rate > -5*SCALESIZE){
-    relY = (((abs(relX))*(tan(radians)))-(((GRAVITY)*(pow((abs(relX)),2)))/(2.0*(pow(velocity,2)*pow(cos(radians),2))))/10);	
+    relY = (((abs(relX))*(tan(radians)))-(((GRAVITY)*(pow((abs(relX)),2)))/(2.0*(pow(velocity,2)*pow(cos(radians),2))))/10);
     rate = 4*(relY-prevRelY);
     if(rate < -5*SCALESIZE)
-      rate = -5*SCALESIZE; 
-  } 
-  
-  
-  prevRelY = relY;  
+      rate = -5*SCALESIZE;
+  }
+  prevRelY = relY;
 	relX -= (-5)/speedMult;
-   
   yPos -= (rate/15)*SCALESIZE;
-  if(angle%2){  
-  	xPos += (-.3*SCALESIZE - randXChange)/speedMult;	
+  if(angle%2){
+    xPos += (-.3*SCALESIZE - randXChange)/speedMult;
   }
   else{
     xPos -= (-.3*SCALESIZE - randXChange)/speedMult;
@@ -66,14 +61,14 @@ bool Letter::loadLetter(char letter, SDL_Renderer* renderer)
 		return false;
 	}
 	return true;
-} 
+}
 bool Letter::loadFromRenderedText(char letter, SDL_Color letterColor, SDL_Renderer* renderer)
 {
 	char letterArray[2];
-	letterArray[0] = letter;	
-	letterArray[1] = '\0';	
+	letterArray[0] = letter;
+	letterArray[1] = '\0';
 	SDL_Surface* letterSurface = TTF_RenderText_Solid(font, letterArray, CODE_COLOR);
-	SDL_Surface* shadowSurface = TTF_RenderText_Solid(font, letterArray, SHADOW_COLOR); 
+	SDL_Surface* shadowSurface = TTF_RenderText_Solid(font, letterArray, SHADOW_COLOR);
 	this->letter = letter;
 	if(letterSurface == NULL){
 		printf("SDL_ttf Error: %s\n", TTF_GetError());
@@ -92,24 +87,23 @@ bool Letter::loadFromRenderedText(char letter, SDL_Color letterColor, SDL_Render
 	SDL_FreeSurface(letterSurface);
 	SDL_FreeSurface(shadowSurface);
 	}
-	return texture!=NULL;	
+	return texture!=NULL;
 }
 
 void Letter::render(double x, double y,SDL_Renderer* renderer, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip)
 {
-	if(onGround){	
+	if(onGround){
 		SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
 		SDL_SetTextureAlphaMod(texture, alpha);
 
 		SDL_SetTextureBlendMode(shadowTexture, SDL_BLENDMODE_BLEND);
 		SDL_SetTextureAlphaMod(shadowTexture, alpha);
-	}	
-	
-	SDL_Rect renderQuad = {x+.3*SCALESIZE,y+.3*SCALESIZE,width,height};
+	}
+
+	SDL_Rect renderQuad = {(int)(x+.3*SCALESIZE),(int)(y+.3*SCALESIZE),(int)width,(int)height};
 
 	SDL_RenderCopyEx(renderer, shadowTexture, clip, &renderQuad, angle, center, flip);
-	
-	renderQuad = {x,y,width,height};
+	renderQuad = {(int)x,(int)y,(int)width,(int)height};
 
 	SDL_RenderCopyEx(renderer, texture, clip, &renderQuad, angle, center, flip);
 }
@@ -118,8 +112,8 @@ void Letter::fade()
 {
   if(alpha < 10){
     alpha = 0;
-    return;  
-  } 
+    return;
+  }
   alpha-=10;
 }
 
@@ -191,13 +185,13 @@ bool Letter::offScreen()
 
 bool Letter::groundContact()
 {
-	if(yPos >= randGroundValue){ 
-		yPos = randGroundValue; 
-		onGround = true;	
-	  lifetime = SDL_GetTicks();	
+	if(yPos >= randGroundValue){
+		yPos = randGroundValue;
+		onGround = true;
+    lifetime = SDL_GetTicks();
     return onGround;
-	}
-	return false;
+  }
+  return false;
 }
 
 char Letter::getLetter()

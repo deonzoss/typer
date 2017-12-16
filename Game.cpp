@@ -4,7 +4,7 @@ Game::Game(SDL_Renderer* renderer)
 {
   this->renderer = renderer;
   textVector = makeTextVector();
-  textGenerator = new TextGenerator(renderer);	
+  textGenerator = new TextGenerator(renderer);
   scoreboard = new Scoreboard(renderer);
   mainMenu = new Menu(renderer);
   loadSounds();

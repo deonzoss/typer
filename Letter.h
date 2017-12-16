@@ -1,6 +1,7 @@
 #ifndef Letter_h
 #define Letter_h
 
+
 class Letter
 {
 	public:
@@ -69,6 +70,7 @@ class Letter
 		Uint8 alpha = 255;
     int dynamic = 0;
     double speedMult = 1;
+
 };
 
 #endif
