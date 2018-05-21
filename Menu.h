@@ -16,6 +16,20 @@ class Menu
         menuFrames[i].y = 58; 
       }
       loadMenuFrameText();
+      
+      title.x = 103;
+      title.y = 128;
+      title.w = 48;
+      title.h = 11;
+      titleXPos = SCREEN_WIDTH/2 - (3*SCALESIZE*title.w)/2;
+      titleYPos = 0 - title.h*SCALESIZE*3;
+      titleYPosLimit = SCREEN_HEIGHT/2-title.h*SCALESIZE*3.4;
+
+      instruction.x = 102;
+      instruction.y = 139;
+      instruction.w = 50;
+      instruction.h = 9;
+
     }
 
     ~Menu()
@@ -33,6 +47,57 @@ class Menu
       font = TTF_OpenFont(CODE_FONT, MAIN_MENU_FONT_SIZE);
       if(font == NULL)
         printf("Error opening menu font\n");
+    }
+
+    void showTitle(){
+
+      SDL_Rect renderQuad = {titleXPos, titleYPos, title.w*SCALESIZE*3, title.h*SCALESIZE*3};
+      SDL_RenderCopy(renderer, objectTexture, &title, &renderQuad);
+       
+      if(!titleEnter){
+      
+        renderQuad = {SCREEN_WIDTH/2 - instruction.w*SCALESIZE/2, 3*SCREEN_HEIGHT/4, instruction.w*SCALESIZE, instruction.h*SCALESIZE};
+        SDL_RenderCopyEx(renderer, objectTexture, &instruction, &renderQuad, instructionAngle, NULL, SDL_FLIP_NONE);
+        if(instructionRotateRight){
+          if(instructionAngle < 10){
+            instructionAngle+=.5;
+          }
+          else{
+            instructionRotateRight = false;
+          }
+        }
+        else{
+          if(instructionAngle > -10){
+            instructionAngle-=.5;
+          }
+          else{
+            instructionRotateRight = true;
+          }
+        }
+      }
+      showTitleBool = true;
+
+      if(titleEnter){
+        titleYPos += .6*SCALESIZE;
+        if(titleYPos >= titleYPosLimit){
+          titleFloatTime = SDL_GetTicks();
+          titleEnter = false;
+        }
+      }
+      else if(titleFloatUp){
+          titleYPos -= .1*SCALESIZE;
+      }
+      else{
+        titleYPos += .1*SCALESIZE;
+      }
+      if((SDL_GetTicks() - titleFloatTime) > 1000){ 
+          titleFloatUp = !titleFloatUp;
+          titleFloatTime = SDL_GetTicks();
+      }
+
+
+
+
     }
     
     void reset(){
@@ -53,6 +118,7 @@ class Menu
       raiseMenu = false;
       scrollDownPrevFrame = false;
       transition = false;
+      showTitleBool = false;
     }
 
     void raise(){
@@ -125,54 +191,61 @@ class Menu
     }
 
     void render(){
-      if(raiseMenu){
-        raise();
-      }
-      if(menuDisplay>=1 && menuDisplay <=5){
-        if(transition && !scrollDownPrevFrame){
-          displayPreviousBorder(); 
-          displayPreviousMenuFrame(); 
-          for(int i = 0; i < prevWordVector.size(); i++){
-            prevWordVector[i]->render();
+      if(!showTitleBool){
+        if(raiseMenu){
+          raise();
+        }
+        if(menuDisplay>=1 && menuDisplay <=5){
+          if(transition && !scrollDownPrevFrame){
+            displayPreviousBorder(); 
+            displayPreviousMenuFrame(); 
+            for(int i = 0; i < prevWordVector.size(); i++){
+              prevWordVector[i]->render();
+            }
+            if(prevBorderType==2) 
+              characterText->render();
+            else if(prevBorderType==3)
+              levelText->render();
+            else if(prevBorderType==4)
+              scoreboardText->render();
+            else if(prevBorderType==5)
+              optionsText->render();
           }
-          if(prevBorderType==2) 
+          displayBorder();
+          displayMenu(); 
+          if(!transition || prevBorderType!=2) 
             characterText->render();
-          else if(prevBorderType==3)
+          if(!transition || prevBorderType!=3)
             levelText->render();
-          else if(prevBorderType==4)
+          if(!transition || prevBorderType!=4)
             scoreboardText->render();
-          else if(prevBorderType==5)
+          if(!transition || prevBorderType!=5)
             optionsText->render();
+          if(scrollDownPrevFrame){
+            displayPreviousBorder(); 
+            displayPreviousMenuFrame(); 
+          }
+        }  
+        else if(menuDisplay==6){
+          displayPauseMenu();
+          return;
+        } 
+        
+        for(int i = 0; i < wordVector.size(); i++){
+          wordVector[i]->render();
         }
-        displayBorder();
-        displayMenu(); 
-        if(!transition || prevBorderType!=2) 
-          characterText->render();
-        if(!transition || prevBorderType!=3)
-          levelText->render();
-        if(!transition || prevBorderType!=4)
-          scoreboardText->render();
-        if(!transition || prevBorderType!=5)
-          optionsText->render();
-        if(scrollDownPrevFrame){
-          displayPreviousBorder(); 
-          displayPreviousMenuFrame(); 
-        }
-      }  
-      else if(menuDisplay==6){
-        displayPauseMenu();
-        return;
-      } 
-      
-      for(int i = 0; i < wordVector.size(); i++){
-        wordVector[i]->render();
+       
+        floatText(); 
+        SDL_Rect renderQuad = {typeStartXPos+.3*SCALESIZE, typeStartYPos+.3*SCALESIZE, typeStartWidth, typeStartHeight};
+        SDL_RenderCopyEx(renderer, typeStartShadow, NULL, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
+        renderQuad = {typeStartXPos, typeStartYPos, typeStartWidth, typeStartHeight};
+        SDL_RenderCopyEx(renderer, typeStart, NULL, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
+        mouseClicked = false;
       }
-     
-      floatText(); 
-      SDL_Rect renderQuad = {typeStartXPos+.3*SCALESIZE, typeStartYPos+.3*SCALESIZE, typeStartWidth, typeStartHeight};
-      SDL_RenderCopyEx(renderer, typeStartShadow, NULL, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
-      renderQuad = {typeStartXPos, typeStartYPos, typeStartWidth, typeStartHeight};
-      SDL_RenderCopyEx(renderer, typeStart, NULL, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
+        
+      else if(showTitleBool){
+        titleText->render();
+      }
     
     }
 
@@ -257,10 +330,31 @@ class Menu
       }
       if(wordVectorType != menuDisplay){
         Word* word = new Word(renderer, currentBorderRect.x+1*SCALESIZE, currentBorderRect.y+15*SCALESIZE, "Difficulty Rating: ", 1, MENU_FONT_COLOR, SHADOW_COLOR, MAIN_MENU_FONT_SIZE, .1*SCALESIZE);
+        Word* bash = new Word(renderer, word->getWidth() + currentBorderRect.x+1*SCALESIZE, currentBorderRect.y+15*SCALESIZE, "BASH", 1, MENU_FONT_COLOR, SHADOW_COLOR, MAIN_MENU_FONT_SIZE, .1*SCALESIZE);
+        Word* cplusplus = new Word(renderer, word->getWidth() + currentBorderRect.x+1*SCALESIZE, bash->getHeight() + currentBorderRect.y+15*SCALESIZE, "C++", 1, MENU_FONT_COLOR, SHADOW_COLOR, MAIN_MENU_FONT_SIZE, .1*SCALESIZE);
+        
         wordVector.push_back(word);
+        wordVector.push_back(bash);
+        wordVector.push_back(cplusplus);
         wordVectorType = menuDisplay;
       }
+      else if (mouseClicked){
+        if(mouseX >= wordVector[1]->getX() && mouseX <= wordVector[1]->getX()+wordVector[1]->getWidth()){
+          if(mouseY >= wordVector[1]->getY() && mouseY <= wordVector[1]->getY()+wordVector[1]->getHeight()){
+            printf("bash\n");
+            levelTypes.push_back(1);
+          }
+          else if(mouseY >= wordVector[2]->getY() && mouseY <= wordVector[2]->getY()+wordVector[2]->getHeight()){
+            printf("C++\n");
+            levelTypes.push_back(2);
+          }
+        }
+        else{
+          printf("nothing\n");
+        }
+      }
     }
+
     
     void displayScoresMenu(){
       if(borderType != menuDisplay){ 
@@ -475,9 +569,25 @@ class Menu
     
     int getMenuDisplay(){ return menuDisplay;}
 
+    std::vector<int> getLevelType(){
+      return levelTypes;
+    }
+
     void setObjectTexture(SDL_Texture* texture){
       this->objectTexture = texture;
-  }
+    }
+
+    void setMouseX(double value){
+      this->mouseX = value;
+    }
+    
+    void setMouseY(double value){
+      this->mouseY = value;
+    }
+    
+    void setMouseClicked(bool value){
+      this->mouseClicked = value;
+    }
 
   private:
     Word* characterText = NULL; 
@@ -486,6 +596,8 @@ class Menu
     Word* optionsText = NULL;
     Word* tipSentenceText = NULL;
     Word* pauseText = NULL; 
+    Word* titleText = NULL;
+    bool showTitleBool = false;
     
     SDL_Renderer* renderer = NULL;
     SDL_Rect menuFrames[4]; 
@@ -501,6 +613,13 @@ class Menu
     double tipTextHeight = 0;
     SDL_Texture* tipTextShadow = NULL;
     SDL_Texture* objectTexture = NULL;
+    SDL_Rect title;
+    SDL_Rect instruction;
+    double instructionAngle;
+    bool instructionRotateRight;
+    double titleXPos;
+    double titleYPos;
+
     
     TTF_Font* font = NULL;
    
@@ -511,7 +630,11 @@ class Menu
     double typeStartHeight = 0;
     char* startString = "t y p e   \" s t a r t \"   t o   b e g i n   g a m e ";
     bool floatUp = false;
+    bool titleFloatUp = false;
+    bool titleEnter = true;
+    double titleYPosLimit;
     Uint32 floatTime = 0;
+    Uint32 titleFloatTime = 0;
 
     SDL_Rect currentBorderRect;
     SDL_Rect currentOutlineRect;
@@ -527,6 +650,13 @@ class Menu
     int wordVectorType = NULL;
     std::vector<Word*> prevWordVector;    
     int prevWordVectorType = NULL;
+
+    double mouseX = NULL;
+    double mouseY = NULL;
+    bool mouseClicked = NULL;
+    std::vector<int> levelTypes;
+
+    
    
 };
 

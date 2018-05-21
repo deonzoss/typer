@@ -49,3 +49,7 @@ void TextGenerator::readFile(std::string filename){
 	}
 
 }
+
+void TextGenerator::setType(std::vector<int> levelType){
+  this->levelType = levelType;
+}

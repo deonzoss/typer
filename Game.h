@@ -10,6 +10,7 @@
 #include "GameScreen.h"
 #include "Level.h"
 #include "Object.h"
+#include "Mouse.h"
 #include "Trashcan.h"
 #include "Fountain.h"
 #include "Clock.h"
@@ -19,6 +20,7 @@
 #include "Trophy.h"
 #include "TrophyFactory.h"
 #include <vector>
+#include <iostream>
 #ifndef Game_h
 #define Game_h
 
@@ -62,11 +64,25 @@ class Game
 
         void newLevel();
 
+        void showDemo(){
+          showDemoBool = true;
+        }
+
+        void quitDemo(){
+          showDemoBool = false;
+        }
+
+        bool getDemoBool(){
+          return showDemoBool;
+        }
+
         SDL_Texture* loadBackground();	
 
         SDL_Texture* loadAnimationSheet();
 
         void start();
+
+        void playDemo();
 
     private:
       Menu* mainMenu; 
@@ -101,6 +117,9 @@ class Game
       Uint32 levelTime = 0;
       Uint32 trophyTime = 0;
       Uint32 soundTime = 0;
+      Uint32 demoTypeTime = 0;
+      bool demoWordTyped = false;
+      int demoCurrentWord = 0;
       int trophyDropIndex = 0;
       bool startLevel = false;
       bool quitLevel = false; 
@@ -108,6 +127,8 @@ class Game
       bool screenRaised = false;	
       bool pauseLevel = false;
       bool renderLevelDisplay = false;
+      bool showDemoBool = true;
+      int typeSpeedLimit = 100;
       double scrollSpeed;
       double wordRate;
       int strikes = 0;

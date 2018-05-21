@@ -198,7 +198,7 @@ bool setup(){
   MENU_FRAMES_SPAWN_Y = 4*SCALESIZE;
 
   CHARACTER_SCORE_X = OFFSET + 13*SCALESIZE;	//initial coordinates for values to fly out of
-  CHARACTER_SCORE_Y = 79.5*SCALESIZE;	//computer
+  CHARACTER_SCORE_Y = 86*SCALESIZE;	//computer
   CHARACTER_SCORE_FONT_SIZE = 3*SCALESIZE;
 
 

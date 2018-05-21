@@ -294,6 +294,12 @@ void Game::eventHandler()
     if(event.type == SDL_QUIT){
       quit = true;
     }
+    if(showDemoBool && event.type == SDL_TEXTINPUT){
+      explodeTextVector(); 
+      mainMenu->reset();
+      quitLevel = true;
+      showDemoBool=false;
+    }
     else if(startLevel && event.key.keysym.sym==SDLK_ESCAPE && event.type == SDL_KEYUP){
       explodeTextVector(); 
       Mix_PlayChannel(-1, screenSoundReverse, 0);
@@ -314,7 +320,7 @@ void Game::eventHandler()
       int x,y;
       SDL_GetMouseState(&x, &y);
       collisionHandler(x,y-2*SCALESIZE);
-       
+      mainMenu->setMouseClicked(true);
     } 
     else if(event.type == SDL_TEXTINPUT){
       mainCharacter->setTyping(true);	
@@ -340,7 +346,7 @@ void Game::processInput(char input)
     } 
     return;
   }
-  if(startLevel && !pauseLevel){	
+  if(showDemoBool || (startLevel && !pauseLevel)){	
 	  for(int i = 0; i < textVector.capacity(); i++){
 		  if(textVector[i]->hasText() && textVector[i]->getText().front() == input){
         match = true;	
@@ -506,7 +512,7 @@ void Game::collisionHandler(double x, double y)
         scoreVector.push_back(score); 
       }
   }
-  else if (startLevel && !x && !y){ 
+  else if ((showDemoBool || startLevel) && !x && !y){ 
    for(int i = 0; i < letterVector.size(); i++){
       if(letterVector[i]->getOnGround() == false){
         int scoreValue = NULL;
@@ -607,6 +613,50 @@ void Game::collisionHandler(double x, double y)
   }
 }
 
+void Game::playDemo(){
+  screen->renderScreen(); 
+  if(!screenDropped){
+    screen->setDemoScreen();
+    screenDropped = true;
+    screenRaised = false;
+  }
+  if(textVector[0] == NULL || textVector[0]->getText().length() == 0){
+    textGenerator->setType(mainMenu->getLevelType());
+    textVector = populateTextVector();
+  }
+  displayTextVector();	
+  scoreboard->render();
+  screen->renderFrame();	
+  collisionHandler(NULL, NULL); 
+
+  if(demoCurrentWord == 0){
+    demoCurrentWord = rand () % textVector.size() + 1;
+    std::cout << "Current Word:  " << textVector[demoCurrentWord-1]->getText() << std::endl;
+  }
+
+
+  if(SDL_GetTicks() - demoTypeTime > typeSpeedLimit){
+    mainCharacter->setTyping(true);	
+    int minX = textVector[0]->getXPos(); 
+    demoCurrentWord = 1;
+    for(int i = 1; i < textVector.size(); i++){
+      if(textVector[i]->getXPos() < minX){
+        minX = textVector[i]->getXPos();
+        demoCurrentWord = i + 1;
+      }
+    }
+    if(textVector[demoCurrentWord-1]->getText().length() == 1){
+      processInput(textVector[demoCurrentWord-1]->getText().front());
+      typeSpeedLimit = rand () % 100 + 100;
+    }
+    else{
+      processInput(textVector[demoCurrentWord-1]->getText().front());
+    }
+    demoTypeTime = SDL_GetTicks();
+  }
+
+}
+
 
 void Game::start()
 {	
@@ -641,7 +691,7 @@ void Game::start()
   door = new Door(renderer);
   door->setObjectTexture(animationSheet); 
 
-  Object* mouse = new Object(149, 68, 6, 6, 0, 0, renderer);
+  Mouse* mouse = new Mouse(0, 0, renderer);
   mouse->setObjectTexture(animationSheet);
   int mouseY;
   int mouseX;
@@ -650,12 +700,10 @@ void Game::start()
   Mix_PlayChannel(-1, pauseSound, 0);
   
   while(!quit){
+
     SDL_RenderClear(renderer);
     SDL_Rect dest = {.x = 0, .y = 0, .w = SCREEN_WIDTH, .h = SCREEN_HEIGHT}; 
     SDL_RenderCopy(renderer, background, NULL, &dest);	
-
-
-    
 
     door->render();  
     clock->render(); 
@@ -668,8 +716,10 @@ void Game::start()
     desk->render(); 
     worker->render();
 
-   
-    if(startLevel && !quitLevel){
+    if(showDemoBool){
+      playDemo();
+    }
+    else if(startLevel && !quitLevel){
       if(Mix_PlayingMusic() == 0){
         if(Mix_PlayMusic(gameplayMusic, -1) == -1){
          // printf("music error\n");
@@ -692,6 +742,7 @@ void Game::start()
       screen->renderScreen(); 
       if(screenDropped){
         if(textVector[0] == NULL || textVector[0]->getText().length() == 0){
+          textGenerator->setType(mainMenu->getLevelType());
           textVector = populateTextVector();
         }
         displayTextVector();	
@@ -726,10 +777,13 @@ void Game::start()
       if(!screenRaised){
         screenRaised = screen->liftScreen();
         screenDropped = !screenRaised; 
+        if(screenRaised){
+          screen->setShowDemo(false);
+        }
       }
       else if(!screen->getLettersDropped()){
         screen->dropLetter();
-      } 
+      }
       else{
         startWord = "START"; 
         startLevel = false;	
@@ -740,7 +794,7 @@ void Game::start()
       mainMenu->render();
       screen->renderScreen(); 
     }
-    if(trophyDropIndex < trophyList.size() && SDL_GetTicks() - trophyTime > 50){ 
+    if(!showDemoBool && trophyDropIndex < trophyList.size() && SDL_GetTicks() - trophyTime > 50){ 
       dropTrophy();
       trophyTime = SDL_GetTicks();
     }
@@ -774,11 +828,17 @@ void Game::start()
     } 
     if(renderLevelDisplay)
       currentLevel->render();
+
+    if(showDemoBool){
+      mainMenu->showTitle();
+    }
     
     SDL_GetMouseState(&mouseX, &mouseY);
     SDL_ShowCursor(0);
     mouse->setX(mouseX);
     mouse->setY(mouseY);
+    mainMenu->setMouseX(mouseX);
+    mainMenu->setMouseY(mouseY);
     mouse->render();
     SDL_RenderPresent(renderer);
     /*if(strikes == 3){

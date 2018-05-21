@@ -77,9 +77,23 @@ class Word
       yPos = value;
     } 
     
+    double getX(){
+      return xPos;
+    } 
+    
     double getY(){
       return yPos;
     } 
+
+    double getWidth(){
+      return wordWidth;
+    }
+    
+    double getHeight(){
+      return wordHeight;
+    }
+
+
   private: 
     SDL_Renderer* renderer = NULL;
     SDL_Texture* wordTexture = NULL;
@@ -104,3 +118,4 @@ class Word
 }; 
 
 #endif  
+

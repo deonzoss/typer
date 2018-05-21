@@ -128,6 +128,21 @@ class GameScreen
       return false;
     }
 
+    void setDemoScreen(){
+        wholeScreenYPos = SCREEN_END_YPOS;
+        leftFrameExtension->setY(-1*SCALESIZE);
+        rightFrameExtension->setY(-1*SCALESIZE);
+        screenDropped = true; 
+        showDemo = true;
+        if(countDown!=true){
+          countDown = true;
+        }
+    }
+
+    void setShowDemo(bool value){
+      showDemo = value;
+    }
+
     void countDownAnimate(){
       for(int i = 0; i < 15; i++){
        // countDownFrames[i]->render();
@@ -139,9 +154,9 @@ class GameScreen
       leftFrameExtension->render();
       rightFrameExtension->render();
       entireBar->render();
-      if(!endLettersDropped){
+      if(!endLettersDropped && !showDemo){
         return false;
-      } 
+      }
       
       if(leftFrameExtension->getY() > -28*SCALESIZE){
         int sideFramesYPos = leftFrameExtension->getY();
@@ -342,6 +357,10 @@ class GameScreen
       return flagsDown;
     }
 
+    void setEndLettersDropped(bool value){
+      endLettersDropped = value;
+    }
+
   private:
     SDL_Texture* objectTexture = NULL;
     SDL_Renderer* renderer = NULL;
@@ -365,6 +384,7 @@ class GameScreen
     bool lettersDropped = true; 
     bool endLettersDropped = false; 
     bool endLettersRaised = true; 
+    bool showDemo = false;
     double wholeScreenXPos = 0;
     double wholeScreenYPos = 0;
     int raiseLetters = 0;

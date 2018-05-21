@@ -18,8 +18,11 @@ class TextGenerator{
 		std::string create();
 
 		void readFile(std::string filename);
+
+    void setType(std::vector<int> levelType);
 	private:
 		std::vector<std::string> stringVector;
+    std::vector<int> levelType;
 		int rand;
 		SDL_Renderer* renderer;
 		FILE* file;
