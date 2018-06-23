@@ -20,7 +20,21 @@ class Object
     }
     
     void render(){
-      SDL_RenderCopy(renderer, objectTexture, &objectClip, &renderQuad);
+      if(!rotate){
+        SDL_RenderCopy(renderer, objectTexture, &objectClip, &renderQuad);
+      }
+      else{ 
+        if(direction){
+          angle+=randInt;
+        }
+        else{
+          angle-=randInt;
+        }
+        if(angle > 360){
+          angle = 0;
+        }
+        SDL_RenderCopyEx(renderer, objectTexture, &objectClip, &renderQuad, angle, NULL, SDL_FLIP_NONE);
+      }
     }
 
     void setY(int value){
@@ -39,7 +53,17 @@ class Object
       return renderQuad.x;
     }
 
+    void setRotate(bool value){
+      rotate = value;
+      randInt = (rand() % 10) + 5;
+      direction = (rand() % 2);
+    }
+
   private:
+    bool rotate = false;
+    int direction = 0;
+    int angle = 0;
+    int randInt = 0;
     SDL_Texture* objectTexture = NULL;
     SDL_Renderer* renderer = NULL;
     SDL_Rect objectClip;

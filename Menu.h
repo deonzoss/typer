@@ -156,7 +156,7 @@ class Menu
       SDL_FreeSurface(textSurface);
       SDL_FreeSurface(textSurfaceShadow);
        
-      typeStartXPos = SCREEN_WIDTH/2 - typeStartWidth/2; 
+      typeStartXPos = SCREEN_WIDTH/2 - typeStartWidth*1.5/2; 
       typeStartYPos = GROUND_VALUE; 
     }
 
@@ -236,9 +236,9 @@ class Menu
         }
        
         floatText(); 
-        SDL_Rect renderQuad = {typeStartXPos+.3*SCALESIZE, typeStartYPos+.3*SCALESIZE, typeStartWidth, typeStartHeight};
+        SDL_Rect renderQuad = {typeStartXPos+.3*SCALESIZE, typeStartYPos+.3*SCALESIZE, typeStartWidth*1.5, typeStartHeight*1.5};
         SDL_RenderCopyEx(renderer, typeStartShadow, NULL, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
-        renderQuad = {typeStartXPos, typeStartYPos, typeStartWidth, typeStartHeight};
+        renderQuad = {typeStartXPos, typeStartYPos, typeStartWidth*1.5, typeStartHeight*1.5};
         SDL_RenderCopyEx(renderer, typeStart, NULL, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
         mouseClicked = false;
       }
@@ -628,7 +628,7 @@ class Menu
     double typeStartYPos = 0;
     double typeStartWidth = 0;
     double typeStartHeight = 0;
-    char* startString = "t y p e   \" s t a r t \"   t o   b e g i n   g a m e ";
+    char* startString = "type \"start\" to  begin  game";
     bool floatUp = false;
     bool titleFloatUp = false;
     bool titleEnter = true;

@@ -19,6 +19,7 @@
 #include "Scorer.h"
 #include "Trophy.h"
 #include "TrophyFactory.h"
+#include "Cabinet.h"
 #include <vector>
 #include <iostream>
 #ifndef Game_h
@@ -109,6 +110,7 @@ class Game
       Boss* boss = NULL; 
       GameScreen* screen = NULL;
       Trashcan* trashcan = NULL;
+      Cabinet* cabinet = NULL;
       Object* desk = NULL;
       Fountain* fountain = NULL;
       Clock* clock = NULL;

@@ -24,10 +24,23 @@ class Clock{
 
     void render(){
       object->render();
-      renderQuad = {CLOCK_SPAWN_X + 4*SCALESIZE, CLOCK_SPAWN_Y, minuteHand.w*SCALESIZE, minuteHand.h*SCALESIZE};
-      SDL_RenderCopyEx(renderer, objectTexture, &minuteHand, &renderQuad, minuteHandAngle, NULL, SDL_FLIP_NONE); 
-      renderQuad = {CLOCK_SPAWN_X + 4*SCALESIZE, CLOCK_SPAWN_Y + 1*SCALESIZE, hourHand.w*SCALESIZE, hourHand.h*SCALESIZE};
-      SDL_RenderCopyEx(renderer, objectTexture, &hourHand, &renderQuad, hourHandAngle, NULL, SDL_FLIP_NONE); 
+      if(animate && (SDL_GetTicks() - animationTime) < 100){
+        renderQuad = {CLOCK_SPAWN_X + 4*SCALESIZE, CLOCK_SPAWN_Y  + 1*SCALESIZE, minuteHand.w*SCALESIZE, minuteHand.h*SCALESIZE};
+        SDL_RenderCopyEx(renderer, objectTexture, &minuteHand, &renderQuad, minuteHandAngle, NULL, SDL_FLIP_NONE); 
+        renderQuad = {CLOCK_SPAWN_X + 4*SCALESIZE, CLOCK_SPAWN_Y + 2*SCALESIZE, hourHand.w*SCALESIZE, hourHand.h*SCALESIZE};
+        SDL_RenderCopyEx(renderer, objectTexture, &hourHand, &renderQuad, hourHandAngle, NULL, SDL_FLIP_NONE); 
+        
+      }
+      else{
+        if(animate){
+          animate = false;
+          object->setY(object->getY() - 1*SCALESIZE);
+        }
+        renderQuad = {CLOCK_SPAWN_X + 4*SCALESIZE, CLOCK_SPAWN_Y, minuteHand.w*SCALESIZE, minuteHand.h*SCALESIZE};
+        SDL_RenderCopyEx(renderer, objectTexture, &minuteHand, &renderQuad, minuteHandAngle, NULL, SDL_FLIP_NONE); 
+        renderQuad = {CLOCK_SPAWN_X + 4*SCALESIZE, CLOCK_SPAWN_Y + 1*SCALESIZE, hourHand.w*SCALESIZE, hourHand.h*SCALESIZE};
+        SDL_RenderCopyEx(renderer, objectTexture, &hourHand, &renderQuad, hourHandAngle, NULL, SDL_FLIP_NONE); 
+      }
     
       if(!levelStarted){ 
         if(minuteHandAngle > 360){
@@ -81,6 +94,14 @@ class Clock{
       levelStarted = value;
     }
 
+    void setAnimate(bool value){
+      if(animate == false){
+        object->setY(object->getY() + 1*SCALESIZE);
+      }
+      animate = value;
+      animationTime = SDL_GetTicks();
+    }
+
   private:
     Object* object;
     SDL_Renderer* renderer = NULL;
@@ -93,6 +114,8 @@ class Clock{
     double hourHandAngle = 0;
     double speed = 1;
     bool levelStarted = false;
+    bool animate = false;
+    Uint32 animationTime;
 
 };
 

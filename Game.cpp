@@ -13,7 +13,7 @@ Game::Game(SDL_Renderer* renderer)
 
 void Game::loadSounds()
 {
-  gameplayMusic = Mix_LoadMUS("sounds/music1.wav");
+  gameplayMusic = Mix_LoadMUS("sounds/typerTheme.wav");
   if(!gameplayMusic){
     printf("%s\n", Mix_GetError());
   }
@@ -487,9 +487,15 @@ void Game::collisionHandler(double x, double y)
         strcpy(scoreString, "+100");
         trashcan->animate();
       }
+      else if(cabinet->collisionCheck(x,y)){
+        scoreValue = 100; 
+        strcpy(scoreString, "+100");
+        cabinet->animate();
+      }
       else if(clock->collisionCheck(x,y)){
         scoreValue = 100; 
         strcpy(scoreString, "+100");
+        clock->setAnimate(true);
       }
       else if(worker->computerCollisionCheck(x,y)){
         worker->updateComputer();
@@ -554,9 +560,15 @@ void Game::collisionHandler(double x, double y)
           deleteLetter = true;
           trashcan->animate();
         }
+        else if(cabinet->collisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
+          scoreValue = 100; 
+          deleteLetter = true;
+          cabinet->animate();
+        }
         else if(clock->collisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
           scoreValue = 100; 
           deleteLetter = true; 
+          clock->setAnimate(true);
         }
         else if(worker->computerCollisionCheck(letterVector[i]->getX(), letterVector[i]->getY())){
           worker->updateComputer();
@@ -681,6 +693,9 @@ void Game::start()
  
   trashcan = new Trashcan(renderer);
   trashcan->setObjectTexture(animationSheet);
+  
+  cabinet = new Cabinet(renderer);
+  cabinet->setObjectTexture(animationSheet);
 
   fountain = new Fountain(renderer);
   fountain->setObjectTexture(animationSheet);  
@@ -708,8 +723,9 @@ void Game::start()
     door->render();  
     clock->render(); 
     trashcan->render(); 
+    cabinet->render();
     fountain->render(); 
-    if(startLevel && !quitLevel && screenDropped){ 
+    if((showDemoBool || startLevel) && !quitLevel && screenDropped){ 
       displayDynamicLetters(); 
     } 
     boss->render(); 
@@ -717,6 +733,11 @@ void Game::start()
     worker->render();
 
     if(showDemoBool){
+      if(Mix_PlayingMusic() == 0){
+        if(Mix_PlayMusic(gameplayMusic, -1) == -1){
+          printf("music error\n");
+        }
+      }
       playDemo();
     }
     else if(startLevel && !quitLevel){
